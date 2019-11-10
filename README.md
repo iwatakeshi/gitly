@@ -2,7 +2,7 @@
 
 An API to download and/or extract git repositories.
 
-This project is the spiritual successor of [gittar](https://github.com/iwatakeshi/gittar) written in TypeScript.
+This project is the spiritual successor of [gittar](https://github.com/lukeed/gittar) written in TypeScript.
 
 ## Usage
 

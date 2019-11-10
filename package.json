@@ -7,11 +7,11 @@
     "tslint": "^5.20.1",
     "typescript": "^3.7.2"
   },
-  "name": "git-copy",
+  "name": "gitly",
   "version": "0.0.0",
   "description": "An API to download and/or extract git repositories",
   "main": "lib/main.ts",
-  "repository": "github:iwatakeshi/git-copy",
+  "repository": "github:iwatakeshi/gitly",
   "author": "Takeshi Iwana <iwatakeshi@gmail.com>",
   "license": "MIT",
   "files": [

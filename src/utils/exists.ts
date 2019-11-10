@@ -1,12 +1,12 @@
 import { constants, promises as fs } from 'fs'
 import { isAbsolute } from 'path'
 
-import GitCopyOptions from '../interfaces/options'
+import GitlyOptions from '../interfaces/options'
 
 import parse from './parse'
 import { getFile } from './tar'
 
-export default async (path: string, options: GitCopyOptions = {}) => {
+export default async (path: string, options: GitlyOptions = {}) => {
   if (!isAbsolute(path)) {
     path = getFile(parse(path), options)
   }

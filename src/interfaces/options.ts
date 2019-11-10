@@ -2,7 +2,7 @@ import { FileStat } from 'tar'
 
 import URLInfo from './url'
 
-export default interface GitCopyOptions {
+export default interface GitlyOptions {
   cache?: boolean
   force?: boolean
   temp?: string

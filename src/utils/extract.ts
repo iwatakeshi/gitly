@@ -2,7 +2,7 @@ import { promises as fs } from 'fs'
 import { resolve } from 'path'
 import { FileStat } from 'tar'
 
-import GitCopyOptions from '../interfaces/options'
+import GitlyOptions from '../interfaces/options'
 
 import exists from './exists'
 import { extract } from './tar'
@@ -16,7 +16,7 @@ const { mkdir } = fs
  * @param options
  *
  */
-export default async (source: string, destination: string, options: GitCopyOptions = {}) => {
+export default async (source: string, destination: string, options: GitlyOptions = {}) => {
   destination = resolve(destination)
   if (await exists(source, options)) {
     try {

@@ -1,6 +1,6 @@
 import { parse } from 'url'
 
-import GitCopyOptions from '../interfaces/options'
+import GitlyOptions from '../interfaces/options'
 import URLInfo from '../interfaces/url'
 
 /**
@@ -17,7 +17,7 @@ import URLInfo from '../interfaces/url'
  * 7. host:owner/repo#tag
  * ```
  */
-export default (url: string, options: GitCopyOptions = {}): URLInfo => {
+export default (url: string, options: GitlyOptions = {}): URLInfo => {
   let { url: normalized, host } = normalizeURL(url, options)
 
   // Parse the url

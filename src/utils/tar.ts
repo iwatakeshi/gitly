@@ -2,10 +2,10 @@ import os = require('os')
 import { join } from 'path'
 import tar = require('tar')
 
-import GitCopyOptions from '../interfaces/options'
+import GitlyOptions from '../interfaces/options'
 import URLInfo from '../interfaces/url'
 
-export function getUrl(info: URLInfo, options: GitCopyOptions = {}) {
+export function getUrl(info: URLInfo, options: GitlyOptions = {}) {
   const { path: repo, type } = info
 
   if (options.url && options.url.filter) {
@@ -22,7 +22,7 @@ export function getUrl(info: URLInfo, options: GitCopyOptions = {}) {
   }
 }
 
-export function getFile(info: URLInfo, options: GitCopyOptions = {}) {
+export function getFile(info: URLInfo, options: GitlyOptions = {}) {
   const { path, type, hostname: site } = info
   return join(options.temp || join(os.homedir(), '.gitcopy'), site, path, `${type}.tar.gz`)
 }

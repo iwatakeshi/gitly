@@ -1,4 +1,4 @@
-import GitCopyOptions from '../interfaces/options'
+import GitlyOptions from '../interfaces/options'
 
 import download from './download'
 import execute from './execute'
@@ -20,7 +20,7 @@ import { getFile, getUrl } from './tar'
  * // ...
  * ```
  */
-export default async (repository: string, options: GitCopyOptions = {}) => {
+export default async (repository: string, options: GitlyOptions = {}) => {
   const info = parse(repository, options)
   const file = getFile(info, options)
   const url = getUrl(info, options)

@@ -8,8 +8,8 @@ import URLInfo from '../interfaces/url'
 export function getUrl(info: URLInfo, options: GitCopyOptions = {}) {
   const { path: repo, type } = info
 
-  if (options.filter) {
-    return options.filter(info)
+  if (options.url && options.url.filter) {
+    return options.url.filter(info)
   }
 
   switch (info.hostname) {

@@ -10,7 +10,7 @@
   "name": "gitly",
   "version": "1.0.1",
   "description": "An API to download and/or extract git repositories",
-  "main": "lib/main.ts",
+  "main": "lib/main.js",
   "repository": "github:iwatakeshi/gitly",
   "author": "Takeshi Iwana <iwatakeshi@gmail.com>",
   "license": "MIT",

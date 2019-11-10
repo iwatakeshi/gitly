@@ -1,6 +1,6 @@
-import { existsSync, promises as fs } from 'fs'
+import { existsSync } from 'fs'
 import { join } from 'path'
-const { rmdir } = fs
+import { rm } from 'shelljs'
 
 import fetch from '../fetch'
 
@@ -9,11 +9,11 @@ describe('utils/fetch', () => {
     temp: join(__dirname, 'output', 'fetch', '.gitcopy')
   }
   beforeEach(async () => {
-    await rmdir(join(__dirname, 'output', 'fetch', '.gitcopy'), { recursive: true })
+    rm('-rf', join(__dirname, 'output', 'fetch', '.gitcopy'))
   })
 
   afterAll(async () => {
-    await rmdir(join(__dirname, 'output', 'fetch', '.gitcopy'), { recursive: true })
+    rm('-rf', join(__dirname, 'output', 'fetch', '.gitcopy'))
   })
 
   it('should fetch "lukeed/gittar"', async () => {
@@ -85,14 +85,14 @@ describe('utils/fetch (cache)', () => {
   const isCached = (ms: number) => Date.now() - ms <= 15
 
   beforeAll(async () => {
-    await rmdir(join(__dirname, 'output', 'fetch', 'cache'), { recursive: true })
+    rm('-rf', join(__dirname, 'output', 'fetch', 'cache'))
     // Prefetch
     const path = await fetch('lukeed/gittar', { temp: options.temp })
     expect(existsSync(path)).toBe(true)
   })
 
   afterAll(async () => {
-    await rmdir(join(__dirname, 'output', 'fetch', 'cache'), { recursive: true })
+    rm('-rf', join(__dirname, 'output', 'fetch', 'cache'))
   })
 
   it('should return a path to the cached zipped file', async () => {

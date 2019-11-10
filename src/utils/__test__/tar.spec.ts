@@ -20,8 +20,10 @@ describe('utils/tar', () => {
 
     it('should return a custom url to the zipped file', () => {
       expect(getUrl(parse('iwatakeshi/test'), {
-        filter(info) {
-          return `https://domain.com${info.path}/repo/archive.tar.gz?ref=${info.type}`
+        url: {
+          filter(info) {
+            return `https://domain.com${info.path}/repo/archive.tar.gz?ref=${info.type}`
+          }
         }
       }))
         .toEqual('https://domain.com/iwatakeshi/test/repo/archive.tar.gz?ref=master')

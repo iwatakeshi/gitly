@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
+import { FileStat } from 'tar'
 
 import GitCopyOptions from '../interfaces/options'
 
@@ -19,8 +20,10 @@ export default async (source: string, destination: string, options: GitCopyOptio
   destination = resolve(destination)
   if (await exists(source, options)) {
     try {
+      let filter = (options.extract && options.extract.filter) ? options.extract.filter :
+        (_path: string, _stat: FileStat) => true
       await mkdir(destination, { recursive: true })
-      await extract({ ...{ strip: 1 }, ...options as any, ...{ file: source, cwd: destination } })
+      await extract({ strip: 1, filter, file: source, cwd: destination })
       return destination
     } catch (_) { }
   }

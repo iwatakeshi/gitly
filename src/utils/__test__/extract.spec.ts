@@ -1,10 +1,9 @@
-import { existsSync, promises as fs } from 'fs'
+import { existsSync } from 'fs'
 import { join } from 'path'
+import { rm } from 'shelljs'
 
 import extract from '../extract'
 import fetch from '../fetch'
-
-const { rmdir } = fs
 
 describe('utils/extract', () => {
   const destination = join(__dirname, 'output', 'extract', 'example')
@@ -12,14 +11,14 @@ describe('utils/extract', () => {
     temp: join(__dirname, 'output', 'extract', '.gitcopy')
   }
   beforeEach(async () => {
-    await rmdir(join(__dirname, 'output', 'extract', '.gitcopy'), { recursive: true })
+    rm('-rf', join(__dirname, 'output', 'extract', '.gitcopy'))
   })
   afterEach(async () => {
-    await rmdir(destination, { recursive: true })
+    rm('-rf', destination)
   })
 
   afterAll(async () => {
-    await rmdir(join(__dirname, 'output', 'extract', '.gitcopy'), { recursive: true })
+    rm('-rf', join(__dirname, 'output', 'extract', '.gitcopy'))
   })
 
   it('should extract "lukeed/gittar"', async () => {

@@ -27,9 +27,11 @@
   },
   "scripts": {
     "prepare": "yarn build",
+    "preversion": "yarn run lint",
+    "prepublishOnly": "yarn test",
     "build": "tsc",
     "test": "jest",
-    "lint": "tslint -p .",
+    "lint": "tslint -p . -t stylish",
     "lint:fix": "tslint -p . -t stylish --fix"
   }
 }

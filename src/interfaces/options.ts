@@ -1,3 +1,5 @@
+import { FileStat } from 'tar'
+
 import URLInfo from './url'
 
 export default interface GitCopyOptions {
@@ -5,5 +7,10 @@ export default interface GitCopyOptions {
   force?: boolean
   temp?: string
   host?: string
-  filter?(info: URLInfo): string
+  url?: {
+    filter?(info: URLInfo): string
+  }
+  extract?: {
+    filter?(path: string, stat: FileStat): boolean
+  }
 }

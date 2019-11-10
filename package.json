@@ -33,5 +33,6 @@
     "test": "jest",
     "lint": "tslint -p . -t stylish",
     "lint:fix": "tslint -p . -t stylish --fix"
-  }
+  },
+  "types": "lib/main.d.ts"
 }

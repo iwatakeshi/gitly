@@ -1,0 +1,35 @@
+{
+  "devDependencies": {
+    "@oclif/tslint": "^3.1.1",
+    "@types/node": "^12.12.7",
+    "@types/shelljs": "^0.8.6",
+    "shelljs": "^0.8.3",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.2"
+  },
+  "name": "git-copy",
+  "version": "0.0.0",
+  "description": "An API to download and/or extract git repositories",
+  "main": "lib/main.ts",
+  "repository": "github:iwatakeshi/git-copy",
+  "author": "Takeshi Iwana <iwatakeshi@gmail.com>",
+  "license": "MIT",
+  "files": [
+    "lib/**/*"
+  ],
+  "dependencies": {
+    "@types/jest": "^24.0.22",
+    "@types/tar": "^4.0.3",
+    "axios": "^0.19.0",
+    "jest": "^24.9.0",
+    "tar": "^5.0.5",
+    "ts-jest": "^24.1.0"
+  },
+  "scripts": {
+    "prepare": "yarn build",
+    "build": "tsc",
+    "test": "jest",
+    "lint": "tslint -p .",
+    "lint:fix": "tslint -p . -t stylish --fix"
+  }
+}

@@ -41,6 +41,8 @@ export default (url: string, options: GitlyOptions = {}): URLInfo => {
 function normalizeURL(url: string, options: any) {
   // Remove 'www.'
   url = url.replace('www.', '')
+  // Remove '.git'
+  url = url.replace('.git', '')
   const httpRegex = /http(s)?\:\/\//
   const tldRegex = /[\S]+\.([\D]+)/
   let host = options.host || ''

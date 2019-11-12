@@ -58,6 +58,34 @@ describe('utils/parse', () => {
     } as URLInfo)
   })
 
+  it('should parse "host.com/owner/repo.git"', () => {
+    expect(parse('host.com/owner/repo.git')).toStrictEqual({
+      protocol: 'https',
+      host: 'host.com',
+      hostname: 'host',
+      hash: '',
+      href: 'https://host.com/owner/repo',
+      path: '/owner/repo',
+      repository: 'repo',
+      owner: 'owner',
+      type: 'master'
+    } as URLInfo)
+  })
+
+  it('should parse "host.com/owner/repo.git#tag"', () => {
+    expect(parse('host.com/owner/repo.git#tag')).toStrictEqual({
+      protocol: 'https',
+      host: 'host.com',
+      hostname: 'host',
+      hash: '#tag',
+      href: 'https://host.com/owner/repo#tag',
+      path: '/owner/repo',
+      repository: 'repo',
+      owner: 'owner',
+      type: 'tag'
+    } as URLInfo)
+  })
+
   it('should parse "host.com/owner/repo#tag"', () => {
     expect(parse('host.com/owner/repo#tag')).toStrictEqual({
       protocol: 'https',

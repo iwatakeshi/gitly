@@ -34,5 +34,23 @@
     "lint": "tslint -p . -t stylish",
     "lint:fix": "tslint -p . -t stylish --fix"
   },
-  "types": "lib/main.d.ts"
+  "types": "lib/main.d.ts",
+  "keywords": [
+    "archive",
+    "bitbucket",
+    "download",
+    "extract",
+    "fetch",
+    "git",
+    "github",
+    "gitlab",
+    "offline-first",
+    "offline",
+    "project",
+    "repo",
+    "repository",
+    "scaffold",
+    "tarbarll",
+    "zip"
+  ]
 }

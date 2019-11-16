@@ -21,7 +21,7 @@ describe('utils/exists', () => {
     expect(result).toBe(true)
   })
 
-  it('should return true when a non absolute path exists', async () => {
+  it('should return false when a non absolute path does not exists', async () => {
     const result = (await exists('iwatakeshi/myrepo', options))
     expect(result).toBe(false)
   })

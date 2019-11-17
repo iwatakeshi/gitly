@@ -2,9 +2,10 @@ import { existsSync } from 'fs'
 import { join } from 'path'
 import { rm } from 'shelljs'
 
+import { GitlyDownloadError } from '../error'
 import fetch from '../fetch'
 
-describe('utils/fetch', () => {
+describe('utils/fetch (no cache)', () => {
   const options = {
     temp: join(__dirname, 'output', 'fetch', '.gitcopy')
   }
@@ -88,7 +89,7 @@ describe('utils/fetch', () => {
   })
 })
 
-describe('utils/fetch (cache)', () => {
+describe('utils/fetch (cached)', () => {
   const options = {
     temp: join(__dirname, 'output', 'fetch', 'cache'),
     cache: true

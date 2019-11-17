@@ -69,11 +69,13 @@ describe('utils/fetch', () => {
     expect(existsSync(path)).toBe(true)
   })
 
-  it('should error and return an empty string when a repo is not found', async () => {
-    await expect(fetch('github:deekul:gittar#v0.1.1')).resolves.toEqual('').catch(error => expect(error).toEqual({
-      status: 404,
-      message: 'Not Found'
-    }))
+  it('should throw an error when a repo is not found', async () => {
+    expect.assertions(1)
+    try {
+      await fetch('github:doesnotexist123xyz/gittar#v0.1.1')
+    } catch (error) {
+      expect(error).toBeInstanceOf(GitlyDownloadError)
+    }
   })
 })
 

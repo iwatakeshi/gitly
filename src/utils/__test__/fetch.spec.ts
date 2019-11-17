@@ -17,53 +17,62 @@ describe('utils/fetch', () => {
   })
 
   it('should fetch "lukeed/gittar"', async () => {
+    expect.assertions(2)
     const path = await fetch('lukeed/gittar', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "lukeed/gittar#v0.1.1"', async () => {
+    expect.assertions(2)
     const path = await fetch('lukeed/gittar#v0.1.1', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "https://github.com/lukeed/gittar"', async () => {
+    expect.assertions(2)
     const path = await fetch('https://github.com/lukeed/gittar', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
   it('should fetch "https://github.com/lukeed/gittar#v0.1.1"', async () => {
+    expect.assertions(2)
     const path = await fetch('https://github.com/lukeed/gittar#v0.1.1', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "github.com/lukeed/gittar"', async () => {
+    expect.assertions(2)
     const path = await fetch('github.com/lukeed/gittar', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "github.com/lukeed/gittar#v0.1.1"', async () => {
+    expect.assertions(2)
     const path = await fetch('github.com/lukeed/gittar#v0.1.1', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "github:lukeed/gittar"', async () => {
+    expect.assertions(2)
     const path = await fetch('github:lukeed/gittar', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "github:lukeed/gittar#v0.1.1"', async () => {
+    expect.assertions(2)
     const path = await fetch('github:lukeed/gittar#v0.1.1', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "gitlab:Rich-Harris/buble#v0.15.2"', async () => {
+    expect.assertions(2)
     const path = await fetch('gitlab:Rich-Harris/buble#v0.15.2', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)

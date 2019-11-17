@@ -33,14 +33,10 @@ export default async (repository: string, options: GitlyOptions = {}) => {
     order = [remote, local]
   }
 
-  try {
-    const result = await execute(order)
-    if (typeof result === 'boolean') {
-      return file
-    }
+  const result = await execute(order)
+  if (typeof result === 'boolean') {
+    return file
+  }
 
-    return result
-  } catch (_) { }
-
-  return ''
+  return result
 }

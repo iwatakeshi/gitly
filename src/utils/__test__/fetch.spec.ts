@@ -2,9 +2,10 @@ import { existsSync } from 'fs'
 import { join } from 'path'
 import { rm } from 'shelljs'
 
+import { GitlyDownloadError } from '../error'
 import fetch from '../fetch'
 
-describe('utils/fetch', () => {
+describe('utils/fetch (no cache)', () => {
   const options = {
     temp: join(__dirname, 'output', 'fetch', '.gitcopy')
   }
@@ -17,67 +18,78 @@ describe('utils/fetch', () => {
   })
 
   it('should fetch "lukeed/gittar"', async () => {
+    expect.assertions(2)
     const path = await fetch('lukeed/gittar', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "lukeed/gittar#v0.1.1"', async () => {
+    expect.assertions(2)
     const path = await fetch('lukeed/gittar#v0.1.1', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "https://github.com/lukeed/gittar"', async () => {
+    expect.assertions(2)
     const path = await fetch('https://github.com/lukeed/gittar', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
   it('should fetch "https://github.com/lukeed/gittar#v0.1.1"', async () => {
+    expect.assertions(2)
     const path = await fetch('https://github.com/lukeed/gittar#v0.1.1', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "github.com/lukeed/gittar"', async () => {
+    expect.assertions(2)
     const path = await fetch('github.com/lukeed/gittar', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "github.com/lukeed/gittar#v0.1.1"', async () => {
+    expect.assertions(2)
     const path = await fetch('github.com/lukeed/gittar#v0.1.1', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "github:lukeed/gittar"', async () => {
+    expect.assertions(2)
     const path = await fetch('github:lukeed/gittar', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "github:lukeed/gittar#v0.1.1"', async () => {
+    expect.assertions(2)
     const path = await fetch('github:lukeed/gittar#v0.1.1', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should fetch "gitlab:Rich-Harris/buble#v0.15.2"', async () => {
+    expect.assertions(2)
     const path = await fetch('gitlab:Rich-Harris/buble#v0.15.2', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
-  it('should error and return an empty string when a repo is not found', async () => {
-    await expect(fetch('github:deekul:gittar#v0.1.1')).resolves.toEqual('').catch(error => expect(error).toEqual({
-      status: 404,
-      message: 'Not Found'
-    }))
+  it('should throw an error when a repo is not found', async () => {
+    expect.assertions(1)
+    try {
+      await fetch('github:doesnotexist123xyz/gittar#v0.1.1')
+    } catch (error) {
+      expect(error).toBeInstanceOf(GitlyDownloadError)
+    }
   })
 })
 
-describe('utils/fetch (cache)', () => {
+describe('utils/fetch (cached)', () => {
   const options = {
     temp: join(__dirname, 'output', 'fetch', 'cache'),
     cache: true

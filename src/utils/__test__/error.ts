@@ -1,7 +1,6 @@
-import { GitlyDownloadError, GitlyErrorType, GitlyExtractError, GitlyFetchError } from '../error'
+import { GitlyDownloadError, GitlyErrorType, GitlyExtractError, GitlyFetchError, GitlyUknownError } from '../error'
 
 describe('utils/error', () => {
-
   describe('GitlyFetchError', () => {
     it('should return an instance', () => {
       const error = new GitlyFetchError('message')
@@ -26,6 +25,15 @@ describe('utils/error', () => {
       expect(error.message).toBe('[gitly:download]: message')
       expect(error.code).toBe(402)
       expect(error.type).toBe(GitlyErrorType.Download)
+    })
+  })
+
+  describe('GitlyUknownError', () => {
+    it('should return an instance', () => {
+      const error = new GitlyUknownError('message', 402)
+      expect(error.message).toBe('[gitly:uknown]: message')
+      expect(error.code).toBe(402)
+      expect(error.type).toBe(GitlyErrorType.Unknown)
     })
   })
 })

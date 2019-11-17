@@ -24,7 +24,7 @@ export function getUrl(info: URLInfo, options: GitlyOptions = {}) {
 
 export function getFile(info: URLInfo, options: GitlyOptions = {}) {
   const { path, type, hostname: site } = info
-  return join(options.temp || join(os.homedir(), '.gitcopy'), site, path, `${type}.tar.gz`)
+  return join(options.temp || join(os.homedir(), '.gitly'), site, path, `${type}.tar.gz`)
 }
 
 export const extract = tar.extract

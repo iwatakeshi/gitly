@@ -79,10 +79,17 @@ describe('utils/fetch (no cache)', () => {
     expect(existsSync(path)).toBe(true)
   })
 
-  it('should throw an error when a repo is not found', async () => {
+  it('should return an empty string when a repo is not found', async () => {
+    expect.assertions(1)
+    expect(await fetch('github:doesnotexist123xyz/gittar#v0.1.1')).toEqual('')
+  })
+
+  it('should throw an error when a repo is not found (with options', async () => {
     expect.assertions(1)
     try {
-      await fetch('github:doesnotexist123xyz/gittar#v0.1.1')
+      await fetch('github:doesnotexist123xyz/gittar#v0.1.1', {
+        throw: true
+      })
     } catch (error) {
       expect(error).toBeInstanceOf(GitlyDownloadError)
     }

@@ -4,6 +4,7 @@ An API to download and/or extract git repositories.
 
 [![Node CI](https://github.com/iwatakeshi/gitly/workflows/Node%20CI/badge.svg)](https://github.com/iwatakeshi/gitly/actions?query=workflow%3A%22Node+CI%22)
 [![Version](https://img.shields.io/npm/v/gitly.svg)](https://www.npmjs.com/package/gitly)
+![Codecov](https://img.shields.io/codecov/c/github/iwatakeshi/gitly)
 [![Downloads/week](https://img.shields.io/npm/dw/gitly.svg)](https://www.npmjs.com/package/gitly)
 [![License](https://img.shields.io/github/license/iwatakeshi/gitly)](https://github.com/iwatakeshi/gitly/blob/master/LICENSE.md)
 

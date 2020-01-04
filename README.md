@@ -32,8 +32,8 @@ console.log(await fetch('gitlab:Rich-Harris/buble#v0.15.2'))
 console.log(await fetch('Rich-Harris/buble', { host: 'gitlab' }))
 // -> ~/.gitly/gitlab/Rich-Harris/buble/master.tar.gz
 
-const source = '...local file or repo pattern to the local file...'
-const dest = '/path/to/foobar'
+const source = 'path to downloaded zip file (can be obtained by fetch())'
+const destination = '/path/to/foobar'
 
 await extract(source, destination)
 // -> /path/to/foobar

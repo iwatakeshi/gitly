@@ -15,14 +15,14 @@
   },
   "devDependencies": {
     "@oclif/tslint": "^3.1.1",
-    "@types/jest": "^25.1.4",
-    "@types/node": "^13.9.1",
-    "@types/shelljs": "^0.8.6",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.1",
+    "@types/shelljs": "^0.8.7",
     "@types/tar": "^4.0.3",
-    "jest": "^25.1.0",
+    "jest": "^25.4.0",
     "shelljs": "^0.8.3",
-    "ts-jest": "^25.2.1",
-    "tslint": "^6.1.0",
+    "ts-jest": "^25.4.0",
+    "tslint": "^6.1.1",
     "typescript": "^3.8.3"
   },
   "scripts": {

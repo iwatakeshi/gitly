@@ -10,20 +10,20 @@
     "lib/**/*"
   ],
   "dependencies": {
-    "axios": "^0.19.2",
-    "tar": "^6.0.2"
+    "axios": "^0.20.0",
+    "tar": "^6.0.5"
   },
   "devDependencies": {
     "@oclif/tslint": "^3.1.1",
-    "@types/jest": "^26.0.4",
-    "@types/node": "^14.0.23",
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.11.2",
     "@types/shelljs": "^0.8.8",
     "@types/tar": "^4.0.3",
-    "jest": "^26.1.0",
+    "jest": "^26.4.2",
     "shelljs": "^0.8.4",
-    "ts-jest": "^26.1.2",
-    "tslint": "^6.1.2",
-    "typescript": "^3.9.6"
+    "ts-jest": "^26.4.0",
+    "tslint": "^6.1.3",
+    "typescript": "^4.0.3"
   },
   "scripts": {
     "prepare": "yarn build",

@@ -2,8 +2,8 @@ import { existsSync } from 'fs'
 import { join } from 'path'
 import { rm } from 'shelljs'
 
-import { GitlyDownloadError } from '../error'
 import download from '../download'
+import { GitlyDownloadError } from '../error'
 
 describe('utils/fetch (no cache)', () => {
   const options = {

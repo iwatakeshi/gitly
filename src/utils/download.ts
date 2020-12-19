@@ -1,8 +1,8 @@
 import GitlyOptions from '../interfaces/options'
 
-import fetch from './fetch'
 import execute from './execute'
 import exists from './exists'
+import fetch from './fetch'
 import { isOffline } from './offline'
 import parse from './parse'
 import { getFile, getUrl } from './tar'
@@ -11,7 +11,6 @@ import { getFile, getUrl } from './tar'
  * Download the tar file from the repository
  * and store it in a temporary directory
  * @param repository The repository to download
- * @param options
  *
  * @example
  * ```js
@@ -23,7 +22,7 @@ import { getFile, getUrl } from './tar'
 export default async function download(
   repository: string,
   options: GitlyOptions = {}
-) {
+): Promise<string> {
   const info = parse(repository, options)
   const file = getFile(info, options)
   const url = getUrl(info, options)

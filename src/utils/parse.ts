@@ -18,15 +18,15 @@ import URLInfo from '../interfaces/url'
  * ```
  */
 export default (url: string, options: GitlyOptions = {}): URLInfo => {
-  let { url: normalized, host } = normalizeURL(url, options)
+  const { url: normalized, host } = normalizeURL(url, options)
 
   // Parse the url
   const result = parse(normalized)
-  const paths = (result.path || '').split('/').filter(p => !!p)
+  const paths = (result.path || '').split('/').filter((p) => !!p)
   const owner = paths.shift() || ''
   const repository = paths.shift() || ''
   return {
-    protocol: (result.protocol || 'https').replace(/\:/g, ''),
+    protocol: (result.protocol || 'https').replace(/:/g, ''),
     host: result.host || host || 'github.com',
     hostname: (result.hostname || host || 'github').replace(/\.(\S+)/, ''),
     hash: result.hash || '',
@@ -34,23 +34,23 @@ export default (url: string, options: GitlyOptions = {}): URLInfo => {
     path: result.path || '',
     repository,
     owner,
-    type: (result.hash || '#master').substr(1)
+    type: (result.hash || '#master').substr(1),
   }
 }
 
-function normalizeURL(url: string, options: any) {
+function normalizeURL(url: string, options: GitlyOptions) {
   // Remove 'www.'
   url = url.replace('www.', '')
   // Remove '.git'
   url = url.replace('.git', '')
-  const httpRegex = /http(s)?\:\/\//
+  const httpRegex = /http(s)?:\/\//
   const tldRegex = /[\S]+\.([\D]+)/
   let host = options.host || ''
-  if (/([\S]+)\:.+/.test(url) && !httpRegex.test(url)) {
+  if (/([\S]+):.+/.test(url) && !httpRegex.test(url)) {
     /**
      * Matches host:owner/repo
      */
-    const matches = url.match(/([\S]+)\:.+/)
+    const matches = url.match(/([\S]+):.+/)
     // Get the host
     host = matches ? matches[1] : ''
     // Remove the host from the url
@@ -68,10 +68,10 @@ function normalizeURL(url: string, options: any) {
      */
 
     // Get the TLD if any
-    const matches = (options.host as string || '').match(tldRegex)
+    const matches = ((options.host as string) || '').match(tldRegex)
     let match = 'com'
     if (matches) match = matches[1]
-    let domain = (options.host || 'github')
+    let domain = options.host || 'github'
     domain = domain.replace(`.${match}`, '')
 
     url = `https://${domain}.${match}/${url}`

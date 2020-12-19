@@ -4,6 +4,7 @@ export async function isOffline(): Promise<boolean> {
   try {
     await lookup('google.com')
     return false
-  } catch (_) { }
+    // eslint-disable-next-line no-empty
+  } catch (_) {}
   return true
 }

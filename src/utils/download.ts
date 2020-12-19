@@ -1,21 +1,51 @@
-import axios from 'axios'
-import * as stream from 'stream'
-import { promisify } from 'util'
+import GitlyOptions from '../interfaces/options'
 
-import { GitlyDownloadError } from './error'
-import write from './write'
+import fetch from './fetch'
+import execute from './execute'
+import exists from './exists'
+import { isOffline } from './offline'
+import parse from './parse'
+import { getFile, getUrl } from './tar'
 
-const pipeline = promisify(stream.pipeline)
+/**
+ * Download the tar file from the repository
+ * and store it in a temporary directory
+ * @param repository The repository to download
+ * @param options
+ *
+ * @example
+ * ```js
+ * // ..
+ * const path = await download('iwatakeshi/git-copy')
+ * // ...
+ * ```
+ */
+export default async function download(
+  repository: string,
+  options: GitlyOptions = {}
+) {
+  const info = parse(repository, options)
+  const file = getFile(info, options)
+  const url = getUrl(info, options)
+  const local = async () => exists(file)
+  const remote = async () => fetch(url, file)
+  let order = [local, remote]
+  if ((await isOffline()) || options.cache) {
+    order = [local]
+  } else if (options.force || info.type === 'master') {
+    order = [remote, local]
+  }
 
-export default async function download(url: string, file: string): Promise<string> {
-  const response = await axios.get(url, {
-    responseType: 'stream', validateStatus: status => status >= 200 && status < 500
-  })
-
-  const { statusText: message, status: code } = response
-  if (code >= 400) throw new GitlyDownloadError(message, code)
-  else if (code >= 300 && code < 400) {
-    return download(response.headers.location, file)
-  } else await pipeline(response.data, await write(file))
-  return file
+  try {
+    const result = await execute(order)
+    if (typeof result === 'boolean') {
+      return file
+    }
+    return result
+  } catch (error) {
+    if (options.throw) {
+      throw error
+    }
+  }
+  return ''
 }

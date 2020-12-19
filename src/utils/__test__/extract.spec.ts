@@ -3,12 +3,12 @@ import { join } from 'path'
 import { rm } from 'shelljs'
 
 import extract from '../extract'
-import fetch from '../fetch'
+import download from '../download'
 
 describe('utils/extract', () => {
   const destination = join(__dirname, 'output', 'extract', 'example')
   const options = {
-    temp: join(__dirname, 'output', 'extract', '.gitcopy')
+    temp: join(__dirname, 'output', 'extract', '.gitcopy'),
   }
   beforeEach(async () => {
     rm('-rf', join(__dirname, 'output', 'extract', '.gitcopy'))
@@ -23,14 +23,14 @@ describe('utils/extract', () => {
 
   it('should extract "lukeed/gittar"', async () => {
     // tslint:disable-next-line: no-floating-promises
-    const path = await fetch('lukeed/gittar', options)
+    const path = await download('lukeed/gittar', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
   it('should extract "lukeed/gittar#v0.1.1"', async () => {
     // tslint:disable-next-line: no-floating-promises
-    const source = await fetch('lukeed/gittar#v0.1.1', options)
+    const source = await download('lukeed/gittar#v0.1.1', options)
     const path = await extract(source, destination, options)
     expect(existsSync(source)).toBe(true)
     expect(source).toBeTruthy()
@@ -39,7 +39,7 @@ describe('utils/extract', () => {
   })
 
   it('should extract "https://github.com/lukeed/gittar"', async () => {
-    const source = await fetch('https://github.com/lukeed/gittar', options)
+    const source = await download('https://github.com/lukeed/gittar', options)
     const path = await extract(source, destination, options)
     expect(existsSync(source)).toBe(true)
     expect(source).toBeTruthy()
@@ -48,7 +48,10 @@ describe('utils/extract', () => {
   })
 
   it('should extract "https://github.com/lukeed/gittar#v0.1.1"', async () => {
-    const source = await fetch('https://github.com/lukeed/gittar#v0.1.1', options)
+    const source = await download(
+      'https://github.com/lukeed/gittar#v0.1.1',
+      options
+    )
     const path = await extract(source, destination, options)
     expect(existsSync(source)).toBe(true)
     expect(source).toBeTruthy()
@@ -57,7 +60,7 @@ describe('utils/extract', () => {
   })
 
   it('should extract "github.com/lukeed/gittar"', async () => {
-    const source = await fetch('github.com/lukeed/gittar', options)
+    const source = await download('github.com/lukeed/gittar', options)
     const path = await extract(source, destination, options)
     expect(existsSync(source)).toBe(true)
     expect(source).toBeTruthy()
@@ -66,7 +69,7 @@ describe('utils/extract', () => {
   })
 
   it('should extract "github.com/lukeed/gittar#v0.1.1"', async () => {
-    const source = await fetch('github.com/lukeed/gittar#v0.1.1', options)
+    const source = await download('github.com/lukeed/gittar#v0.1.1', options)
     const path = await extract(source, destination, options)
     expect(existsSync(source)).toBe(true)
     expect(source).toBeTruthy()
@@ -75,7 +78,7 @@ describe('utils/extract', () => {
   })
 
   it('should extract "github:lukeed/gittar"', async () => {
-    const source = await fetch('github:lukeed/gittar', options)
+    const source = await download('github:lukeed/gittar', options)
     const path = await extract(source, destination, options)
     expect(existsSync(source)).toBe(true)
     expect(source).toBeTruthy()
@@ -84,7 +87,7 @@ describe('utils/extract', () => {
   })
 
   it('should extract "github:lukeed/gittar#v0.1.1"', async () => {
-    const source = await fetch('github:lukeed/gittar#v0.1.1', options)
+    const source = await download('github:lukeed/gittar#v0.1.1', options)
     const path = await extract(source, destination, options)
     expect(existsSync(source)).toBe(true)
     expect(source).toBeTruthy()

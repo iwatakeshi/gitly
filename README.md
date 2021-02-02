@@ -15,7 +15,7 @@ This project is the spiritual successor of [gittar](https://github.com/lukeed/gi
 Since v1.0+
 
 ```typescript
-import { download, extract } = from 'gitly'
+import { download, extract } from 'gitly'
 
 console.log(await download('iwatakeshi/gitly'))
 // -> ~/.gitly/github/iwatakeshi/gitly/master.tar.gz

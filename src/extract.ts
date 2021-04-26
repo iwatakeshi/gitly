@@ -4,7 +4,7 @@ import { resolve } from 'path'
 import GitlyOptions from './types/options'
 
 import exists from './utils/exists'
-import { extract } from 'tar'
+import tar from 'tar'
 
 const { mkdir } = fs
 
@@ -15,11 +15,11 @@ const { mkdir } = fs
  * @param options
  *
  */
-export default async (
+export default async function extract(
   source: string,
   destination: string,
   options: GitlyOptions = {}
-): Promise<string> => {
+): Promise<string> {
   destination = resolve(destination)
   if (await exists(source, options)) {
     try {
@@ -28,7 +28,7 @@ export default async (
           ? options.extract.filter
           : () => true
       await mkdir(destination, { recursive: true })
-      await extract({ strip: 1, filter, file: source, cwd: destination })
+      await tar.extract({ strip: 1, filter, file: source, cwd: destination })
       return destination
       // eslint-disable-next-line no-empty
     } catch (_) {}

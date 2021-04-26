@@ -15,7 +15,10 @@ import URLInfo from '../types/url'
  * 7. host:owner/repo#tag
  * ```
  */
-export default (url: string, options: GitlyOptions = {}): URLInfo => {
+export default function parse(
+  url: string,
+  options: GitlyOptions = {}
+): URLInfo {
   const { url: normalized, host } = normalizeURL(url, options)
 
   // Parse the url

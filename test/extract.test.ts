@@ -2,23 +2,23 @@ import { existsSync } from 'fs'
 import { join } from 'path'
 import { rm } from 'shelljs'
 
-import download from '../download'
-import extract from '../extract'
+import download from '../src/download'
+import extract from '../src/extract'
 
 describe('utils/extract', () => {
   const destination = join(__dirname, 'output', 'extract', 'example')
   const options = {
-    temp: join(__dirname, 'output', 'extract', '.gitcopy'),
+    temp: join(__dirname, 'output', 'extract', '.gitly'),
   }
   beforeEach(async () => {
-    rm('-rf', join(__dirname, 'output', 'extract', '.gitcopy'))
+    rm('-rf', join(__dirname, 'output', 'extract', '.gitly'))
   })
   afterEach(async () => {
     rm('-rf', destination)
   })
 
   afterAll(async () => {
-    rm('-rf', join(__dirname, 'output', 'extract', '.gitcopy'))
+    rm('-rf', join(__dirname, 'output', 'extract', '.gitly'))
   })
 
   it('should extract "lukeed/gittar"', async () => {

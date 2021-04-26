@@ -1,8 +1,7 @@
 import { promises as dns } from 'dns'
-const { lookup } = dns
-export async function isOffline(): Promise<boolean> {
+export default async function isOffline(): Promise<boolean> {
   try {
-    await lookup('google.com')
+    await dns.lookup('google.com')
     return false
     // eslint-disable-next-line no-empty
   } catch (_) {}

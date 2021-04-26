@@ -4,8 +4,8 @@ export default interface URLInfo {
   hostname: string
   hash: string
   href: string
-  path: string,
+  path: string
   repository: string
   owner: string
-  type: string
+  branch: string
 }

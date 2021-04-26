@@ -1,10 +1,10 @@
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
 
-import GitlyOptions from '../interfaces/options'
+import GitlyOptions from './types/options'
 
-import exists from './exists'
-import { extract } from './tar'
+import exists from './utils/exists'
+import { extract } from 'tar'
 
 const { mkdir } = fs
 

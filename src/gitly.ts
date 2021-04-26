@@ -1,4 +1,5 @@
-import GitlyOptions from '../interfaces/options'
+import GitlyOptions from './types/options'
+import { GITLY_PATH } from './constants'
 
 import download from './download'
 import extract from './extract'
@@ -11,8 +12,8 @@ import extract from './extract'
  */
 export default async function gitly(
   repository: string,
-  destination: string,
-  options: GitlyOptions
+  destination: string = GITLY_PATH,
+  options: GitlyOptions = {}
 ): Promise<[string, string]> {
   const source = await download(repository, options)
   return [source, await extract(source, destination, options)]

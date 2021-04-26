@@ -1,25 +1,21 @@
-import axios from 'axios'
-import * as stream from 'stream'
-import { promisify } from 'util'
+import https from 'https'
 
 import { GitlyDownloadError } from './error'
 import write from './write'
-
-const pipeline = promisify(stream.pipeline)
-
 export default async function fetch(
   url: string,
   file: string
 ): Promise<string> {
-  const response = await axios.get(url, {
-    responseType: 'stream',
-    validateStatus: (status) => status >= 200 && status < 500,
+  return new Promise<string>((result, reject) => {
+    https
+      .get(url, async (response) => {
+        const { statusCode: code, statusMessage: message, headers } = response
+        if (code && code >= 400)
+          return reject(new GitlyDownloadError(message!, code))
+        if (code && code > 300 && code < 400)
+          return fetch(headers.location!, file).then(result)
+        response.pipe((await write(file)).on('finish', () => result(file)))
+      })
+      .on('error', (error) => new GitlyDownloadError(error.message))
   })
-
-  const { statusText: message, status: code } = response
-  if (code >= 400) throw new GitlyDownloadError(message, code)
-  else if (code >= 300 && code < 400) {
-    return fetch(response.headers.location, file)
-  } else await pipeline(response.data, await write(file))
-  return file
 }

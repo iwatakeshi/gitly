@@ -12,6 +12,15 @@ This project is the spiritual successor of [gittar](https://github.com/lukeed/gi
 
 ## Usage
 
+Since v2.0+
+
+```typescript
+import gitly from 'gitly'
+
+console.log(await gitly('iwatakeshi/gitly', '/path/to/extracted/folder/'))
+// -> ['~/.gitly/github/iwatakeshi/gitly/master.tar.gz', '/path/to/extracted/folder/']
+```
+
 Since v1.0+
 
 ```typescript
@@ -39,58 +48,45 @@ await extract(source, destination)
 // -> /path/to/foobar
 ```
 
-Since v2.0+
+### `GitlyOptions` (interface)
 
-```typescript
-import gitly from 'gitly'
-
-console.log(await gitly('iwatakeshi/gitly', '/path/to/extracted/folder/'))
-// -> ['~/.gitly/github/iwatakeshi/gitly/master.tar.gz', '/path/to/extracted/folder/']
-```
-
-## Options
-
-```typescript
+```ts
 interface GitlyOptions {
-  /**
-   * Use cache only (default: undefined)
-   */
+  /** Use cache only (default: undefined) */
   cache?: boolean
-  /**
-   * Use both cache and local (default: undefined)
-   */
+  /** Use both cache and local (default: undefined) */
   force?: boolean
-  /**
-   * Throw an error when downloading (default: undefined)
-   */
+  /** Throw an error when fetching (default: undefined) */
   throw?: boolean
-  /**
-   * Set cache directory (default: '~/.gitly')
-   */
+  /** Set cache directory (default: '~/.gitly') */
   temp?: string
-  /**
-   * Set the host name (default: undefined)
-   */
+  /** Set the host name (default: undefined) */
   host?: string
+  /** Options for url */
   url?: {
     /**
      * Extend the url filtering method
-     * @param info The URLInfo object
-     */
+     * @param info The URLInfo object */
     filter?(info: URLInfo): string
   }
+  /** Options for tar extractions */
   extract?: {
-    /**
-     * Extend the extract filtering method for the 'tar' library
-     */
+    /** Extend the extract filtering method for the 'tar' library */
     filter?(path: string, stat: FileStat): boolean
   }
+  /**
+   * Overrieds the fetch function
+   * @param url The url of the repository to download
+   * @param destination The path where the file is to be downloaded
+   * @returns The destination path
+   */
+  fetch: (url: string, destination: string) => Promise<string>
 }
 ```
 
-## Interfaces
+### `URLInfo` (interface)
 
-```typescript
+```ts
 interface URLInfo {
   protocol: string
   host: string
@@ -100,6 +96,32 @@ interface URLInfo {
   path: string
   repository: string
   owner: string
-  type: string
+  branch: string
 }
+```
+
+### `gitly` (function)
+
+```ts
+function gitly(
+  repository: string,
+  destination?: string,
+  options?: GitlyOptions
+): Promise<[string, string]>
+```
+
+### `download` (function)
+
+```ts
+function download(repository: string, options: GitlyOptions): Promise<string>
+```
+
+### `extract` (function)
+
+```ts
+function extract(
+  source: string,
+  destination: string,
+  options?: GitlyOptions
+): Promise<string>
 ```

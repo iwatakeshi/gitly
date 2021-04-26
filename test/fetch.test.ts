@@ -2,19 +2,19 @@ import { existsSync } from 'fs'
 import { join } from 'path'
 import { rm } from 'shelljs'
 
-import download from '../download'
-import { GitlyDownloadError } from '../error'
+import download from '../src/download'
+import { GitlyDownloadError } from '../src/utils/error'
 
 describe('utils/fetch (no cache)', () => {
   const options = {
-    temp: join(__dirname, 'output', 'fetch', '.gitcopy'),
+    temp: join(__dirname, 'output', 'fetch', '.gitly'),
   }
   beforeEach(async () => {
-    rm('-rf', join(__dirname, 'output', 'fetch', '.gitcopy'))
+    rm('-rf', join(__dirname, 'output', 'fetch', '.gitly'))
   })
 
   afterAll(async () => {
-    rm('-rf', join(__dirname, 'output', 'fetch', '.gitcopy'))
+    rm('-rf', join(__dirname, 'output', 'fetch', '.gitly'))
   })
 
   it('should fetch "lukeed/gittar"', async () => {

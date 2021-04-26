@@ -1,17 +1,17 @@
 import { constants, promises as fs } from 'fs'
 import { isAbsolute } from 'path'
 
-import GitlyOptions from '../interfaces/options'
+import GitlyOptions from '../types/options'
 
 import parse from './parse'
-import { getFile } from './tar'
+import { createArchiveFilePath } from './git'
 
 export default async function exists(
   path: string,
   options: GitlyOptions = {}
 ): Promise<boolean> {
   if (!isAbsolute(path)) {
-    path = getFile(parse(path), options)
+    path = createArchiveFilePath(parse(path), options)
   }
   try {
     await fs.access(path, constants.F_OK)

@@ -52,5 +52,23 @@
   },
   "dependencies": {
     "tar": "^6.1.0"
-  }
+  },
+  "keywords": [
+    "archive",
+    "bitbucket",
+    "download",
+    "extract",
+    "fetch",
+    "git",
+    "github",
+    "gitlab",
+    "offline-first",
+    "offline",
+    "project",
+    "repo",
+    "repository",
+    "scaffold",
+    "tarbarll",
+    "zip"
+  ]
 }

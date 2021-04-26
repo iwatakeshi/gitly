@@ -36,7 +36,7 @@
     }
   ],
   "devDependencies": {
-    "@prismify/tsdx": "^0.1.0",
+    "@prismify/tsdx": "^0.1.1",
     "@size-limit/preset-small-lib": "^4.10.2",
     "@types/jest": "^26.0.23",
     "@types/shelljs": "^0.8.8",

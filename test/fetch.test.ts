@@ -75,7 +75,7 @@ describe('utils/fetch (no cache)', () => {
     expect(existsSync(path)).toBe(true)
   })
 
-  it('should fetch "gitlab:Rich-Harris/buble#v0.15.2"', async () => {
+  it.skip('should fetch "gitlab:Rich-Harris/buble#v0.15.2"', async () => {
     expect.assertions(2)
     const path = await download('gitlab:Rich-Harris/buble#v0.15.2', options)
     expect(path).toBeTruthy()

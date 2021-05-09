@@ -18,7 +18,9 @@ export function createArchiveUrl(
     case 'bitbucket':
       return `https://bitbucket.org${repo}/get/${branch}.tar.gz`
     case 'gitlab':
-      return `https://gitlab.com${repo}/repository/archive.tar.gz?ref=${branch}`
+      return `https://gitlab.com${repo}/-/archive/${branch}/${
+        repo.split('/')[2]
+      }-${branch}.tar.gz`
     default:
       return `https://github.com${repo}/archive/${branch}.tar.gz`
   }

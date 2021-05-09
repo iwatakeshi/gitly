@@ -16,7 +16,9 @@ export function getUrl(info: URLInfo, options: GitlyOptions = {}): string {
     case 'bitbucket':
       return `https://bitbucket.org${repo}/get/${type}.tar.gz`
     case 'gitlab':
-      return `https://gitlab.com${repo}/repository/archive.tar.gz?ref=${type}`
+      return `https://gitlab.com${repo}/-/archive/${type}/${
+        repo.split('/')[2]
+      }-${type}.tar.gz`
     default:
       return `https://github.com${repo}/archive/${type}.tar.gz`
   }

@@ -12,7 +12,7 @@ This project is the spiritual successor of [gittar](https://github.com/lukeed/gi
 
 ## Usage
 
-Since v2.0+
+**Since v2.0+**
 
 ```typescript
 import gitly from 'gitly'
@@ -21,7 +21,7 @@ console.log(await gitly('iwatakeshi/gitly', '/path/to/extracted/folder/'))
 // -> ['~/.gitly/github/iwatakeshi/gitly/master.tar.gz', '/path/to/extracted/folder/']
 ```
 
-Since v1.0+
+**Since v1.0+**
 
 ```typescript
 import { download, extract } from 'gitly'
@@ -46,6 +46,40 @@ const destination = '/path/to/foobar'
 
 await extract(source, destination)
 // -> /path/to/foobar
+```
+
+## Advanced Usage
+
+**Since v3.0+**
+
+Because urls and remote APIs can change, you can extend/replace some capabilities of gitly.
+
+For example, if you would like to change the way gitly fetches the archive, replace the `fetch` method with our own.
+
+```ts
+gitly('...', '...', {
+  fetch: async (url, destination) => url, // Use axios or do something and return the url
+})
+```
+
+You can also change the way how gitly filters the url for git repositories.
+
+```ts
+gitly('...', '...', {
+  url: {
+    filter: async (info) => gitUrl, // Deterime input url and return the correct git url based on the input.
+  },
+})
+```
+
+Lastly, you can even change the extraction filter method for `tar`.
+
+```ts
+gitly('...', '...', {
+  extract: {
+    filter: async (path, stat) => true, // Filter the files for tar
+  },
+})
 ```
 
 ### `GitlyOptions` (interface)

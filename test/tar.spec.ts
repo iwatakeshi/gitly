@@ -17,7 +17,7 @@ describe('utils/tar', () => {
 
     it('should return a gitlab url to the zipped file', () => {
       expect(createArchiveUrl(parse('gitlab:iwatakeshi/test'))).toEqual(
-        'https://gitlab.com/iwatakeshi/test/repository/archive.tar.gz?ref=master'
+        'https://gitlab.com/iwatakeshi/test/-/archive/master/test-master.tar.gz'
       )
     })
 

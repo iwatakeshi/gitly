@@ -11,24 +11,24 @@
   ],
   "dependencies": {
     "axios": "^0.21.1",
-    "tar": "^6.1.6"
+    "tar": "^6.1.11"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.24",
-    "@types/node": "^16.4.13",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.10",
     "@types/shelljs": "^0.8.9",
     "@types/tar": "^4.0.5",
-    "@typescript-eslint/eslint-plugin": "^4.29.0",
-    "@typescript-eslint/eslint-plugin-tslint": "^4.29.0",
-    "@typescript-eslint/parser": "^4.29.0",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-prefer-arrow": "^1.2.3",
-    "jest": "^27.0.6",
+    "jest": "^27.1.0",
     "shelljs": "^0.8.4",
-    "ts-jest": "^27.0.4",
-    "tslib": "^2.3.0",
-    "typescript": "^4.3.5"
+    "ts-jest": "^27.0.5",
+    "tslib": "^2.3.1",
+    "typescript": "^4.4.2"
   },
   "scripts": {
     "prepare": "npm run build",

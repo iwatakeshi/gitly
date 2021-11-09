@@ -1,4 +1,4 @@
-export { default } from './gitly'
-export { default as download } from './download'
-export { default as extract } from './extract'
-export { default as parse } from './utils/parse'
+export {default} from './core/gitly'
+export {download} from './core/download'
+export {extract} from './core/extract'
+export {parse} from './utils/url/parse'

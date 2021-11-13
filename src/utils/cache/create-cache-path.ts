@@ -12,6 +12,7 @@ export function createCachePath(url: GitURL, directory?: string): string {
   return join(
     directory || GITLY_PATH,
     url.provider,
+    url.owner,
     /* istanbul ignore next */
     url.repository ?? url.pathname,
     `${url.branch}.tar.gz`

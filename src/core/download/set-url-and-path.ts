@@ -6,12 +6,14 @@ import { GitURL } from '../../utils/url/git-url'
 
 /**
  * Sets the archive url and the cache path
+ * @param options The gitly options
+ * @returns A tuple containing the archive url and path respectively.
  */
 export function setURLAndPath(options?: GitlyDownloadOptions) {
   return (url: GitURL): [string, string] => {
     const archiveURL = defaultTo(
       createArchiveURL,
-      options?.createArchiveURL,
+      options?.createArchiveURL
     )(url)
     const path = createCachePath(url, options?.cache?.directory)
     return [archiveURL, path]

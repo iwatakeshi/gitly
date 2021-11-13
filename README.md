@@ -48,114 +48,121 @@ await extract(source, destination)
 // -> /path/to/foobar
 ```
 
-## Advanced Usage
+## Functions
 
-**Since v3.0+**
-
-Because urls and remote APIs can change, you can extend/replace some capabilities of gitly.
-
-For example, if you would like to change the way gitly fetches the archive, replace the `fetch` method with our own.
+### `gitly`
 
 ```ts
-gitly('...', '...', {
-  fetch: async (url, destination) => url, // Use axios or do something and return the url
-})
-```
-
-You can also change the way how gitly filters the url for git repositories.
-
-```ts
-gitly('...', '...', {
-  url: {
-    filter: async (info) => gitUrl, // Deterime input url and return the correct git url based on the input.
-  },
-})
-```
-
-Lastly, you can even change the extraction filter method for `tar`.
-
-```ts
-gitly('...', '...', {
-  extract: {
-    filter: async (path, stat) => true, // Filter the files for tar
-  },
-})
-```
-
-### `GitlyOptions` (interface)
-
-```ts
-interface GitlyOptions {
-  /** Use cache only (default: undefined) */
-  cache?: boolean
-  /** Use both cache and local (default: undefined) */
-  force?: boolean
-  /** Throw an error when fetching (default: undefined) */
-  throw?: boolean
-  /** Set cache directory (default: '~/.gitly') */
-  temp?: string
-  /** Set the host name (default: undefined) */
-  host?: string
-  /** Options for url */
-  url?: {
-    /**
-     * Extend the url filtering method
-     * @param info The URLInfo object */
-    filter?(info: URLInfo): string
-  }
-  /** Options for tar extractions */
-  extract?: {
-    /** Extend the extract filtering method for the 'tar' library */
-    filter?(path: string, stat: FileStat): boolean
-  }
-  /**
-   * Overrieds the fetch function
-   * @param url The url of the repository to download
-   * @param destination The path where the file is to be downloaded
-   * @returns The destination path
-   */
-  fetch: (url: string, destination: string) => Promise<string>
-}
-```
-
-### `URLInfo` (interface)
-
-```ts
-interface URLInfo {
-  protocol: string
-  host: string
-  hostname: string
-  hash: string
-  href: string
-  path: string
-  repository: string
-  owner: string
-  branch: string
-}
-```
-
-### `gitly` (function)
-
-```ts
-function gitly(
+type gitly = (
   repository: string,
   destination?: string,
   options?: GitlyOptions
-): Promise<[string, string]>
+) => Promise<[string, string]>
 ```
 
-### `download` (function)
+### `download`
 
 ```ts
-function download(repository: string, options: GitlyOptions): Promise<string>
+type download = (repository: string, options?: GitlyDownloadOptions) => Promise<string>
 ```
 
-### `extract` (function)
+### `extract`
 
 ```ts
-function extract(
+type extract = (
   source: string,
   destination: string,
-  options?: GitlyOptions
-): Promise<string>
+  options?: GitlyExtractOptions
+) => Promise<string>
+```
+
+## Classes
+
+### `GitURL`
+
+```ts
+class GitURL extends URL implements GitMetadata {}
+```
+
+## Interfaces
+
+
+### `GitlyOptions`
+
+```ts
+interface GitlyOptions extends GitlyDownloadOptions {
+  /**
+   * Extraction options for `tar`
+   */
+  extract?: ExtractOptions
+}
+```
+
+### `GitlyDownloadOptions`
+
+```ts
+interface GitlyDownloadOptions {
+  /**
+   * Allow gitly to throw on error
+   */
+  throw?: boolean
+  /**
+   * A custom function that generates the archive url for gitly to download
+   */
+  createArchiveURL?: (url: GitURL) => string
+  /**
+   * Cache options
+   */
+  cache?: {
+   /**
+    * Disables gitly's use of cache.
+    */
+    disable?: boolean
+    /**
+     * Sets the root cache directory
+     */
+    directory?: string
+  }
+  /**
+  * A custom function that fetches and downloads the git repository.
+  * @deprecated Since `v3.0.0`
+  * 
+  * Note: Consider using the gitly's utilities or contribute to the project.
+  */
+  fetch?: (url: GitURL, path: string) => Promise<Readable>
+  /**
+  * Force gitly to fetch remotely first before accessing the cache
+  */
+  force?: boolean
+}
+```
+
+### `GitlyExtractOptions`
+```ts
+interface GitlyExtractOptions extends ExtractOptions {
+  /**
+   * Allow gitly to throw on error
+   */
+  throw?: boolean
+}
+```
+
+### `GitMetadata`
+
+```ts
+/**
+ * Defines the metadata for a git repository
+ */
+interface GitMetadata {
+  owner: string
+  repository: string
+  branch: string
+  provider: GitProvider
+}
+```
+
+### `GitProvider`
+
+```ts
+type GitProvider<T = ''> = 'bitbucket' | 'github' | 'gitlab' | T
 ```

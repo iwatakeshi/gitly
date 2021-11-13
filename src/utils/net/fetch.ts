@@ -1,5 +1,5 @@
-import axios, {AxiosResponse} from "axios";
-import {Readable} from "stream";
+import axios, { AxiosResponse } from 'axios'
+import { Readable } from 'stream'
 
 const validateStatus = (status: number) => status >= 200 && status < 500
 const isHTTPError = ({status: code}: AxiosResponse) => code >= 400

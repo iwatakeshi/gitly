@@ -1,8 +1,4 @@
-export type GitProvider<T = ''> = |
-  'bitbucket' |
-  'github' |
-  'gitlab' |
-  T
+export type GitProvider<T = ''> = 'bitbucket' | 'github' | 'gitlab' | T
 
 export interface GitMetadata {
   owner: string

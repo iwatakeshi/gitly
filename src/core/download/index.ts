@@ -33,7 +33,7 @@ export interface GitlyDownloadOptions {
      */
     disable?: boolean
     /**
-     *
+     * Sets the root cache directory
      */
     directory?: string
   }

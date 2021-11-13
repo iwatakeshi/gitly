@@ -1,6 +1,9 @@
 import tar, { ExtractOptions } from 'tar'
 
 export interface GitlyExtractOptions extends ExtractOptions {
+  /**
+   * Allow gitly to throw on error
+   */
   throw?: boolean
 }
 
@@ -16,9 +19,9 @@ export async function extract(
   options?: GitlyExtractOptions
 ): Promise<string> {
   try {
-    await tar.extract({strip: 1, ...options, file: source, cwd: destination})
+    await tar.extract({ strip: 1, ...options, file: source, cwd: destination })
     return destination
-  } catch (e: any) {
+  } catch (e) {
     if (options?.throw) throw e
     return ''
   }
@@ -39,7 +42,6 @@ export async function extract(
 export const $extract =
   /*  istanbul ignore next */
 
-
-  (destination: string, options?: GitlyExtractOptions) =>
-    async (source: string) =>
-      extract(source, destination, options)
+  (destination: string, options?: GitlyExtractOptions) => async (
+    source: string
+  ) => extract(source, destination, options)

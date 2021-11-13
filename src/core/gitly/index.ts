@@ -2,10 +2,13 @@ import { GITLY_PATH } from '../../utils/constants'
 
 import { $download, GitlyDownloadOptions } from '../download'
 import { $extract } from '../extract'
-import { pipeAsync, tapAsync } from "rambdax";
-import { ExtractOptions } from "tar";
+import { pipeAsync, tapAsync } from 'rambdax'
+import { ExtractOptions } from 'tar'
 
 export interface GitlyOptions extends GitlyDownloadOptions {
+  /**
+   * Extraction options for `tar`
+   */
   extract?: ExtractOptions
 }
 
@@ -23,7 +26,9 @@ export default async function gitly(
 ): Promise<[string, string]> {
   return pipeAsync<[string, string]>(
     $download(options),
-    tapAsync($extract(destination, {...options?.extract, throw: options.throw})),
+    tapAsync(
+      $extract(destination, { ...options?.extract, throw: options.throw })
+    ),
     (source: string) => [source, destination]
   )(repository)
 }

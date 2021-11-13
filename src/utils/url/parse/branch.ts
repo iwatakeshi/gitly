@@ -1,3 +1,3 @@
-import {replace} from "rambda";
+import { replace } from "rambda";
 
 export const branch = replace('#', '')

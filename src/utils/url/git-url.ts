@@ -1,7 +1,7 @@
-import {branch} from "./parse/branch";
-import {ownerRepo} from "./parse/owner-repo";
-import {provider} from "./parse/provider";
-import {GitMetadata} from "../../types/git";
+import { branch } from './parse/branch'
+import { ownerRepo } from './parse/owner-repo'
+import { provider } from './parse/provider'
+import { GitMetadata } from '../../types/git'
 
 /**
  * Options for `GitURL`
@@ -14,8 +14,12 @@ export interface GitURLOptions {
 }
 
 export class GitURL extends URL implements GitMetadata {
-  constructor(url: string | URL, base?: string | URL, private readonly options?: GitURLOptions) {
-    super(url, base);
+  constructor(
+    url: string | URL,
+    base?: string | URL,
+    private readonly options?: GitURLOptions
+  ) {
+    super(url, base)
   }
 
   get owner() {
@@ -33,6 +37,7 @@ export class GitURL extends URL implements GitMetadata {
   }
 
   get provider() {
+    /* istanbul ignore next */
     return provider(this.host) || 'github'
   }
 }

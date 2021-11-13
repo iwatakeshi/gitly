@@ -23,7 +23,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Test
-        run: yarn test --ci --coverage --maxWorkers=2
+        run: yarn test --ci
       - name: Codecov
         if: matrix.os == 'ubuntu-latest' && contains(matrix.node, '17')
         uses: codecov/codecov-action@v1.0.4

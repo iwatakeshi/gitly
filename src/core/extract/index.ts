@@ -1,6 +1,6 @@
 import tar, { ExtractOptions } from 'tar'
 
-export type GitlyExtractOptions = ExtractOptions & {
+export interface GitlyExtractOptions extends ExtractOptions {
   throw?: boolean
 }
 

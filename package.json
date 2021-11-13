@@ -46,7 +46,7 @@
   "scripts": {
     "watch": "parcel watch",
     "build": "parcel build",
-    "test": "jest --runInBand --coverage",
+    "test": "jest -i --coverage",
     "docs": "npm run docs:build && serve docs",
     "docs:build": "typedoc"
   },

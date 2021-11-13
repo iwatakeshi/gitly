@@ -8,11 +8,7 @@ import { GitURL } from '../url/git-url'
  * @param url The git url containing the required repository metadata
  * @param directory The root directory where the cache is stored
  */
-export function createCachePath(
-  url: GitURL,
-  directory?: string
-): string {
-
+export function createCachePath(url: GitURL, directory?: string): string {
   return join(
     directory || GITLY_PATH,
     url.provider,

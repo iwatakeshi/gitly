@@ -9,10 +9,12 @@
   "main": "lib/common/index.js",
   "module": "lib/esm/index.js",
   "types": "lib/types/index.d.ts",
-  "typings": "dist/gitly.d.ts",
   "files": [
     "lib",
-    "src"
+    "src",
+    "tsconfig.json",
+    "tsconfig.esm.json",
+    "tsconfig.types.json"
   ],
   "engines": {
     "node": ">=12.0.0"

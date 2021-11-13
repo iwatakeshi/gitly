@@ -4,6 +4,7 @@ import { curry, flip } from 'rambda'
 import { GitURL } from '../url/git-url'
 
 /**
+ * Creates a cache path for gitly to store the repository.
  * @param url The git url containing the required repository metadata
  * @param directory The root directory where the cache is stored
  */
@@ -14,14 +15,18 @@ export function createCachePath(
 
   return join(
     directory || GITLY_PATH,
-    url.host ?? `${url.provider}`,
-    url.pathname ?? url.repository,
+    url.provider,
+    /* istanbul ignore next */
+    url.repository ?? url.pathname,
     `${url.branch}.tar.gz`
   )
 }
 
 /**
- * A curried version of createCachePath
+ * Creates a cache path for gitly to store the repository.
+ * @param directory The root directory where the cache is stored
+ * @returns A curried version of `createCachePath()`
  */
-export const $createCachePath = curry(flip(createCachePath)) as
-  (directory?: string) => (url: GitURL) => string
+export const $createCachePath = curry(flip(createCachePath)) as (
+  directory?: string
+) => (url: GitURL) => string

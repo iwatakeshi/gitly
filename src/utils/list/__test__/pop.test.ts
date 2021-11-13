@@ -1,4 +1,4 @@
-import {pop} from "../pop";
+import { pop } from "../pop";
 
 describe('pop', () => {
   describe('array', () => {

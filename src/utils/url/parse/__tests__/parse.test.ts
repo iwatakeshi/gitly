@@ -1,5 +1,5 @@
-import {parse} from "../index";
-import {GitMetadata} from "../../../../types/git";
+import { parse } from "../index";
+import { GitMetadata } from "../../../../types/git";
 
 const expected = (url: Partial<GitMetadata> = {}) => ({
   owner: 'iwatakeshi',

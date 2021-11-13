@@ -1,7 +1,7 @@
-import {mktdir} from "../mktdir";
-import {exists} from "../exists";
-import {rm} from "shelljs";
-import {tmpdir} from "os";
+import { mktdir } from "../mktdir";
+import { exists } from "../exists";
+import { rm } from "shelljs";
+import { tmpdir } from "os";
 
 describe('mktdir', () => {
   afterAll(() => {

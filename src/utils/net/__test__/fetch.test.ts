@@ -1,5 +1,5 @@
-import {isReadableStream} from "../../stream/is-stream";
-import {fetch} from "../fetch";
+import { isReadableStream } from "../../stream/is-stream";
+import { fetch } from "../fetch";
 
 describe('fetch', () => {
   it('should fetch and return a readable stream', async () => {

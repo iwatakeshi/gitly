@@ -1,6 +1,6 @@
-import {exists} from "../exists";
-import {tmpdir} from 'os'
-import {join} from "path";
+import { exists } from "../exists";
+import { tmpdir } from 'os'
+import { join } from "path";
 
 describe('exists', () => {
   it('should return true when a temp directory exists', async () => {

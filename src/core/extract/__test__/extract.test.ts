@@ -1,8 +1,8 @@
-import {mktdirSync} from "../../../utils/fs/mktdir";
-import {dirname, join} from "path";
-import {download} from "../../download";
-import {extract} from "../index";
-import {ls} from "shelljs";
+import { mktdirSync } from "../../../utils/fs/mktdir";
+import { dirname, join } from "path";
+import { download } from "../../download";
+import { extract } from "../index";
+import { ls } from "shelljs";
 
 const TEST_DIR = mktdirSync('gitly', 'extract')
 describe('extract', () => {

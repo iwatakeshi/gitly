@@ -1,4 +1,4 @@
-import {GitURL} from "../git-url";
+import { GitURL } from "../git-url";
 
 describe('GitURL', () => {
   it('should create an instance of GitURL', () => {

@@ -1,5 +1,5 @@
-import {toGitURL} from "../to-git-url";
-import {GitURL} from "../../git-url";
+import { toGitURL } from "../to-git-url";
+import { GitURL } from "../../git-url";
 
 describe('to-git-url', () => {
   describe('to-url', () => {

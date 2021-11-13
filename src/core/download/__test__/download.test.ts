@@ -1,8 +1,8 @@
-import {existsSync} from 'fs'
-import {rm} from 'shelljs'
+import { existsSync } from 'fs'
+import { rm } from 'shelljs'
 
-import {download, GitlyDownloadOptions} from '../index'
-import {mktdirSync} from "../../../utils/fs/mktdir";
+import { download, GitlyDownloadOptions } from '../index'
+import { mktdirSync } from "../../../utils/fs/mktdir";
 
 
 describe('download', () => {

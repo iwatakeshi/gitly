@@ -18,7 +18,6 @@
   "engines": {
     "node": ">=13"
   },
-  "module": "dist/gitly.esm.js",
   "dependencies": {
     "axios": "^0.24.0",
     "rambda": "^6.9.0",

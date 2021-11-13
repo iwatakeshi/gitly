@@ -16,6 +16,6 @@ export function takeLastUntil(fn: any) {
       // Keep adding the elements
       temp.push(iterable[i])
     }
-    return typeof iterable === 'string' ? temp?.reverse().join('') : temp.reverse()
+    return typeof iterable === 'string' ? reverse(temp).join('') : reverse(temp)
   }
 }

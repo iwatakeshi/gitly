@@ -3,7 +3,13 @@ import {ownerRepo} from "./parse/owner-repo";
 import {provider} from "./parse/provider";
 import {GitMetadata} from "../../types/git";
 
+/**
+ * Options for `GitURL`
+ */
 export interface GitURLOptions {
+  /**
+   * The repository's branch
+   */
   branch?: string
 }
 

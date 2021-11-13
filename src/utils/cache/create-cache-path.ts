@@ -1,7 +1,7 @@
-import {join} from "path";
-import {GITLY_PATH} from "../constants";
-import {curry, flip} from "rambda";
-import {GitURL} from "../url/git-url";
+import { join } from 'path'
+import { GITLY_PATH } from '../constants'
+import { curry, flip } from 'rambda'
+import { GitURL } from '../url/git-url'
 
 /**
  * @param url The git url containing the required repository metadata

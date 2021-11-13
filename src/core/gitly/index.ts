@@ -15,7 +15,7 @@ export interface GitlyOptions extends GitlyDownloadOptions {
 /**
  * Downloads and extracts the repository
  * @param repository The repository to download
- * @param destination The destination to index.ts
+ * @param destination The destination path to download the repository
  * @param options The options for gitly
  * @returns A tuple with the source and destination respectively
  */

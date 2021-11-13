@@ -1,10 +1,10 @@
-import {and, complement, curry, flip, match, pipe, test} from "rambda";
-import {toGitURL} from "./to-git-url";
-import isDomainUrl, {DOMAIN_REGEX} from "../is-domain-url";
-import {tld} from "./tld";
-import isAbsoluteUrl from "../is-absolute-url";
-import {GitMetadata, GitProvider} from "../../../types/git";
-import {GitURL} from "../git-url";
+import { and, complement, curry, flip, match, pipe, test } from 'rambda'
+import { toGitURL } from './to-git-url'
+import isDomainUrl, { DOMAIN_REGEX } from '../is-domain-url'
+import { tld } from './tld'
+import isAbsoluteUrl from '../is-absolute-url'
+import { GitMetadata, GitProvider } from '../../../types/git'
+import { GitURL } from '../git-url'
 
 export type GitlyParseOptions = Pick<GitMetadata, 'branch' | 'provider'>
 
@@ -22,12 +22,11 @@ export type GitlyParseOptions = Pick<GitMetadata, 'branch' | 'provider'>
  * 7. host:owner/repo#tag
  * ```
  */
-export function
-parse(
+export function parse(
   url: string,
   options: GitlyParseOptions = {
     branch: 'master',
-    provider: 'github'
+    provider: 'github',
   }
 ): Partial<GitURL> {
 
@@ -43,10 +42,7 @@ parse(
 
 
   const isScopedOrRelativeURL = and(
-    and(
-      test(SCOPED_OR_RELATIVE_REGEX_URL),
-      complement(test(PROTOCOL_REGEX))
-    ),
+    and(test(SCOPED_OR_RELATIVE_REGEX_URL), complement(test(PROTOCOL_REGEX))),
     complement(test(DOMAIN_REGEX))
   )
 
@@ -57,11 +53,11 @@ parse(
     const [, , host, owner, pathname] = match(SCOPED_OR_RELATIVE_REGEX_URL, url)
     const _provider: GitProvider = (host as GitProvider) ?? options.provider
     const _url = `${_provider}.${tld(_provider)}/${owner}/${pathname}`
-    return pipe(upgrade, x => toGitURL(x))(_url)
+    return pipe(upgrade, (x) => toGitURL(x))(_url)
   }
 
   if (isDomainUrl(url)) {
-    return pipe(upgrade, x => toGitURL(x))(url)
+    return pipe(upgrade, (x) => toGitURL(x))(url)
   }
 
   if (isAbsoluteUrl(url)) {

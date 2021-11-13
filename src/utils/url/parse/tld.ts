@@ -1,5 +1,5 @@
-import {always, cond, equals, T} from "rambda";
-import {GitProvider} from "../../../types/git";
+import { always, cond, equals, T } from "rambda";
+import { GitProvider } from "../../../types/git";
 
 type TLD = 'com' | 'org'
 

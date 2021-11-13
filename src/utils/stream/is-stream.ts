@@ -5,9 +5,11 @@
  * @param stream
  */
 export function isStream(stream: unknown) {
-  return stream !== null
-    && typeof stream === 'object'
-    && typeof (stream as any).pipe === 'function';
+  return (
+    stream !== null &&
+    typeof stream === 'object' &&
+    typeof (stream as any).pipe === 'function'
+  )
 }
 
 /**
@@ -15,10 +17,12 @@ export function isStream(stream: unknown) {
  * @param stream
  */
 export function isWritableStream(stream: unknown) {
-  return isStream(stream)
-    && (stream as any).writable !== false
-    && typeof (stream as any)._write === 'function'
-    && typeof (stream as any)._writableState === 'object';
+  return (
+    isStream(stream) &&
+    (stream as any).writable !== false &&
+    typeof (stream as any)._write === 'function' &&
+    typeof (stream as any)._writableState === 'object'
+  )
 }
 
 /**
@@ -26,10 +30,12 @@ export function isWritableStream(stream: unknown) {
  * @param stream
  */
 export function isReadableStream(stream: unknown) {
-  return isStream(stream)
-    && (stream as any).readable !== false
-    && typeof (stream as any)._read === 'function'
-    && typeof (stream as any)._readableState === 'object';
+  return (
+    isStream(stream) &&
+    (stream as any).readable !== false &&
+    typeof (stream as any)._read === 'function' &&
+    typeof (stream as any)._readableState === 'object'
+  )
 }
 
 /**
@@ -37,8 +43,7 @@ export function isReadableStream(stream: unknown) {
  * @param stream
  */
 export function isDuplexStream(stream: unknown) {
-  return isWritableStream(stream)
-    && isReadableStream(stream);
+  return isWritableStream(stream) && isReadableStream(stream)
 }
 
 /**
@@ -46,6 +51,7 @@ export function isDuplexStream(stream: unknown) {
  * @param stream
  */
 export function isTransformStream(stream: unknown) {
-  return isDuplexStream(stream)
-    && typeof (stream as any)._transform === 'function';
+  return (
+    isDuplexStream(stream) && typeof (stream as any)._transform === 'function'
+  )
 }

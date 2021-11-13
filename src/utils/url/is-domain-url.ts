@@ -1,4 +1,4 @@
-import {isEmpty} from "rambda";
+import { isEmpty } from "rambda";
 
 export const DOMAIN_REGEX = /([a-z]+)(\.)([a-z.]+)/
 const PROTOCOL = /https?/

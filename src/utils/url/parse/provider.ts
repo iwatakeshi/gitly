@@ -1,7 +1,7 @@
-import {equals, filter, head, pipe, split} from "rambda";
-import {pop} from "../../list/pop";
-import {takeLastUntil} from "../../list/take-last-until";
-import {GitProvider} from "../../../types/git";
+import { equals, filter, head, pipe, split } from "rambda";
+import { pop } from "../../list/pop";
+import { takeLastUntil } from "../../list/take-last-until";
+import { GitProvider } from "../../../types/git";
 
 export const provider = pipe(
   split('.'),

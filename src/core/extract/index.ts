@@ -1,4 +1,4 @@
-import tar, {ExtractOptions} from 'tar'
+import tar, { ExtractOptions } from 'tar'
 
 export type GitlyExtractOptions = ExtractOptions & {
   throw?: boolean
@@ -13,7 +13,7 @@ export type GitlyExtractOptions = ExtractOptions & {
 export async function extract(
   source: string,
   destination: string,
-  options?: GitlyExtractOptions,
+  options?: GitlyExtractOptions
 ): Promise<string> {
   try {
     await tar.extract({strip: 1, ...options, file: source, cwd: destination})

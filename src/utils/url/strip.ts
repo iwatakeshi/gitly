@@ -1,4 +1,4 @@
-import {replace} from "rambda";
+import { replace } from "rambda";
 
 /**
  * Removes `www` from a url (including the dot and any numbers used i.e. www1, www2, etc)

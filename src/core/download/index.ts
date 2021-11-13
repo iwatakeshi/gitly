@@ -1,17 +1,17 @@
-import {curry, flip, pipeAsync} from "rambdax";
-import isOnline from "../../utils/net/is-online";
-import {execute} from "../../utils/task";
-import {parse} from "../../utils/url/parse";
-import {orderTasks, setTasks} from './tasks'
-import {setURLAndPath} from "./set-url-and-path";
-import {Readable} from "stream";
-import {GitURL} from "../../utils/url/git-url";
+import { pipeAsync } from 'rambdax'
+import isOnline from '../../utils/net/is-online'
+import { execute } from '../../utils/task'
+import { parse } from '../../utils/url/parse'
+import { orderTasks, setTasks } from './tasks'
+import { setURLAndPath } from './set-url-and-path'
+import { Readable } from 'stream'
+import { GitURL } from '../../utils/url/git-url'
 
 export interface GitlyDownloadOptions {
   /**
    * Allow gitly to throw on error
    */
-  throw?: boolean,
+  throw?: boolean
   /**
    * A custom function that generates the archive url for gitly to download
    * @param url The parsed git url
@@ -50,11 +50,11 @@ export interface GitlyDownloadOptions {
   force?: boolean
 }
 
-
 /**
  * Download the tar file from the repository
  * and store it in a temporary directory
  * @param url The repository url to download
+ * @param options The gitly options
  * @example
  * ```js
  * // ...
@@ -62,7 +62,10 @@ export interface GitlyDownloadOptions {
  * // ...
  * ```
  */
-export async function download(url: string, options?: GitlyDownloadOptions): Promise<string> {
+export async function download(
+  url: string,
+  options?: GitlyDownloadOptions
+): Promise<string> {
   try {
     const connected = await isOnline()
     return await pipeAsync<string>(
@@ -81,5 +84,7 @@ export async function download(url: string, options?: GitlyDownloadOptions): Pro
 /**
  * A curried version of `download`
  */
-export const $download = curry(flip(download)) as
-  (options?: GitlyDownloadOptions) => (url: string) => Promise<string>
+export const $download =
+  /*  istanbul ignore next */
+  (options?: GitlyDownloadOptions) => async (url: string) =>
+    download(url, options)

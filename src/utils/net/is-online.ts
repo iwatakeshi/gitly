@@ -1,5 +1,5 @@
-import {promises as dns} from 'dns'
-import {tryCatchAsync} from "rambdax";
+import { promises as dns } from 'dns'
+import { tryCatchAsync } from 'rambdax'
 
 const isOnline = tryCatchAsync(async () => {
   await dns.lookup('google.com')

@@ -1,8 +1,8 @@
-import {GitlyDownloadOptions} from "./index";
-import {defaultTo} from "rambdax";
-import {createArchiveURL} from "../../utils/git/create-archive-url";
-import {createCachePath} from "../../utils/cache/create-cache-path";
-import {GitURL} from "../../utils/url/git-url";
+import { GitlyDownloadOptions } from './index'
+import { defaultTo } from 'rambdax'
+import { createArchiveURL } from '../../utils/git/create-archive-url'
+import { createCachePath } from '../../utils/cache/create-cache-path'
+import { GitURL } from '../../utils/url/git-url'
 
 /**
  * Sets the archive url and the cache path

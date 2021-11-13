@@ -1,9 +1,9 @@
-import {GITLY_PATH} from '../../utils/constants'
+import { GITLY_PATH } from '../../utils/constants'
 
-import {$download, GitlyDownloadOptions} from '../download'
-import {$extract} from '../extract'
-import {pipeAsync, tapAsync} from "rambdax";
-import {ExtractOptions} from "tar";
+import { $download, GitlyDownloadOptions } from '../download'
+import { $extract } from '../extract'
+import { pipeAsync, tapAsync } from "rambdax";
+import { ExtractOptions } from "tar";
 
 export interface GitlyOptions extends GitlyDownloadOptions {
   extract?: ExtractOptions

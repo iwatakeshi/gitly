@@ -1,7 +1,7 @@
-import {join} from "path";
-import {mkdirSync, mkdtempSync, promises as fs} from 'fs'
-import {tmpdir} from "os";
-import {tempdir} from "shelljs";
+import { join } from "path";
+import { mkdirSync, mkdtempSync, promises as fs } from 'fs'
+import { tmpdir } from "os";
+import { tempdir } from "shelljs";
 
 /**
  * Creates a test directory

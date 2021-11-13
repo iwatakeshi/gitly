@@ -16,7 +16,7 @@
     "src"
   ],
   "engines": {
-    "node": ">=13"
+    "node": ">=10"
   },
   "dependencies": {
     "axios": "^0.24.0",

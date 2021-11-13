@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Task } from '../../utils/task'
 import { exists } from '../../utils/fs/exists'
 import { createWriteStream, promises as fs } from 'fs'

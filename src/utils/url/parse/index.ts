@@ -64,7 +64,7 @@ export function parse(
   if (isDomainUrl(url)) {
     return pipe(upgrade, (x) => toGitURL(x))(url)
   }
-
+  /* istanbul ignore next */
   if (isAbsoluteUrl(url)) {
     return toGitURL(url)
   }

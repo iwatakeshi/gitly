@@ -82,7 +82,16 @@ export async function download(
 }
 
 /**
- * A curried version of `download`
+ * Download the tar file from the repository
+ * and store it in a temporary directory
+ * @param options The gitly options
+ * @returns A curried version of `download()`
+ * @example
+ * ```js
+ * // ...
+ * const path = await ('iwatakeshi/gitly' |> $download())
+ * // ...
+ * ```
  */
 export const $download =
   /*  istanbul ignore next */

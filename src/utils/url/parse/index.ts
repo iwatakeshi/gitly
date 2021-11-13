@@ -6,11 +6,21 @@ import isAbsoluteUrl from '../is-absolute-url'
 import { GitMetadata, GitProvider } from '../../../types/git'
 import { GitURL } from '../git-url'
 
-export type GitlyParseOptions = Pick<GitMetadata, 'branch' | 'provider'>
+/**
+ * Options for `parse`
+ */
+export interface GitlyParseOptions
+  extends Pick<GitMetadata, 'branch' | 'provider'> {
+}
+
+// NOTE: This regex urls can match protocols (i.e http):
+const SCOPED_OR_RELATIVE_REGEX_URL = /(([^\/]+):)?([^\/]+)\/(.+)+/
+const PROTOCOL_REGEX = /https?/
 
 /**
  * Parses a url and returns the metadata
- *
+ * @param url The url to parse
+ * @param options The options for `parse`
  * @example
  * ```markdown
  * 1. owner/repo
@@ -29,17 +39,12 @@ export function parse(
     provider: 'github',
   }
 ): Partial<GitURL> {
-
-  // NOTE: This regex urls can match protocols (i.e http):
-  const SCOPED_OR_RELATIVE_REGEX_URL = /(([^\/]+):)?([^\/]+)\/(.+)+/
-  const PROTOCOL_REGEX = /https?/
   // Determine the type of url entered
   // Possible types:
   // - relative url (i.e. owner/repo, owner/repo#develop)
   // - scoped url (i.e. host:owner/repo, host:owner/repo#develop)
   // - absolute url (i.e. https://www.github.com/owner/repo, etc)
   // - simple url (i.e. github.com/owner/repo, etc)
-
 
   const isScopedOrRelativeURL = and(
     and(test(SCOPED_OR_RELATIVE_REGEX_URL), complement(test(PROTOCOL_REGEX))),
@@ -64,9 +69,27 @@ export function parse(
     return toGitURL(url)
   }
 
+  /* istanbul ignore next */
   return {} as any
 }
 
-export const $parse = curry(flip(parse)) as
-  (options?: GitlyParseOptions) =>
-    (url: string) => GitURL
+/**
+ * Parses a url and returns the metadata
+ * @param url The url to parse
+ * @param options The options for `parse`
+ * @example
+ * ```markdown
+ * 1. owner/repo
+ * 2. owner/repo#tag
+ * 3. https://host.com/owner/repo
+ * 4. host.com/owner/repo
+ * 5. host.com/owner/repo#tag
+ * 6. host:owner/repo
+ * 7. host:owner/repo#tag
+ * ```
+ *
+ * @returns A curried version of `parse()`
+ */
+export const $parse = curry(flip(parse)) as (
+  options?: GitlyParseOptions
+) => (url: string) => GitURL

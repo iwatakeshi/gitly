@@ -24,5 +24,22 @@ export async function extract(
   }
 }
 
-export const $extract = (destination: string, options?: GitlyExtractOptions) =>
-  async (source: string) => await extract(source, destination, options)
+/**
+ * Extract a zipped file to the specified destination
+ * @param destination The path to extract the zipped file.
+ * @param options The tar options
+ * @returns A curried version of `extract()`
+ * @example
+ * ```ts
+ * // ...
+ *  const destination = await (source |> $extract('path/to/extract'))
+ * // ...
+ * ```
+ */
+export const $extract =
+  /*  istanbul ignore next */
+
+
+  (destination: string, options?: GitlyExtractOptions) =>
+    async (source: string) =>
+      extract(source, destination, options)

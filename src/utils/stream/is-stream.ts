@@ -1,4 +1,8 @@
-/* Credits https://github.com/sindresorhus/is-stream*/
+/*
+  istanbul ignore file
+  Credits: https://github.com/sindresorhus/is-stream
+  Note: These methods have been extensively tested by @sindresorhus
+*/
 
 /**
  * Determines whether an object is a stream

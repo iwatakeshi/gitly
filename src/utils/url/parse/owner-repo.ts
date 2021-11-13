@@ -10,13 +10,20 @@ const PATHNAME_REGEX =
  * `/iwatakeshi/.../.../gitly` -> `['iwatakeshi', 'gitly']
  * @param pathname
  */
-export const ownerRepo = (pathname: string): [owner: string, repository: string] => {
+export const ownerRepo = (
+  pathname: string
+): [owner: string, repository: string] => {
+  if (!test(PATHNAME_REGEX, pathname) || !pathname.includes('/'))
+    return ['', '']
+
   const paths = pipe(
     split('/'),
     filter(complement(equals('/'))),
     filter(complement(isEmpty))
   )(pathname)
+  /* istanbul ignore next */
   const owner = head(paths) ?? ''
+  /* istanbul ignore next */
   const repository = last(paths) ?? ''
   return [owner, repository]
 }

@@ -29,14 +29,14 @@ export async function gitly(repository: string): Promise<GitlyResult>;
  */
 export async function gitly(repository: string, destination: string): Promise<GitlyResult>;
 /**
- * 
+ * Downloads and extracts the repository.
  * @param repository The repository to download.
  * @param options The options for gitly.
  * @returns A promise containing a tuple with the source and destination respectively.
  */
 export async function gitly(repository: string, options: GitlyOptions): Promise<GitlyResult>;
 /**
- * 
+ * Downloads and extracts the repository.
  * @param repository The repository to download.
  * @param destination The destination path to download the repository.
  * @param options The options for gitly.

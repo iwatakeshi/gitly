@@ -1,4 +1,8 @@
-export type GitProvider<T = ''> = 'bitbucket' | 'github' | 'gitlab' | T
+export type GitProvider<T extends string = never> =
+  | 'bitbucket'
+  | 'github'
+  | 'gitlab'
+  | T
 
 /**
  * Defines the metadata for a git repository

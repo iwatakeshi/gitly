@@ -18,7 +18,7 @@ export default async function fetch(
 
   const { statusText: message, status: code } = response
   if (code >= 400) throw new GitlyDownloadError(message, code)
-  else if (code >= 300 && code < 400) {
+  else if (code >= 300 && code < 400 && response.headers.location) {
     return fetch(response.headers.location, file)
   } else await pipeline(response.data, await write(file))
   return file

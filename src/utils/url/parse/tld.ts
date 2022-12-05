@@ -1,9 +1,16 @@
-import { always, cond, equals, T } from "rambda";
-import { GitProvider } from "../../../types/git";
+import { GitProvider } from '../../../types/git'
 
-type TLD = 'com' | 'org'
+export type TLD<T extends string = never> = 'com' | 'org' | T
 
-export const tld = cond<GitProvider, TLD>([
-  [equals<GitProvider>('bitbucket'), always('org')],
-  [T, always('com')]
-]) as (provider: GitProvider) => TLD
+export function tld<P extends string = never, T extends string = never>(
+  provider: GitProvider<P>,
+  tld: TLD<T> = 'com'
+): TLD<T> {
+  const map = {
+    bitbucket: 'org',
+    github: 'com',
+    gitlab: 'com',
+  } as Record<GitProvider<P>, TLD<T>>
+
+  return map[provider] || tld
+}

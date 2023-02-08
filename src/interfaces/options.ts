@@ -37,5 +37,8 @@ export default interface GitlyOptions {
      */
     filter?(path: string, stat: FileStat): boolean
   }
+  /**
+   * Set the request headers (default: undefined)
+   */
   headers?: RawAxiosRequestHeaders | AxiosHeaders
 }

@@ -18,13 +18,11 @@ import URLInfo from '../interfaces/url'
  * ```
  */
 export default (url: string, options: GitlyOptions = {}): URLInfo => {
-  const { url: normalized, host } = normalizeURL(url, options)
-
-  // Parse the url
-  const result = parse(normalized)
-  const paths = (result.path || '').split('/').filter((p) => !!p)
-  const owner = paths.shift() || ''
-  const repository = paths.shift() || ''
+  const { url: normalized, host } = normalizeURL(url, options);
+  const result = parse(normalized);
+  const paths = (result.path || '').split('/').filter(Boolean);
+  const owner = paths.shift() || '';
+  const repository = paths.shift() || '';
   return {
     protocol: (result.protocol || 'https').replace(/:/g, ''),
     host: result.host || host || 'github.com',
@@ -34,48 +32,35 @@ export default (url: string, options: GitlyOptions = {}): URLInfo => {
     path: result.path || '',
     repository,
     owner,
-    type: (result.hash || '#master').substr(1),
-  }
-}
+    type: (result.hash || '#master').substring(1),
+  };
+};
+
 
 function normalizeURL(url: string, options: GitlyOptions) {
-  // Remove 'www.'
-  url = url.replace('www.', '')
-  // Remove '.git'
-  url = url.replace('.git', '')
-  const httpRegex = /http(s)?:\/\//
-  const tldRegex = /[\S]+\.([\D]+)/
-  let host = options.host || ''
-  if (/([\S]+):.+/.test(url) && !httpRegex.test(url)) {
-    /**
-     * Matches host:owner/repo
-     */
-    const matches = url.match(/([\S]+):.+/)
-    // Get the host
-    host = matches ? matches[1] : ''
-    // Remove the host from the url
-    url = host ? url.replace(`${host}:`, '') : url
-    // Add the host back in the correct format
-    url = `https://${host}.com/${url}`
-  } else if (tldRegex.test(url) && !httpRegex.test(url)) {
-    /**
-     * Matches github.com/...
-     */
-    url = `https://${url}`
-  } else if (/[\S]+\/[\S]+/.test(url) && !httpRegex.test(url)) {
-    /**
-     * Matches owner/repo
-     */
+  const { host } = options;
+  const isNotProtocol = !/http(s)?:\/\//.test(url);
+  const hasHost = /([\S]+):.+/.test(url);
+  const hasTLD = /[\S]+\.([\D]+)/.test(url);
 
-    // Get the TLD if any
-    const matches = ((options.host as string) || '').match(tldRegex)
-    let match = 'com'
-    if (matches) match = matches[1]
-    let domain = options.host || 'github'
-    domain = domain.replace(`.${match}`, '')
+  let normalizedURL = url.replace("www.", "").replace(".git", "");
+  let updatedHost = host || "";
 
-    url = `https://${domain}.${match}/${url}`
+  if (isNotProtocol && hasHost) {
+    // Matches host:owner/repo
+    const hostMatch = url.match(/([\S]+):.+/);
+    updatedHost = hostMatch ? hostMatch[1] : "";
+    normalizedURL = `https://${updatedHost}.com/${normalizedURL.replace(`${updatedHost}:`, "")}`;
+  } else if (isNotProtocol && hasTLD) {
+    // Matches host.com/...
+    normalizedURL = `https://${normalizedURL}`;
+  } else if (isNotProtocol) {
+    // Matches owner/repo
+    const tldMatch = (host || "").match(/[\S]+\.([\D]+)/);
+    const domain = (host || "github").replace(`.${tldMatch ? tldMatch[1] : "com"}`, "");
+    const tld = tldMatch ? tldMatch[1] : "com";
+    normalizedURL = `https://${domain}.${tld}/${normalizedURL}`;
   }
 
-  return { url, host }
+  return { url: normalizedURL, host: updatedHost };
 }

@@ -17,7 +17,7 @@ import URLInfo from '../interfaces/url'
  * 7. host:owner/repo#tag
  * ```
  */
-export default (url: string, options: GitlyOptions = {}): URLInfo => {
+export default function parse(url: string, options: GitlyOptions = {}): URLInfo {
   const { url: normalized, host } = normalizeURL(url, options);
   const result = new URL(normalized);
   const paths = (result.pathname || '').split('/').filter(Boolean);
@@ -34,7 +34,7 @@ export default (url: string, options: GitlyOptions = {}): URLInfo => {
     owner,
     type: (result.hash || '#master').substring(1),
   };
-};
+}
 
 
 function normalizeURL(url: string, options: GitlyOptions) {

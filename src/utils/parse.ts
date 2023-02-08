@@ -1,4 +1,4 @@
-import { parse } from 'url'
+import { URL } from 'url'
 
 import GitlyOptions from '../interfaces/options'
 import URLInfo from '../interfaces/url'
@@ -19,8 +19,8 @@ import URLInfo from '../interfaces/url'
  */
 export default (url: string, options: GitlyOptions = {}): URLInfo => {
   const { url: normalized, host } = normalizeURL(url, options);
-  const result = parse(normalized);
-  const paths = (result.path || '').split('/').filter(Boolean);
+  const result = new URL(normalized);
+  const paths = (result.pathname || '').split('/').filter(Boolean);
   const owner = paths.shift() || '';
   const repository = paths.shift() || '';
   return {
@@ -29,7 +29,7 @@ export default (url: string, options: GitlyOptions = {}): URLInfo => {
     hostname: (result.hostname || host || 'github').replace(/\.(\S+)/, ''),
     hash: result.hash || '',
     href: result.href || '',
-    path: result.path || '',
+    path: result.pathname || '',
     repository,
     owner,
     type: (result.hash || '#master').substring(1),

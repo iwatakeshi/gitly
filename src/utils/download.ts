@@ -27,7 +27,7 @@ export default async function download(
   const file = getFile(info, options)
   const url = getUrl(info, options)
   const local = async () => exists(file)
-  const remote = async () => fetch(url, file)
+  const remote = async () => fetch(url, file, options)
   let order = [local, remote]
   if ((await isOffline()) || options.cache) {
     order = [local]

@@ -1,6 +1,7 @@
 import { FileStat } from 'tar'
 
 import URLInfo from './url'
+import { AxiosHeaders, RawAxiosRequestHeaders } from 'axios'
 
 export default interface GitlyOptions {
   /**
@@ -36,4 +37,5 @@ export default interface GitlyOptions {
      */
     filter?(path: string, stat: FileStat): boolean
   }
+  headers?: RawAxiosRequestHeaders | AxiosHeaders
 }

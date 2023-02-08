@@ -4,14 +4,17 @@ import { promisify } from 'util'
 
 import { GitlyDownloadError } from './error'
 import write from './write'
+import GitlyOptions from '../interfaces/options'
 
 const pipeline = promisify(stream.pipeline)
 
 export default async function fetch(
   url: string,
-  file: string
+  file: string,
+  options: GitlyOptions = {}
 ): Promise<string> {
   const response = await axios.get(url, {
+    headers: options.headers,
     responseType: 'stream',
     validateStatus: (status) => status >= 200 && status < 500,
   })

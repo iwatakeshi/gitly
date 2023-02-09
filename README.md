@@ -88,7 +88,7 @@ interface GitlyOptions {
   /**
    * Set the request headers (default: undefined)
    */
-  headers? RawAxiosRequestHeaders | AxiosHeaders
+  headers?: RawAxiosRequestHeaders | AxiosHeaders
 }
 ```
 

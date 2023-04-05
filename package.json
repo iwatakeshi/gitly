@@ -1,6 +1,6 @@
 {
   "name": "gitly",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "An API to download and/or extract git repositories",
   "main": "lib/main.js",
   "repository": "github:iwatakeshi/gitly",

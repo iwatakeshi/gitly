@@ -59,6 +59,6 @@
     "zip"
   ],
   "engines": {
-    "node": "15.x"
+    "node": ">=15.x"
   }
 }

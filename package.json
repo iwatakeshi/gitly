@@ -57,5 +57,8 @@
     "scaffold",
     "tarbarll",
     "zip"
-  ]
+  ],
+  "engines": {
+    "node": "15.x"
+  }
 }

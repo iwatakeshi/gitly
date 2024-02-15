@@ -89,6 +89,17 @@ interface GitlyOptions {
    * Set the request headers (default: undefined)
    */
   headers?: RawAxiosRequestHeaders | AxiosHeaders
+  /**
+   * Set the backend (default: undefined)
+   *
+   * @example
+   * ```markdown
+   * 'axios' - default behavior
+   * 'git' - use local git installation to clone the repository (allows for cloning private
+   * repositories as long as the local git installation has access)
+   * ```
+   */
+  backend?: 'axios' | 'git'
 }
 ```
 

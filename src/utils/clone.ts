@@ -5,7 +5,7 @@ import spawn from 'cross-spawn'
 /**
  * Uses local git installation to clone a repository to the destination.
  */
-export default async function gitClone(
+export default async function clone(
   repository: string,
   destination: string,
   options: GitlyOptions = {}

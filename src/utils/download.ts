@@ -24,10 +24,10 @@ export default async function download(
   options: GitlyOptions = {}
 ): Promise<string> {
   const info = parse(repository, options)
-  const file = getArchivePath(info, options)
+  const path = getArchivePath(info, options)
   const url = getUrl(info, options)
-  const local = async () => exists(file)
-  const remote = async () => fetch(url, file, options)
+  const local = async () => exists(path)
+  const remote = async () => fetch(url, path, options)
   let order = [local, remote]
   if ((await isOffline()) || options.cache) {
     order = [local]
@@ -38,7 +38,7 @@ export default async function download(
   try {
     const result = await execute(order)
     if (typeof result === 'boolean') {
-      return file
+      return path
     }
     return result
   } catch (error) {

@@ -14,13 +14,13 @@ export default async function clone(
   options: GitlyOptions = {}
 ): Promise<string> {
   const info = parse(repository, options)
-  const file = getArchivePath(info, options)
+  const path = getArchivePath(info, options)
 
   let order: (() => Promise<boolean | string>)[] = []
 
-  const local = async () => exists(file)
+  const local = async () => exists(path)
   const remote = async () => {
-    const result = spawn.sync('git', ['clone', info.href, file])
+    const result = spawn.sync('git', ['clone', info.href, path])
     return result.status === 0
   }
 
@@ -34,7 +34,7 @@ export default async function clone(
   try {
     const result = await execute(order)
     if (typeof result === 'boolean') {
-      return file
+      return path
     }
     return result
   } catch (error) {

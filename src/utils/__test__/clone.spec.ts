@@ -22,7 +22,6 @@ describe('utils/clone', () => {
   })
   it('should clone the repository', async () => {
     const result = await clone('lukeed/gittar', options)
-    console.log(result)
     expect(await exists(result)).toBe(true)
   })
 })

@@ -1,6 +1,7 @@
 import parse from '../parse'
 import { getUrl } from '../archive'
 import { getArchivePath } from '../archive'
+const isWin32 = process.platform === 'win32'
 
 describe('utils/archive', () => {
   describe('getUrl()', () => {
@@ -40,7 +41,8 @@ describe('utils/archive', () => {
   describe('getArchivePath()', () => {
     it('should return a path to the zipped file', () => {
       expect(getArchivePath(parse('iwatakeshi/test'))).toEqual(
-        expect.stringMatching(/\.gitly\/github\/iwatakeshi\/test\/master\.tar\.gz/)
+        isWin32 ? expect.stringMatching(/\.gitly\\github\\iwatakeshi\\test\\master\.tar\.gz/) :
+          expect.stringMatching(/\.gitly\/github\/iwatakeshi\/test\/master\.tar\.gz/)
       )
     })
   })

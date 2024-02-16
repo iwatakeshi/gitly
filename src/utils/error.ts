@@ -1,8 +1,9 @@
 export enum GitlyErrorType {
   Fetch = 'fetch',
+  Clone = 'clone',
   Extract = 'extract',
   Download = 'download',
-  Unknown = 'unknown'
+  Unknown = 'unknown',
 }
 
 export default abstract class GitlyAbstractError extends Error {
@@ -36,4 +37,8 @@ export const GitlyExtractError = class extends GitlyAbstractError {
 
 export const GitlyDownloadError = class extends GitlyAbstractError {
   static type = GitlyErrorType.Download
+}
+
+export const GitlyCloneError = class extends GitlyAbstractError {
+  static type = GitlyErrorType.Clone
 }

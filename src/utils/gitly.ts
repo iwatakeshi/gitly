@@ -14,9 +14,15 @@ export default async function gitly(
   destination: string,
   options: GitlyOptions
 ): Promise<[string, string]> {
-  if (options?.backend === 'git') {
-    return await clone(repository, destination, options)
+  let source: string = '';
+  switch (options?.backend) {
+    case 'git':
+      source = await clone(repository, options)
+      break;
+    default:
+      source = await download(repository, options)
+      break;
   }
-  const source = await download(repository, options)
+
   return [source, await extract(source, destination, options)]
 }

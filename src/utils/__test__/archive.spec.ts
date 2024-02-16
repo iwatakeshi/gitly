@@ -1,7 +1,8 @@
 import parse from '../parse'
-import { getUrl } from '../tar'
+import { getUrl } from '../archive'
+import { getArchivePath } from '../archive'
 
-describe('utils/tar', () => {
+describe('utils/archive', () => {
   describe('getUrl()', () => {
     it('should return a github url to the zipped file', () => {
       expect(getUrl(parse('iwatakeshi/test'))).toEqual(
@@ -32,6 +33,14 @@ describe('utils/tar', () => {
         })
       ).toEqual(
         'https://domain.com/iwatakeshi/test/repo/archive.tar.gz?ref=master'
+      )
+    })
+  })
+
+  describe('getArchivePath()', () => {
+    it('should return a path to the zipped file', () => {
+      expect(getArchivePath(parse('iwatakeshi/test'))).toEqual(
+        expect.stringMatching(/\.gitly\/github\/iwatakeshi\/test\/master\.tar\.gz/)
       )
     })
   })

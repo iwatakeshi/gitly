@@ -5,7 +5,7 @@ import exists from './exists'
 import fetch from './fetch'
 import { isOffline } from './offline'
 import parse from './parse'
-import { getFile, getUrl } from './tar'
+import { getArchivePath, getUrl } from './archive'
 
 /**
  * Download the tar file from the repository
@@ -24,14 +24,14 @@ export default async function download(
   options: GitlyOptions = {}
 ): Promise<string> {
   const info = parse(repository, options)
-  const file = getFile(info, options)
+  const file = getArchivePath(info, options)
   const url = getUrl(info, options)
   const local = async () => exists(file)
   const remote = async () => fetch(url, file, options)
   let order = [local, remote]
   if ((await isOffline()) || options.cache) {
     order = [local]
-  } else if (options.force || info.type === 'master') {
+  } else if (options.force || ['master', 'main'].includes(info.type)) {
     order = [remote, local]
   }
 

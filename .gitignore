@@ -99,3 +99,6 @@ lib/
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Ingore output files
+src/utils/__test__/output/

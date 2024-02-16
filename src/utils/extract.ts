@@ -4,7 +4,7 @@ import { resolve } from 'path'
 import GitlyOptions from '../interfaces/options'
 
 import exists from './exists'
-import { extract } from './tar'
+import { extract } from './archive'
 
 const { mkdir } = fs
 

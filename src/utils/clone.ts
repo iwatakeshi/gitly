@@ -1,4 +1,8 @@
 import GitlyOptions from '../interfaces/options'
+import { getArchivePath } from './archive'
+import execute from './execute'
+import exists from './exists'
+import { isOffline } from './offline'
 import parse from './parse'
 import spawn from 'cross-spawn'
 
@@ -7,10 +11,36 @@ import spawn from 'cross-spawn'
  */
 export default async function clone(
   repository: string,
-  destination: string,
   options: GitlyOptions = {}
-): Promise<[string, string]> {
+): Promise<string> {
   const info = parse(repository, options)
-  spawn.sync('git', ['clone', info.href, destination])
-  return [info.href, destination]
+  const file = getArchivePath(info, options)
+
+  let order: (() => Promise<boolean | string>)[] = []
+
+  const local = async () => exists(file)
+  const remote = async () => {
+    const result = spawn.sync('git', ['clone', info.href, file])
+    return result.status === 0
+  }
+
+
+  if ((await isOffline()) || options.cache) {
+    order = [local]
+  } else if (options.force || ['master', 'main'].includes(info.type)) {
+    order = [remote, local]
+  }
+
+  try {
+    const result = await execute(order)
+    if (typeof result === 'boolean') {
+      return file
+    }
+    return result
+  } catch (error) {
+    if (options.throw) {
+      throw error
+    }
+  }
+  return ''
 }

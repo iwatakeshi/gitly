@@ -20,21 +20,17 @@ export default async function clone(
   let order: (() => Promise<boolean | string>)[] = []
 
   const local = async () => exists(path)
-  const remote = async () => {
-    // Use the git command to clone the repository
-    // but promisify cross-spawn to handle the output
-    return new Promise<string>((resolve, reject) => {
-      const child = spawn('git', ['clone', info.href, path])
+  const remote = async () => new Promise<string>((resolve, reject) => {
+    const child = spawn('git', ['clone', info.href, path])
 
-      child.on('close', (code) => {
-        if (code === 0) {
-          resolve(path)
-        } else {
-          reject(new GitlyCloneError('Failed to clone the repository'))
-        }
-      })
+    child.on('close', (code) => {
+      if (code === 0) {
+        resolve(path)
+      } else {
+        reject(new GitlyCloneError('Failed to clone the repository'))
+      }
     })
-  }
+  })
 
 
   if ((await isOffline()) || options.cache) {

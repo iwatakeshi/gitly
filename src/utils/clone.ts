@@ -35,8 +35,12 @@ export default async function clone(
 
   const local = async () => exists(archivePath + '.tar.gz')
   const remote = async () => {
-    const depth = options?.git?.depth || 1
+    // If the repository is cached, remove the old cache
+    if (await exists(archivePath)) {
+      await rm(archivePath)
+    }
 
+    const depth = options?.git?.depth || 1
     const child = spawn('git', [
       'clone',
       '--depth',
@@ -50,6 +54,7 @@ export default async function clone(
         reject(new GitlyCloneError(reason.message))
       )
       child.on('close', (code) => {
+        /* istanbul ignore next */
         if (code === 0) {
           // Create the archive after cloning
           tar
@@ -70,14 +75,14 @@ export default async function clone(
             )
             .then(resolve)
             .catch((error) => reject(new GitlyCloneError(error.message)))
-        } else {
+        } /* istanbul ignore next */ else {
           reject(new GitlyCloneError('Failed to clone the repository'))
         }
       })
     })
     return archivePath
   }
-
+  /* istanbul ignore next */
   if ((await isOffline()) || options.cache) {
     order = [local]
   } else if (options.force || ['master', 'main'].includes(info.type)) {

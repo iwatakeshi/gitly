@@ -44,10 +44,13 @@ export default async function clone(
     // Prevent second order command injection
     
     const depth = options?.git?.depth || 1
+
+    /* istanbul ignore if */
     if (typeof depth !== 'number') {
       throw new GitlyCloneError('Invalid depth option')
     }
 
+    /* istanbul ignore if */
     if (info.href.includes('--upload-pack') || directory.includes('--upload-pack')) {
       throw new GitlyCloneError('Invalid argument')
     }

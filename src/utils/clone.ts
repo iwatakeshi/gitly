@@ -45,13 +45,17 @@ export default async function clone(
     
     const depth = options?.git?.depth || 1
 
+    if (repository.includes('--upload-pack') || directory.includes('--upload-pack')) {
+      throw new GitlyCloneError('Invalid argument')
+    }
+
     /* istanbul ignore if */
     if (typeof depth !== 'number') {
       throw new GitlyCloneError('Invalid depth option')
     }
 
     /* istanbul ignore if */
-    if (info.href.includes('--upload-pack') || directory.includes('--upload-pack')) {
+    if (info.href.includes('--upload-pack')) {
       throw new GitlyCloneError('Invalid argument')
     }
 

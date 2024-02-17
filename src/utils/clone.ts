@@ -25,6 +25,14 @@ export default async function clone(
     await removePreviousClone(path)
 
     return new Promise<string>((resolve, reject) => {
+      // https://codeql.github.com/codeql-query-help/javascript/js-second-order-command-line-injection/
+      if (info.href.includes('upload-pack') || path.includes('upload-pack'))
+        reject(
+          new GitlyCloneError(
+            'The phrase "upload-pack" is not allowed in the URL or path'
+          )
+        )
+
       const child = spawn('git', ['clone', info.href, path])
 
       child.on('close', (code) => {

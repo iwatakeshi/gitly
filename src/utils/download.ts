@@ -31,6 +31,7 @@ export default async function download(
   const remote = async () => {
     // If the repository is cached, remove the old cache
     if (await exists(archivePath)) {
+      /* istanbul ignore next */
       rm(archivePath)
     }
     

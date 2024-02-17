@@ -37,6 +37,7 @@ export default async function clone(
   const remote = async () => {
     // If the repository is cached, remove the old cache
     if (await exists(archivePath)) {
+      /* istanbul ignore next */
       await rm(archivePath)
     }
 

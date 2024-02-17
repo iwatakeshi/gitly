@@ -1,4 +1,3 @@
-import { rimraf } from 'rimraf'
 import GitlyOptions from '../interfaces/options'
 import { getArchivePath } from './archive'
 import { GitlyCloneError } from './error'
@@ -7,6 +6,7 @@ import exists from './exists'
 import { isOffline } from './offline'
 import parse from './parse'
 import spawn from 'cross-spawn'
+import { promises as fs } from 'fs'
 
 /**
  * Uses local git installation to clone a repository to the destination.
@@ -22,7 +22,7 @@ export default async function clone(
 
   const local = async () => exists(path)
   const remote = async () => {
-    await removePreviousDownload(path)
+    await removePreviousClone(path)
 
     return new Promise<string>((resolve, reject) => {
       const child = spawn('git', ['clone', info.href, path])
@@ -65,10 +65,10 @@ export default async function clone(
   return ''
 }
 
-async function removePreviousDownload(path: string) {
-  return await rimraf(path)
+async function removePreviousClone(path: string) {
+  return await fs.rm(path, { recursive: true, force: true })
 }
 
 async function removeGitDirectory(path: string) {
-  return rimraf(`${path}/.git`)
+  return await fs.rm(`${path}/.git`, { recursive: true, force: true })
 }

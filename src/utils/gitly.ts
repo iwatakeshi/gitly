@@ -14,14 +14,14 @@ export default async function gitly(
   destination: string,
   options: GitlyOptions
 ): Promise<[string, string]> {
-  let source: string = '';
+  let source: string = ''
   switch (options?.backend) {
     case 'git':
       source = await clone(repository, options)
-      break;
+      break
     default:
       source = await download(repository, options)
-      break;
+      break
   }
 
   return [source, await extract(source, destination, options)]

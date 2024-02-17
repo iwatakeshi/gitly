@@ -10,7 +10,7 @@ describe('utils/extract', () => {
   const options = {
     temp: join(__dirname, 'output', 'extract', '.gitcopy'),
   }
-  
+
   beforeEach(async () => {
     rm('-rf', join(__dirname, 'output', 'extract', '.gitcopy'))
   })

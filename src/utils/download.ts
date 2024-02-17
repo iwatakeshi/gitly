@@ -5,7 +5,7 @@ import exists from './exists'
 import fetch from './fetch'
 import { isOffline } from './offline'
 import parse from './parse'
-import { getArchivePath, getUrl } from './archive'
+import { getArchivePath, getArchiveUrl } from './archive'
 
 /**
  * Download the tar file from the repository
@@ -25,7 +25,7 @@ export default async function download(
 ): Promise<string> {
   const info = parse(repository, options)
   const path = getArchivePath(info, options)
-  const url = getUrl(info, options)
+  const url = getArchiveUrl(info, options)
   const local = async () => exists(path)
   const remote = async () => fetch(url, path, options)
   let order = [local, remote]

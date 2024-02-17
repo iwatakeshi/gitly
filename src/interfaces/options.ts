@@ -51,4 +51,10 @@ export default interface GitlyOptions {
    * ```
    */
   backend?: 'axios' | 'git'
+  /**
+   * Set git options (default: undefined)
+   */
+  git?: {
+    depth?: number
+  }
 }

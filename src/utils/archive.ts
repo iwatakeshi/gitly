@@ -27,7 +27,10 @@ export function getArchiveUrl(
   }
 }
 
-export function getArchivePath(info: URLInfo, options: GitlyOptions = {}): string {
+export function getArchivePath(
+  info: URLInfo,
+  options: GitlyOptions = {}
+): string {
   const { path, type, hostname: site } = info
 
   return join(

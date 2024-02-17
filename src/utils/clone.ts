@@ -1,3 +1,4 @@
+import { rimraf } from 'rimraf'
 import GitlyOptions from '../interfaces/options'
 import { getArchivePath } from './archive'
 import { GitlyCloneError } from './error'
@@ -20,18 +21,29 @@ export default async function clone(
   let order: (() => Promise<boolean | string>)[] = []
 
   const local = async () => exists(path)
-  const remote = async () => new Promise<string>((resolve, reject) => {
-    const child = spawn('git', ['clone', info.href, path])
+  const remote = async () => {
+    await removePreviousDownload(path)
 
-    child.on('close', (code) => {
-      if (code === 0) {
-        resolve(path)
-      } else {
-        reject(new GitlyCloneError('Failed to clone the repository'))
-      }
+    return new Promise<string>((resolve, reject) => {
+      const child = spawn('git', ['clone', info.href, path])
+
+      child.on('close', (code) => {
+        if (code === 0) {
+          removeGitDirectory(path)
+            .then(() => resolve(path))
+            .catch(() =>
+              reject(
+                new GitlyCloneError(
+                  'Failed to remove the .git directory from the cloned repository'
+                )
+              )
+            )
+        } else {
+          reject(new GitlyCloneError('Failed to clone the repository'))
+        }
+      })
     })
-  })
-
+  }
 
   if ((await isOffline()) || options.cache) {
     order = [local]
@@ -51,4 +63,12 @@ export default async function clone(
     }
   }
   return ''
+}
+
+async function removePreviousDownload(path: string) {
+  return await rimraf(path)
+}
+
+async function removeGitDirectory(path: string) {
+  return rimraf(`${path}/.git`)
 }

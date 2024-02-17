@@ -27,6 +27,7 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "jest": "^29.7.0",
+    "prettier": "^3.2.5",
     "shelljs": "^0.8.5",
     "ts-jest": "^29.1.2",
     "tslib": "^2.6.2",
@@ -39,7 +40,8 @@
     "build": "tsc",
     "test": "jest",
     "lint": "eslint -c .eslintrc.js --ext .ts src",
-    "lint:fix": "npm run lint --fix"
+    "lint:fix": "npm run lint --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"*.json\" \"*.md\""
   },
   "types": "lib/main.d.ts",
   "keywords": [

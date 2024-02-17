@@ -5,7 +5,10 @@ import tar = require('tar')
 import GitlyOptions from '../interfaces/options'
 import URLInfo from '../interfaces/url'
 
-export function getUrl(info: URLInfo, options: GitlyOptions = {}): string {
+export function getArchiveUrl(
+  info: URLInfo,
+  options: GitlyOptions = {}
+): string {
   const { path: repo, type } = info
 
   if (options.url && options.url.filter) {

@@ -9,11 +9,16 @@ describe('utils/download (no cache)', () => {
   const options = {
     temp: join(__dirname, 'output', 'download'),
   }
-  beforeEach(async () => {
+
+  beforeAll(() => {
     rm('-rf', join(__dirname, 'output', 'download'))
   })
 
-  afterAll(async () => {
+  beforeEach(() => {
+    rm('-rf', join(__dirname, 'output', 'download'))
+  })
+
+  afterAll(() => {
     rm('-rf', join(__dirname, 'output', 'download'))
   })
 

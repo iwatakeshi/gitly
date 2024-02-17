@@ -6,20 +6,20 @@ import download from '../download'
 import extract from '../extract'
 
 describe('utils/extract', () => {
-  const destination = join(__dirname, 'output', 'extract', 'example')
+  const destination = join(__dirname, 'output', 'extract')
   const options = {
     temp: join(__dirname, 'output', 'extract', '.gitcopy'),
   }
 
-  beforeEach(async () => {
+  beforeEach(() => {
     rm('-rf', join(__dirname, 'output', 'extract', '.gitcopy'))
   })
-  afterEach(async () => {
+  afterEach(() => {
     rm('-rf', destination)
   })
 
-  afterAll(async () => {
-    rm('-rf', join(__dirname, 'output', 'extract', '.gitcopy'))
+  afterAll(() => {
+    rm('-rf', join(__dirname, 'output', 'extract'))
   })
 
   it('should extract "lukeed/gittar"', async () => {

@@ -41,7 +41,18 @@ export default async function clone(
       await rm(archivePath)
     }
 
+    // Prevent second order command injection
+    
     const depth = options?.git?.depth || 1
+    if (typeof depth !== 'number') {
+      throw new GitlyCloneError('Invalid depth option')
+    }
+
+    if (info.href.includes('--upload-pack') || directory.includes('--upload-pack')) {
+      throw new GitlyCloneError('Invalid argument')
+    }
+
+
     const child = spawn('git', [
       'clone',
       '--depth',

@@ -75,17 +75,20 @@ export default async function clone(
       child.on('close', (code) => {
         /* istanbul ignore next */
         if (code === 0) {
-          // Create the archive after cloning
-          tar
-            .create(
-              {
-                gzip: true,
-                file: archivePath,
-                // Go one level up to include the repository name in the archive
-                cwd: path.resolve(archivePath, '..'),
-                portable: true,
-              },
-              [info.type]
+          // delete the .git directory to make the archive smaller
+          rm(path.resolve(directory, '.git'), { recursive: true })
+            .then(() =>
+              // Create the archive after cloning
+              tar.create(
+                {
+                  gzip: true,
+                  file: archivePath,
+                  // Go one level up to include the repository name in the archive
+                  cwd: path.resolve(archivePath, '..'),
+                  portable: true,
+                },
+                [info.type]
+              )
             )
             .then(() =>
               rm(path.resolve(directory), {

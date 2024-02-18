@@ -99,7 +99,7 @@ interface GitlyOptions {
    * repositories as long as the local git installation has access)
    * ```
    */
-  backend?: 'axios' | 'git',
+  backend?: 'axios' | 'git'
   /**
    * Set the git options (default: undefined)
    */

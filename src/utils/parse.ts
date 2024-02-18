@@ -59,7 +59,6 @@ function normalizeURL(url: string, options: GitlyOptions) {
   let updatedHost = host || ''
 
   if (isNotProtocol && hasHost) {
-
     // Matches host:owner/repo
     const hostMatch = url.match(/([\S]+):.+/)
     updatedHost = hostMatch ? hostMatch[1] : ''

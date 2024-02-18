@@ -34,7 +34,7 @@ export default async function download(
       /* istanbul ignore next */
       rm(archivePath)
     }
-    
+
     return fetch(url, archivePath, options)
   }
   let order = [local, remote]

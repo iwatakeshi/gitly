@@ -42,10 +42,13 @@ export default async function clone(
     }
 
     // Prevent second order command injection
-    
+
     const depth = options?.git?.depth || 1
 
-    if (repository.includes('--upload-pack') || directory.includes('--upload-pack')) {
+    if (
+      repository.includes('--upload-pack') ||
+      directory.includes('--upload-pack')
+    ) {
       throw new GitlyCloneError('Invalid argument')
     }
 
@@ -59,7 +62,6 @@ export default async function clone(
       throw new GitlyCloneError('Invalid argument')
     }
 
-
     const child = spawn('git', [
       'clone',
       '--depth',
@@ -69,9 +71,7 @@ export default async function clone(
     ])
 
     await new Promise((resolve, reject) => {
-      child.on('error', (reason) =>
-        reject(new GitlyCloneError(reason.message))
-      )
+      child.on('error', (reason) => reject(new GitlyCloneError(reason.message)))
       child.on('close', (code) => {
         /* istanbul ignore next */
         if (code === 0) {

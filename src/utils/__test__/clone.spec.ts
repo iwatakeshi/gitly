@@ -1,24 +1,19 @@
-import exists from '../exists';
+import exists from '../exists'
 import clone from '../clone'
 import { rm } from 'shelljs'
-import { join } from 'path';
-
+import { join } from 'path'
 
 describe('utils/clone', () => {
-  const destination = join(__dirname, 'output', 'clone', 'example')
   const options = {
-    temp: join(__dirname, 'output', 'clone', '.gitcopy'),
+    temp: join(__dirname, 'output', 'clone'),
+    backend: 'git' as 'git' | 'axios',
   }
-
-  beforeEach(async () => {
-    rm('-rf', join(__dirname, 'output', 'clone', '.gitcopy'))
-  })
-  afterEach(async () => {
-    rm('-rf', destination)
+  beforeAll(() => {
+    rm('-rf', join(__dirname, 'output', 'clone'))
   })
 
-  afterAll(async () => {
-    rm('-rf', join(__dirname, 'output', 'clone', '.gitcopy'))
+  afterAll(() => {
+    rm('-rf', join(__dirname, 'output', 'clone'))
   })
   it('should clone the repository', async () => {
     const result = await clone('lukeed/gittar', options)

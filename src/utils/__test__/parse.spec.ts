@@ -12,7 +12,7 @@ describe('utils/parse', () => {
       path: '/owner/repo',
       repository: 'repo',
       owner: 'owner',
-      type: 'master'
+      type: 'master',
     } as URLInfo)
   })
 
@@ -26,7 +26,7 @@ describe('utils/parse', () => {
       path: '/owner/repo',
       repository: 'repo',
       owner: 'owner',
-      type: 'v1.0.0'
+      type: 'v1.0.0',
     } as URLInfo)
   })
 
@@ -40,7 +40,7 @@ describe('utils/parse', () => {
       path: '/owner/repo',
       repository: 'repo',
       owner: 'owner',
-      type: 'master'
+      type: 'master',
     } as URLInfo)
   })
 
@@ -54,7 +54,7 @@ describe('utils/parse', () => {
       path: '/owner/repo',
       repository: 'repo',
       owner: 'owner',
-      type: 'master'
+      type: 'master',
     } as URLInfo)
   })
 
@@ -68,7 +68,7 @@ describe('utils/parse', () => {
       path: '/owner/repo',
       repository: 'repo',
       owner: 'owner',
-      type: 'master'
+      type: 'master',
     } as URLInfo)
   })
 
@@ -82,7 +82,7 @@ describe('utils/parse', () => {
       path: '/owner/repo',
       repository: 'repo',
       owner: 'owner',
-      type: 'tag'
+      type: 'tag',
     } as URLInfo)
   })
 
@@ -96,7 +96,7 @@ describe('utils/parse', () => {
       path: '/owner/repo',
       repository: 'repo',
       owner: 'owner',
-      type: 'tag'
+      type: 'tag',
     } as URLInfo)
   })
 
@@ -110,7 +110,7 @@ describe('utils/parse', () => {
       path: '/owner/repo',
       repository: 'repo',
       owner: 'owner',
-      type: 'master'
+      type: 'master',
     } as URLInfo)
   })
   it('should parse "host:owner/repo#tag"', () => {
@@ -123,14 +123,16 @@ describe('utils/parse', () => {
       path: '/owner/repo',
       repository: 'repo',
       owner: 'owner',
-      type: 'tag'
+      type: 'tag',
     } as URLInfo)
   })
 
   it('should parse "owner/repo#tag" with a different host', () => {
-    expect(parse('owner/repo#tag', {
-      host: 'blah.dev'
-    })).toStrictEqual({
+    expect(
+      parse('owner/repo#tag', {
+        host: 'blah.dev',
+      })
+    ).toStrictEqual({
       protocol: 'https',
       host: 'blah.dev',
       hostname: 'blah',
@@ -139,7 +141,7 @@ describe('utils/parse', () => {
       path: '/owner/repo',
       repository: 'repo',
       owner: 'owner',
-      type: 'tag'
+      type: 'tag',
     } as URLInfo)
   })
 })

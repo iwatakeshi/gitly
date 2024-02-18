@@ -5,39 +5,44 @@ import { rm } from 'shelljs'
 import download from '../download'
 import { GitlyDownloadError } from '../error'
 
-describe('utils/fetch (no cache)', () => {
+describe('utils/download (no cache)', () => {
   const options = {
-    temp: join(__dirname, 'output', 'fetch', '.gitcopy'),
+    temp: join(__dirname, 'output', 'download'),
   }
-  beforeEach(async () => {
-    rm('-rf', join(__dirname, 'output', 'fetch', '.gitcopy'))
+
+  beforeAll(() => {
+    rm('-rf', join(__dirname, 'output', 'download'))
   })
 
-  afterAll(async () => {
-    rm('-rf', join(__dirname, 'output', 'fetch', '.gitcopy'))
+  beforeEach(() => {
+    rm('-rf', join(__dirname, 'output', 'download'))
   })
 
-  it('should fetch "lukeed/gittar"', async () => {
+  afterAll(() => {
+    rm('-rf', join(__dirname, 'output', 'download'))
+  })
+
+  it('should download "lukeed/gittar"', async () => {
     expect.assertions(2)
     const path = await download('lukeed/gittar', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
-  it('should fetch "lukeed/gittar#v0.1.1"', async () => {
+  it('should download "lukeed/gittar#v0.1.1"', async () => {
     expect.assertions(2)
     const path = await download('lukeed/gittar#v0.1.1', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
-  it('should fetch "https://github.com/lukeed/gittar"', async () => {
+  it('should download "https://github.com/lukeed/gittar"', async () => {
     expect.assertions(2)
     const path = await download('https://github.com/lukeed/gittar', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
-  it('should fetch "https://github.com/lukeed/gittar#v0.1.1"', async () => {
+  it('should download "https://github.com/lukeed/gittar#v0.1.1"', async () => {
     expect.assertions(2)
     const path = await download(
       'https://github.com/lukeed/gittar#v0.1.1',
@@ -47,35 +52,35 @@ describe('utils/fetch (no cache)', () => {
     expect(existsSync(path)).toBe(true)
   })
 
-  it('should fetch "github.com/lukeed/gittar"', async () => {
+  it('should download "github.com/lukeed/gittar"', async () => {
     expect.assertions(2)
     const path = await download('github.com/lukeed/gittar', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
-  it('should fetch "github.com/lukeed/gittar#v0.1.1"', async () => {
+  it('should download "github.com/lukeed/gittar#v0.1.1"', async () => {
     expect.assertions(2)
     const path = await download('github.com/lukeed/gittar#v0.1.1', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
-  it('should fetch "github:lukeed/gittar"', async () => {
+  it('should download "github:lukeed/gittar"', async () => {
     expect.assertions(2)
     const path = await download('github:lukeed/gittar', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
-  it('should fetch "github:lukeed/gittar#v0.1.1"', async () => {
+  it('should download "github:lukeed/gittar#v0.1.1"', async () => {
     expect.assertions(2)
     const path = await download('github:lukeed/gittar#v0.1.1', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
 
-  it('should fetch "gitlab:Rich-Harris/buble#v0.15.2"', async () => {
+  it('should download "gitlab:Rich-Harris/buble#v0.15.2"', async () => {
     expect.assertions(2)
     const path = await download('gitlab:Rich-Harris/buble#v0.15.2', options)
     expect(path).toBeTruthy()
@@ -101,22 +106,22 @@ describe('utils/fetch (no cache)', () => {
   })
 })
 
-describe('utils/fetch (cached)', () => {
+describe('utils/download (cached)', () => {
   const options = {
-    temp: join(__dirname, 'output', 'fetch', 'cache'),
+    temp: join(__dirname, 'output', 'download', 'cache'),
     cache: true,
   }
   const isCached = (ms: number) => Date.now() - ms <= 15
 
   beforeAll(async () => {
-    rm('-rf', join(__dirname, 'output', 'fetch', 'cache'))
-    // Prefetch
+    rm('-rf', join(__dirname, 'output', 'download', 'cache'))
+    // Predownload
     const path = await download('lukeed/gittar', { temp: options.temp })
     expect(existsSync(path)).toBe(true)
   })
 
   afterAll(async () => {
-    rm('-rf', join(__dirname, 'output', 'fetch', 'cache'))
+    rm('-rf', join(__dirname, 'output', 'download', 'cache'))
   })
 
   it('should return a path to the cached zipped file', async () => {

@@ -1,4 +1,10 @@
-import { GitlyDownloadError, GitlyErrorType, GitlyExtractError, GitlyFetchError, GitlyUknownError } from '../error'
+import {
+  GitlyDownloadError,
+  GitlyErrorType,
+  GitlyExtractError,
+  GitlyFetchError,
+  GitlyUknownError,
+} from '../error'
 
 describe('utils/error', () => {
   describe('GitlyFetchError', () => {

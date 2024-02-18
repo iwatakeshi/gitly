@@ -5,7 +5,8 @@ import exists from './exists'
 import fetch from './fetch'
 import { isOffline } from './offline'
 import parse from './parse'
-import { getArchivePath, getUrl } from './archive'
+import { getArchivePath, getArchiveUrl } from './archive'
+import { rm } from 'shelljs'
 
 /**
  * Download the tar file from the repository
@@ -24,10 +25,18 @@ export default async function download(
   options: GitlyOptions = {}
 ): Promise<string> {
   const info = parse(repository, options)
-  const path = getArchivePath(info, options)
-  const url = getUrl(info, options)
-  const local = async () => exists(path)
-  const remote = async () => fetch(url, path, options)
+  const archivePath = getArchivePath(info, options)
+  const url = getArchiveUrl(info, options)
+  const local = async () => exists(archivePath)
+  const remote = async () => {
+    // If the repository is cached, remove the old cache
+    if (await exists(archivePath)) {
+      /* istanbul ignore next */
+      rm(archivePath)
+    }
+    
+    return fetch(url, archivePath, options)
+  }
   let order = [local, remote]
   if ((await isOffline()) || options.cache) {
     order = [local]
@@ -38,7 +47,7 @@ export default async function download(
   try {
     const result = await execute(order)
     if (typeof result === 'boolean') {
-      return path
+      return archivePath
     }
     return result
   } catch (error) {

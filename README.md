@@ -50,7 +50,7 @@ console.log(await gitly('iwatakeshi/gitly', '/path/to/extracted/folder/'))
 
 ## Options
 
-```typescript
+````typescript
 interface GitlyOptions {
   /**
    * Use cache only (default: undefined)
@@ -101,7 +101,7 @@ interface GitlyOptions {
    */
   backend?: 'axios' | 'git'
 }
-```
+````
 
 ## Interfaces
 

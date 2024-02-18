@@ -17,12 +17,15 @@ import URLInfo from '../interfaces/url'
  * 7. host:owner/repo#tag
  * ```
  */
-export default function parse(url: string, options: GitlyOptions = {}): URLInfo {
-  const { url: normalized, host } = normalizeURL(url, options);
-  const result = new URL(normalized);
-  const paths = (result.pathname || '').split('/').filter(Boolean);
-  const owner = paths.shift() || '';
-  const repository = paths.shift() || '';
+export default function parse(
+  url: string,
+  options: GitlyOptions = {}
+): URLInfo {
+  const { url: normalized, host } = normalizeURL(url, options)
+  const result = new URL(normalized)
+  const paths = (result.pathname || '').split('/').filter(Boolean)
+  const owner = paths.shift() || ''
+  const repository = paths.shift() || ''
   return {
     protocol: (result.protocol || 'https').replace(/:/g, ''),
     host: result.host || host || 'github.com',
@@ -33,34 +36,47 @@ export default function parse(url: string, options: GitlyOptions = {}): URLInfo 
     repository,
     owner,
     type: (result.hash || '#master').substring(1),
-  };
+  }
 }
 
-
 function normalizeURL(url: string, options: GitlyOptions) {
-  const { host } = options;
-  const isNotProtocol = !/http(s)?:\/\//.test(url);
-  const hasHost = /([\S]+):.+/.test(url);
-  const hasTLD = /[\S]+\.([\D]+)/.test(url);
+  const { host } = options
 
-  let normalizedURL = url.replace("www.", "").replace(".git", "");
-  let updatedHost = host || "";
-
-  if (isNotProtocol && hasHost) {
-    // Matches host:owner/repo
-    const hostMatch = url.match(/([\S]+):.+/);
-    updatedHost = hostMatch ? hostMatch[1] : "";
-    normalizedURL = `https://${updatedHost}.com/${normalizedURL.replace(`${updatedHost}:`, "")}`;
-  } else if (isNotProtocol && hasTLD) {
-    // Matches host.com/...
-    normalizedURL = `https://${normalizedURL}`;
-  } else if (isNotProtocol) {
-    // Matches owner/repo
-    const tldMatch = (host || "").match(/[\S]+\.([\D]+)/);
-    const domain = (host || "github").replace(`.${tldMatch ? tldMatch[1] : "com"}`, "");
-    const tld = tldMatch ? tldMatch[1] : "com";
-    normalizedURL = `https://${domain}.${tld}/${normalizedURL}`;
+  /* istanbul ignore if */
+  if (url.includes('0') && Array.from(url.matchAll(/0/g)).length > 25) {
+    throw new Error('Invalid argument')
+  }
+  /* istanbul ignore if */
+  if (host?.includes('0') && Array.from(host.matchAll(/0/g)).length > 25) {
+    throw new Error('Invalid argument')
   }
 
-  return { url: normalizedURL, host: updatedHost };
+  const isNotProtocol = !/http(s)?:\/\//.test(url)
+  const hasHost = /([\S]+):.+/.test(url)
+  const hasTLD = /[\S]+\.([\D]+)/.test(url)
+
+  let normalizedURL = url.replace('www.', '').replace('.git', '')
+  let updatedHost = host || ''
+
+  if (isNotProtocol && hasHost) {
+
+    // Matches host:owner/repo
+    const hostMatch = url.match(/([\S]+):.+/)
+    updatedHost = hostMatch ? hostMatch[1] : ''
+    normalizedURL = `https://${updatedHost}.com/${normalizedURL.replace(`${updatedHost}:`, '')}`
+  } else if (isNotProtocol && hasTLD) {
+    // Matches host.com/...
+    normalizedURL = `https://${normalizedURL}`
+  } else if (isNotProtocol) {
+    // Matches owner/repo
+    const tldMatch = (host || '').match(/[\S]+\.([\D]+)/)
+    const domain = (host || 'github').replace(
+      `.${tldMatch ? tldMatch[1] : 'com'}`,
+      ''
+    )
+    const tld = tldMatch ? tldMatch[1] : 'com'
+    normalizedURL = `https://${domain}.${tld}/${normalizedURL}`
+  }
+
+  return { url: normalizedURL, host: updatedHost }
 }

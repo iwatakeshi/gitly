@@ -99,7 +99,16 @@ interface GitlyOptions {
    * repositories as long as the local git installation has access)
    * ```
    */
-  backend?: 'axios' | 'git'
+  backend?: 'axios' | 'git',
+  /**
+   * Set the git options (default: undefined)
+   */
+  git?: {
+    /**
+     * Set the depth of the clone (default: 1)
+     */
+    depth?: number
+  }
 }
 ````
 

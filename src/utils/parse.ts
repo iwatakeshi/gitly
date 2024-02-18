@@ -41,6 +41,15 @@ export default function parse(
 
 function normalizeURL(url: string, options: GitlyOptions) {
   const { host } = options
+
+  if (url.includes('0') && Array.from(url.matchAll(/0/g)).length > 25) {
+    throw new Error('Invalid argument')
+  }
+
+  if (host?.includes('0') && Array.from(host.matchAll(/0/g)).length > 25) {
+    throw new Error('Invalid argument')
+  }
+
   const isNotProtocol = !/http(s)?:\/\//.test(url)
   const hasHost = /([\S]+):.+/.test(url)
   const hasTLD = /[\S]+\.([\D]+)/.test(url)
@@ -49,6 +58,7 @@ function normalizeURL(url: string, options: GitlyOptions) {
   let updatedHost = host || ''
 
   if (isNotProtocol && hasHost) {
+
     // Matches host:owner/repo
     const hostMatch = url.match(/([\S]+):.+/)
     updatedHost = hostMatch ? hostMatch[1] : ''

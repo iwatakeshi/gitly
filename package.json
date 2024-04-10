@@ -10,17 +10,17 @@
     "lib/**/*"
   ],
   "dependencies": {
-    "axios": "^1.6.7",
+    "axios": "^1.6.8",
     "cross-spawn": "^7.0.3",
     "shelljs": "^0.8.5",
-    "tar": "^6.2.0"
+    "tar": "^6.2.1"
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.6",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.20",
+    "@types/node": "^20.12.7",
     "@types/shelljs": "^0.8.15",
-    "@types/tar": "^6.1.11",
+    "@types/tar": "^6.1.12",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/eslint-plugin-tslint": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
@@ -31,7 +31,7 @@
     "prettier": "^3.2.5",
     "ts-jest": "^29.1.2",
     "tslib": "^2.6.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.4"
   },
   "scripts": {
     "prepare": "npm run build",

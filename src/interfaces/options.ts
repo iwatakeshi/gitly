@@ -1,7 +1,7 @@
-import { FileStat } from 'tar'
-
-import URLInfo from './url'
-import { AxiosHeaders, RawAxiosRequestHeaders } from 'axios'
+import type URLInfo from './url'
+import type { AxiosHeaders, RawAxiosRequestHeaders } from 'axios'
+import type { Stats } from 'node:fs'
+import type { ReadEntry } from 'tar'
 
 export default interface GitlyOptions {
   /**
@@ -35,7 +35,7 @@ export default interface GitlyOptions {
     /**
      * Extend the extract filtering method for the 'tar' library
      */
-    filter?(path: string, stat: FileStat): boolean
+    filter?(path: string, stat: Stats | ReadEntry): boolean
   }
   /**
    * Set the request headers (default: undefined)

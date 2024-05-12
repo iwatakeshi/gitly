@@ -1,14 +1,14 @@
-import { rm } from 'fs/promises'
-import GitlyOptions from '../interfaces/options'
+import spawn from 'cross-spawn'
+import { rm } from 'node:fs/promises'
+import path from 'node:path'
+import * as tar from 'tar'
+import type GitlyOptions from '../interfaces/options'
 import { getArchivePath } from './archive'
 import { GitlyCloneError } from './error'
 import execute from './execute'
 import exists from './exists'
 import { isOffline } from './offline'
 import parse from './parse'
-import spawn from 'cross-spawn'
-import tar from 'tar'
-import path from 'path'
 /**
  * Uses local git installation to clone a repository to the destination.
  * @param repository The repository to clone
@@ -33,7 +33,7 @@ export default async function clone(
   const directory = archivePath.replace(/\.tar\.gz$/, '')
   let order: (() => Promise<boolean | string>)[] = []
 
-  const local = async () => exists(archivePath + '.tar.gz')
+  const local = async () => exists(`${archivePath}.tar.gz`)
   const remote = async () => {
     // If the repository is cached, remove the old cache
     if (await exists(archivePath)) {

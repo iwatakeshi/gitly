@@ -1,7 +1,7 @@
-import { constants, promises as fs } from 'fs'
-import { isAbsolute } from 'path'
+import { constants, promises as fs } from 'node:fs'
+import { isAbsolute } from 'node:path'
 
-import GitlyOptions from '../interfaces/options'
+import type GitlyOptions from '../interfaces/options'
 
 import parse from './parse'
 import { getArchivePath } from './archive'
@@ -10,11 +10,12 @@ export default async function exists(
   path: string,
   options: GitlyOptions = {}
 ): Promise<boolean> {
+  let _path = path
   if (!isAbsolute(path)) {
-    path = getArchivePath(parse(path), options)
+    _path = getArchivePath(parse(path), options)
   }
   try {
-    await fs.access(path, constants.F_OK)
+    await fs.access(_path, constants.F_OK)
     return true
     // eslint-disable-next-line no-empty
   } catch (_) {}

@@ -1,12 +1,12 @@
-import GitlyOptions from '../interfaces/options'
+import type GitlyOptions from '../interfaces/options'
 
+import { rm } from 'shelljs'
+import { getArchivePath, getArchiveUrl } from './archive'
 import execute from './execute'
 import exists from './exists'
 import fetch from './fetch'
 import { isOffline } from './offline'
 import parse from './parse'
-import { getArchivePath, getArchiveUrl } from './archive'
-import { rm } from 'shelljs'
 
 /**
  * Download the tar file from the repository

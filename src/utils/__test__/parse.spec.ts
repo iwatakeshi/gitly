@@ -1,4 +1,4 @@
-import URLInfo from '../../interfaces/url'
+import type URLInfo from '../../interfaces/url'
 import parse from '../parse'
 
 describe('utils/parse', () => {

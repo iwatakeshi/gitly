@@ -1,4 +1,4 @@
-import { promises as dns } from 'dns'
+import { promises as dns } from 'node:dns'
 const { lookup } = dns
 export async function isOffline(): Promise<boolean> {
   try {

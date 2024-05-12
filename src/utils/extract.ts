@@ -1,7 +1,7 @@
-import { promises as fs } from 'fs'
-import { resolve } from 'path'
+import { promises as fs } from 'node:fs'
+import { resolve } from 'node:path'
 
-import GitlyOptions from '../interfaces/options'
+import type GitlyOptions from '../interfaces/options'
 
 import exists from './exists'
 import { extract } from './archive'
@@ -20,16 +20,15 @@ export default async (
   destination: string,
   options: GitlyOptions = {}
 ): Promise<string> => {
-  destination = resolve(destination)
+  const _destination = resolve(destination)
   if (await exists(source, options)) {
     try {
-      const filter =
-        options.extract && options.extract.filter
-          ? options.extract.filter
-          : () => true
+      const filter = options.extract?.filter
+        ? options.extract.filter
+        : () => true
       await mkdir(destination, { recursive: true })
-      await extract({ strip: 1, filter, file: source, cwd: destination })
-      return destination
+      await extract({ strip: 1, filter, file: source, cwd: _destination })
+      return _destination
       // eslint-disable-next-line no-empty
     } catch (_) {}
   }

@@ -1,7 +1,7 @@
-import { URL } from 'url'
+import { URL } from 'node:url'
 
-import GitlyOptions from '../interfaces/options'
-import URLInfo from '../interfaces/url'
+import type GitlyOptions from '../interfaces/options'
+import type URLInfo from '../interfaces/url'
 
 /**
  * Parses a url and returns the metadata

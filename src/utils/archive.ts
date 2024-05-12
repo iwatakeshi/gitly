@@ -1,9 +1,9 @@
-import os = require('os')
-import { join } from 'path'
-import tar = require('tar')
+import os from 'node:os'
+import { join } from 'node:path'
+import * as tar from 'tar'
 
-import GitlyOptions from '../interfaces/options'
-import URLInfo from '../interfaces/url'
+import type GitlyOptions from '../interfaces/options'
+import type URLInfo from '../interfaces/url'
 
 export function getArchiveUrl(
   info: URLInfo,
@@ -11,7 +11,7 @@ export function getArchiveUrl(
 ): string {
   const { path: repo, type } = info
 
-  if (options.url && options.url.filter) {
+  if (options.url?.filter) {
     return options.url.filter(info)
   }
 

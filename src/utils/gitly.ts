@@ -1,4 +1,4 @@
-import GitlyOptions from '../interfaces/options'
+import type GitlyOptions from '../interfaces/options'
 import clone from './clone'
 import download from './download'
 import extract from './extract'
@@ -14,7 +14,7 @@ export default async function gitly(
   destination: string,
   options: GitlyOptions
 ): Promise<[string, string]> {
-  let source: string = ''
+  let source = ''
   switch (options?.backend) {
     case 'git':
       source = await clone(repository, options)

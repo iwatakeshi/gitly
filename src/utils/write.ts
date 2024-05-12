@@ -1,6 +1,6 @@
-import { WriteStream } from 'fs'
-import { createWriteStream, promises as fs } from 'fs'
-import { dirname, normalize } from 'path'
+import type { WriteStream } from 'node:fs'
+import { createWriteStream, promises as fs } from 'node:fs'
+import { dirname, normalize } from 'node:path'
 
 const { mkdir } = fs
 /**
@@ -8,7 +8,7 @@ const { mkdir } = fs
  * @param path The path to write a file
  */
 export default async function write(path: string): Promise<WriteStream> {
-  path = normalize(path)
-  await mkdir(dirname(path), { recursive: true })
-  return createWriteStream(path)
+  const _path = normalize(path)
+  await mkdir(dirname(_path), { recursive: true })
+  return createWriteStream(_path)
 }

@@ -1,10 +1,10 @@
 import axios from 'axios'
-import * as stream from 'stream'
-import { promisify } from 'util'
+import * as stream from 'node:stream'
+import { promisify } from 'node:util'
 
 import { GitlyDownloadError } from './error'
 import write from './write'
-import GitlyOptions from '../interfaces/options'
+import type GitlyOptions from '../interfaces/options'
 
 const pipeline = promisify(stream.pipeline)
 
@@ -21,8 +21,9 @@ export default async function fetch(
 
   const { statusText: message, status: code } = response
   if (code >= 400) throw new GitlyDownloadError(message, code)
-  else if (code >= 300 && code < 400 && response.headers.location) {
+  if (code >= 300 && code < 400 && response.headers.location) {
     return fetch(response.headers.location, file)
-  } else await pipeline(response.data, await write(file))
+  }
+  await pipeline(response.data, await write(file))
   return file
 }

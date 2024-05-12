@@ -17,17 +17,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node: ${{ matrix.node }}
-      - name: Setup yarn
-        run: npm i -g yarn
 
       - name: Install
-        run: yarn install
+        run: npm install
 
       - name: Test
-        run: yarn test
+        run: npm test
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
         env:
           CI: true

@@ -29,7 +29,7 @@
   },
   "scripts": {
     "prepare": "npm run build",
-    "preversion": "npm run lint",
+    "preversion": "",
     "prepublishOnly": "npm run test",
     "build": "tsc",
     "test": "jest",

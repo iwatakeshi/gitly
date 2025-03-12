@@ -2,15 +2,29 @@
   "name": "gitly",
   "version": "3.0.3",
   "description": "An API to download and/or extract git repositories",
-  "main": "lib/main.js",
+  "type": "module",
+  "main": "./dist/main.js",
+  "types": "./dist/main.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/main.d.ts",
+        "default": "./dist/main.js"
+      },
+      "require": {
+        "types": "./dist/main.d.cts",
+        "default": "./dist/main.cjs"
+      }
+    }
+  },
   "repository": "github:iwatakeshi/gitly",
   "author": "Takeshi Iwana <iwatakeshi@gmail.com>",
   "license": "MIT",
   "files": [
-    "lib/**/*"
+    "dist/**/*"
   ],
   "dependencies": {
-    "axios": "^1.7.9",
+    "axios": "^1.8.3",
     "cross-spawn": "^7.0.6",
     "tar": "^7.4.3",
     "shelljs": "^0.8.5"
@@ -18,24 +32,24 @@
   "devDependencies": {
     "@types/cross-spawn": "^6.0.6",
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.10.3",
+    "@types/node": "^22.13.10",
     "@types/shelljs": "^0.8.15",
     "@types/tar": "^6.1.13",
     "jest": "^29.7.0",
-    "prettier": "^3.4.2",
-    "ts-jest": "^29.2.5",
+    "prettier": "^3.5.3",
+    "ts-jest": "^29.2.6",
     "tslib": "^2.8.1",
-    "typescript": "^5.7.2"
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2"
   },
   "scripts": {
     "prepare": "npm run build",
     "preversion": "",
     "prepublishOnly": "npm run test",
-    "build": "tsc",
+    "build": "tsup",
     "test": "jest",
     "format": "prettier --write \"src/**/*.ts\" \"*.json\" \"*.md\""
   },
-  "types": "lib/main.d.ts",
   "keywords": [
     "archive",
     "bitbucket",

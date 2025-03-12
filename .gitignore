@@ -89,6 +89,7 @@ typings/
 
 # Typescript
 lib/
+dist/
 
 # Yarn
 

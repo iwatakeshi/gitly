@@ -1,5 +1,5 @@
 import type URLInfo from './url'
-import type { AxiosHeaders, RawAxiosRequestHeaders } from 'axios'
+import type { AxiosHeaders, AxiosProxyConfig, RawAxiosRequestHeaders } from 'axios'
 import type { Stats } from 'node:fs'
 import type { ReadEntry } from 'tar'
 
@@ -50,6 +50,10 @@ export default interface GitlyOptions {
    * 'git' - use local git installation to clone the repository (allows for cloning private repositories as long as the local git installation has access)
    * ```
    */
+  /**
+   * Sets the hostname, port, and protocol of the proxy server (default: undefined)
+   */
+  proxy?: AxiosProxyConfig
   backend?: 'axios' | 'git'
   /**
    * Set git options (default: undefined)

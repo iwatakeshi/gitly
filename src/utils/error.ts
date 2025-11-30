@@ -28,7 +28,7 @@ export default abstract class GitlyAbstractError extends Error {
 }
 
 // biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
-export const GitlyUknownError = class extends GitlyAbstractError {
+export const GitlyUnknownError = class extends GitlyAbstractError {
   static type = GitlyErrorType.Unknown
 }
 

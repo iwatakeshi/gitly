@@ -3,7 +3,7 @@ import {
   GitlyErrorType,
   GitlyExtractError,
   GitlyFetchError,
-  GitlyUknownError,
+  GitlyUnknownError,
 } from '../error'
 
 describe('utils/error', () => {
@@ -34,10 +34,10 @@ describe('utils/error', () => {
     })
   })
 
-  describe('GitlyUknownError', () => {
+  describe('GitlyUnknownError', () => {
     it('should return an instance', () => {
-      const error = new GitlyUknownError('message', 402)
-      expect(error.message).toBe('[gitly:uknown]: message')
+      const error = new GitlyUnknownError('message', 402)
+      expect(error.message).toBe('[gitly:unknown]: message')
       expect(error.code).toBe(402)
       expect(error.type).toBe(GitlyErrorType.Unknown)
     })

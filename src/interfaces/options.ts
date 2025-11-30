@@ -38,6 +38,11 @@ export default interface GitlyOptions {
     filter?(path: string, stat: Stats | ReadEntry): boolean
   }
   /**
+   * Extract only a specific subdirectory from the archive
+   * @example 'packages/lib' to extract only that subdirectory
+   */
+  subdirectory?: string
+  /**
    * Set the request headers (default: undefined)
    */
   headers?: RawAxiosRequestHeaders | AxiosHeaders

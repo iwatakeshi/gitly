@@ -57,10 +57,21 @@ function normalizeURL(url: string, options: GitlyOptions) {
   let updatedHost = host || ''
 
   if (isNotProtocol && hasHost) {
-    // Matches host:owner/repo
+    // Matches host:owner/repo (e.g., sourcehut:owner/repo, codeberg:owner/repo)
     const hostMatch = url.match(/([\S]+):.+/)
     updatedHost = hostMatch?.[1] ?? ''
-    normalizedURL = `https://${updatedHost}.com/${normalizedURL.replace(`${updatedHost}:`, '')}`
+    
+    // Handle special domains (e.g., sourcehut -> git.sr.ht, codeberg -> codeberg.org)
+    const specialDomains: Record<string, string> = {
+      'sourcehut': 'git.sr.ht',
+      'codeberg': 'codeberg.org',
+      'github': 'github.com',
+      'gitlab': 'gitlab.com',
+      'bitbucket': 'bitbucket.org',
+    }
+    
+    const domain = specialDomains[updatedHost] || `${updatedHost}.com`
+    normalizedURL = `https://${domain}/${normalizedURL.replace(`${updatedHost}:`, '')}`
   } else if (isNotProtocol && hasTLD) {
     // Matches host.com/...
     normalizedURL = `https://${normalizedURL}`

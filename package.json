@@ -5,6 +5,9 @@
   "type": "module",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
+  "bin": {
+    "gitly": "./dist/cli/index.js"
+  },
   "exports": {
     ".": {
       "import": {
@@ -51,6 +54,9 @@
   "keywords": [
     "archive",
     "bitbucket",
+    "cli",
+    "codeberg",
+    "degit",
     "download",
     "extract",
     "fetch",
@@ -63,7 +69,10 @@
     "repo",
     "repository",
     "scaffold",
-    "tarbarll",
+    "scaffolding",
+    "sourcehut",
+    "tarball",
+    "template",
     "zip"
   ],
   "engines": {

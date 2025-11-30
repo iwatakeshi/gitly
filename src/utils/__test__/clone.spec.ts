@@ -1,7 +1,9 @@
 import exists from '../exists'
 import clone from '../clone'
-import { rm } from 'shelljs'
+import shelljs from 'shelljs'
 import { join } from 'node:path'
+
+const { rm } = shelljs
 
 describe('utils/clone', () => {
   const options = {

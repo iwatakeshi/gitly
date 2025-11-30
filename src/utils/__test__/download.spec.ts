@@ -1,9 +1,11 @@
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
-import { rm } from 'shelljs'
+import shelljs from 'shelljs'
 
 import download from '../download'
 import { GitlyDownloadError } from '../error'
+
+const { rm } = shelljs
 
 describe('utils/download (no cache)', () => {
   const options = {

@@ -9,15 +9,29 @@ import { isOffline } from './offline'
 import parse from './parse'
 
 /**
- * Download the tar file from the repository
- * and store it in a temporary directory
- * @param repository The repository to download
- *
+ * Download a repository archive from GitHub, GitLab, or Bitbucket
+ * @param repository Repository identifier (e.g., 'owner/repo', 'github:owner/repo#tag')
+ * @param options Options for caching, proxy, temp directory, and error handling
+ * @returns Promise resolving to archive path, or empty string on failure (when throw=false)
+ * @throws {AggregateError} When all download strategies fail (when throw=true)
+ * @note Tries local cache first, then remote download
+ * @note Uses force=true to skip cache for main/master branches
+ * @note Returns empty string instead of throwing when options.throw is false
  * @example
- * ```js
- * // ..
- * const path = await download('iwatakeshi/git-copy')
- * // ...
+ * ```typescript
+ * // Download and cache
+ * const path = await download('iwatakeshi/gitly')
+ * 
+ * // Force fresh download
+ * const path = await download('owner/repo', { force: true })
+ * 
+ * // Use cache only (offline mode)
+ * const path = await download('owner/repo', { cache: true })
+ * 
+ * // With proxy
+ * const path = await download('owner/repo', {
+ *   proxy: { protocol: 'http', host: 'proxy.example.com', port: 8080 }
+ * })
  * ```
  */
 export default async function download(

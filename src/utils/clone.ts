@@ -10,18 +10,27 @@ import exists from './exists'
 import { isOffline } from './offline'
 import parse from './parse'
 /**
- * Uses local git installation to clone a repository to the destination.
- * @param repository The repository to clone
- * @param options The options to use
- * @returns The path to the cloned repository
- * @throws {GitlyCloneError} When the repository fails to clone
- * @note This method requires a local git installation
- * @note This method caches the repository by default
+ * Clone a git repository using local git installation
+ * @param repository The repository to clone (e.g., 'owner/repo', 'github:owner/repo')
+ * @param options Options including temp directory, git depth, and error handling
+ * @returns Promise resolving to the path of the created archive
+ * @throws {GitlyCloneError} When repository contains injection attempts or invalid options
+ * @throws {GitlyCloneError} When git clone fails
+ * @note Requires local git installation
+ * @note Validates inputs to prevent command injection
+ * @note Caches repository by default in ~/.gitly
+ * @security Validates --upload-pack parameter to prevent second-order command injection
+ * @security Validates depth option to ensure it's a valid number
  * @example
- * ```js
- * // ...
- * const path = await clone('iwatakeshi/git-copy')
- * // ...
+ * ```typescript
+ * // Clone latest main branch
+ * const path = await clone('iwatakeshi/gitly')
+ * 
+ * // Clone with specific depth
+ * const path = await clone('owner/repo', {
+ *   git: { depth: 5 },
+ *   temp: '/custom/cache/dir'
+ * })
  * ```
  */
 export default async function clone(

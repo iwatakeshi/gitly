@@ -9,17 +9,30 @@ import { extract } from './archive'
 const { mkdir } = fs
 
 /**
- * Extract a zipped file to the specified destination
- * @param source The source zipped file
- * @param destination The path to extract the zipped file
- * @param options
- *
+ * Extract a tar.gz archive to the specified destination
+ * @param source The source tar.gz file path
+ * @param destination The directory path to extract the archive to
+ * @param options Options including extraction filters
+ * @returns Promise resolving to destination path, or empty string on failure
+ * @note Creates destination directory if it doesn't exist
+ * @note Strips top-level directory from archive by default
+ * @example
+ * ```typescript
+ * const dest = await extract('/tmp/repo.tar.gz', '/path/to/extract')
+ * 
+ * // With custom filter
+ * await extract(source, dest, {
+ *   extract: {
+ *     filter: (path) => !path.includes('node_modules')
+ *   }
+ * })
+ * ```
  */
-export default async (
+export default async function extractArchive(
   source: string,
   destination: string,
   options: GitlyOptions = {}
-): Promise<string> => {
+): Promise<string> {
   const _destination = resolve(destination)
   if (await exists(source, options)) {
     try {

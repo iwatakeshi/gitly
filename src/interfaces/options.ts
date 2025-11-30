@@ -52,6 +52,7 @@ export default interface GitlyOptions {
    */
   /**
    * Sets the hostname, port, and protocol of the proxy server (default: undefined)
+   * Falls back to the https_proxy or http_proxy environment variables if not specified
    */
   proxy?: AxiosProxyConfig
   backend?: 'axios' | 'git'

@@ -35,15 +35,21 @@ function getProxy(proxy: GitlyOptions['proxy']): AxiosProxyConfig | false {
     return proxy
   }
 
-  if (typeof process.env.https_proxy === 'string') {
+  const proxyUrl = process.env.https_proxy || process.env.http_proxy
+  if (typeof proxyUrl === 'string') {
     try {
-      const url = new URL(process.env.https_proxy)
-      const { protocol, host, port } = url
+      const url = new URL(proxyUrl)
+      const { protocol, hostname, port } = url
+      
+      // Port is required by AxiosProxyConfig, so only return proxy if port is present
+      if (!port) {
+        return false
+      }
       
       return {
-        protocol,
-        host,
-        port: Number.parseInt(port) ?? undefined,
+        protocol: protocol.replace(':', ''),
+        host: hostname,
+        port: Number.parseInt(port),
       }
     } catch {
       return false;

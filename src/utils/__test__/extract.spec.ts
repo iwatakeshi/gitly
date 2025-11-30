@@ -1,9 +1,11 @@
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
-import { rm } from 'shelljs'
+import shelljs from 'shelljs'
 
 import download from '../download'
 import extract from '../extract'
+
+const { rm } = shelljs
 
 describe('utils/extract', () => {
   const destination = join(__dirname, 'output', 'extract')

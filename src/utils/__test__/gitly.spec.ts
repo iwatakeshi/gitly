@@ -1,7 +1,10 @@
 import { join } from 'node:path'
 import gitly from '../gitly'
 import exists from '../exists'
-import { rm } from 'shelljs'
+import shelljs from 'shelljs'
+
+const { rm } = shelljs
+
 describe('gitly', () => {
   const destination = join(__dirname, 'output', 'gitly')
   const options = {

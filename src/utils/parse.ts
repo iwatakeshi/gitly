@@ -61,7 +61,7 @@ function normalizeURL(url: string, options: GitlyOptions) {
   if (isNotProtocol && hasHost) {
     // Matches host:owner/repo
     const hostMatch = url.match(/([\S]+):.+/)
-    updatedHost = hostMatch ? hostMatch[1] : ''
+    updatedHost = hostMatch?.[1] ?? ''
     normalizedURL = `https://${updatedHost}.com/${normalizedURL.replace(`${updatedHost}:`, '')}`
   } else if (isNotProtocol && hasTLD) {
     // Matches host.com/...
@@ -70,10 +70,10 @@ function normalizeURL(url: string, options: GitlyOptions) {
     // Matches owner/repo
     const tldMatch = (host || '').match(/[\S]+\.([\D]+)/)
     const domain = (host || 'github').replace(
-      `.${tldMatch ? tldMatch[1] : 'com'}`,
+      `.${tldMatch?.[1] ?? 'com'}`,
       ''
     )
-    const tld = tldMatch ? tldMatch[1] : 'com'
+    const tld = tldMatch?.[1] ?? 'com'
     normalizedURL = `https://${domain}.${tld}/${normalizedURL}`
   }
 

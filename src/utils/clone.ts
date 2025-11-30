@@ -31,6 +31,21 @@ export default async function clone(
   const info = parse(repository, options)
   const archivePath = getArchivePath(info, options)
   const directory = archivePath.replace(/\.tar\.gz$/, '')
+  const depth = options?.git?.depth ?? 1
+
+  // Validate inputs early to prevent command injection
+  if (
+    repository.includes('--upload-pack') ||
+    directory.includes('--upload-pack') ||
+    info.href.includes('--upload-pack')
+  ) {
+    throw new GitlyCloneError('Invalid argument')
+  }
+
+  if (typeof depth !== 'number' || Number.isNaN(depth)) {
+    throw new GitlyCloneError('Invalid depth option')
+  }
+
   let order: (() => Promise<boolean | string>)[] = []
 
   const local = async () => exists(`${archivePath}.tar.gz`)
@@ -39,27 +54,6 @@ export default async function clone(
     if (await exists(archivePath)) {
       /* istanbul ignore next */
       await rm(archivePath)
-    }
-
-    // Prevent second order command injection
-
-    const depth = options?.git?.depth || 1
-
-    if (
-      repository.includes('--upload-pack') ||
-      directory.includes('--upload-pack')
-    ) {
-      throw new GitlyCloneError('Invalid argument')
-    }
-
-    /* istanbul ignore if */
-    if (typeof depth !== 'number') {
-      throw new GitlyCloneError('Invalid depth option')
-    }
-
-    /* istanbul ignore if */
-    if (info.href.includes('--upload-pack')) {
-      throw new GitlyCloneError('Invalid argument')
     }
 
     const child = spawn('git', [

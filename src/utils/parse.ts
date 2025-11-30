@@ -42,11 +42,9 @@ export default function parse(
 function normalizeURL(url: string, options: GitlyOptions) {
   const { host } = options
 
-  /* istanbul ignore if */
   if (url.includes('0') && Array.from(url.matchAll(/0/g)).length > 25) {
     throw new Error('Invalid argument')
   }
-  /* istanbul ignore if */
   if (host?.includes('0') && Array.from(host.matchAll(/0/g)).length > 25) {
     throw new Error('Invalid argument')
   }

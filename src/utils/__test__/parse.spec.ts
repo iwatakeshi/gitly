@@ -145,4 +145,35 @@ describe('utils/parse', () => {
       type: 'tag',
     } as URLInfo)
   })
+
+  describe('security: DOS prevention', () => {
+    it('should reject URL with excessive zeros (ReDoS protection)', () => {
+      const maliciousUrl = '0'.repeat(30) + '/repo'
+      expect(() => parse(maliciousUrl)).toThrow('Invalid argument')
+    })
+
+    it('should reject host option with excessive zeros', () => {
+      const maliciousHost = '0'.repeat(30)
+      expect(() => parse('owner/repo', { host: maliciousHost })).toThrow('Invalid argument')
+    })
+
+    it('should allow URL with acceptable number of zeros', () => {
+      const validUrl = 'owner/rep0'
+      expect(() => parse(validUrl)).not.toThrow()
+    })
+
+    it('should allow host with acceptable number of zeros', () => {
+      expect(() => parse('owner/repo', { host: 'host0' })).not.toThrow()
+    })
+
+    it('should reject URL with exactly 26 zeros', () => {
+      const url = '0'.repeat(26) + 'owner/repo'
+      expect(() => parse(url)).toThrow('Invalid argument')
+    })
+
+    it('should allow URL with exactly 25 zeros', () => {
+      const url = '0'.repeat(25) + 'owner/repo'
+      expect(() => parse(url)).not.toThrow()
+    })
+  })
 })

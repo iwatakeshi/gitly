@@ -17,7 +17,8 @@ export default async function exists(
   try {
     await fs.access(_path, constants.F_OK)
     return true
-    // eslint-disable-next-line no-empty
-  } catch (_) {}
-  return false
+  } catch {
+    // File doesn't exist or is not accessible
+    return false
+  }
 }

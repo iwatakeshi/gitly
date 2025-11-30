@@ -4,7 +4,8 @@ export async function isOffline(): Promise<boolean> {
   try {
     await lookup('google.com')
     return false
-    // eslint-disable-next-line no-empty
-  } catch (_) {}
-  return true
+  } catch {
+    // DNS lookup failed - assume offline
+    return true
+  }
 }

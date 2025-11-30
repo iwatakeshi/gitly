@@ -29,8 +29,11 @@ export default async (
       await mkdir(destination, { recursive: true })
       await extract({ strip: 1, filter, file: source, cwd: _destination })
       return _destination
-      // eslint-disable-next-line no-empty
-    } catch (_) {}
+    } catch (error) {
+      // Extraction failed - log error and return empty string
+      console.error('Failed to extract archive:', error)
+      return ''
+    }
   }
   return ''
 }

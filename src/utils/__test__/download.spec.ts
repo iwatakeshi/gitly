@@ -96,13 +96,16 @@ describe('utils/download (no cache)', () => {
   })
 
   it('should throw an error when a repo is not found (with options', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     try {
       await download('github:doesnotexist123xyz/gittar#v0.1.1', {
         throw: true,
       })
     } catch (error) {
-      expect(error).toBeInstanceOf(GitlyDownloadError)
+      // Now throws AggregateError containing GitlyDownloadError(s)
+      expect(error).toBeInstanceOf(AggregateError)
+      const aggError = error as AggregateError
+      expect(aggError.errors.some(e => e instanceof GitlyDownloadError)).toBe(true)
     }
   })
 })

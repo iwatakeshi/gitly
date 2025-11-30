@@ -3,9 +3,9 @@ import { join } from 'node:path'
 import shelljs from 'shelljs'
 
 import download from '../download'
+import { GitlyDownloadError } from '../error'
 
 const { rm } = shelljs
-import { GitlyDownloadError } from '../error'
 
 describe('utils/download (no cache)', () => {
   const options = {

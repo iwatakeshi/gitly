@@ -1,11 +1,9 @@
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
-import shelljs from 'shelljs'
+import { rm } from 'node:fs/promises'
 
 import download from '../download'
 import extract from '../extract'
-
-const { rm } = shelljs
 
 describe('utils/extract', () => {
   const destination = join(__dirname, 'output', 'extract')
@@ -13,15 +11,15 @@ describe('utils/extract', () => {
     temp: join(__dirname, 'output', 'extract', '.gitcopy'),
   }
 
-  beforeEach(() => {
-    rm('-rf', join(__dirname, 'output', 'extract', '.gitcopy'))
+  beforeEach(async () => {
+    await rm(join(__dirname, 'output', 'extract', '.gitcopy'), { recursive: true, force: true })
   })
-  afterEach(() => {
-    rm('-rf', destination)
+  afterEach(async () => {
+    await rm(destination, { recursive: true, force: true })
   })
 
-  afterAll(() => {
-    rm('-rf', join(__dirname, 'output', 'extract'))
+  afterAll(async () => {
+    await rm(join(__dirname, 'output', 'extract'), { recursive: true, force: true })
   })
 
   it('should extract "lukeed/gittar"', async () => {

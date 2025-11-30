@@ -1,9 +1,7 @@
 import { join } from 'node:path'
+import { rm } from 'node:fs/promises'
 import gitly from '../gitly'
 import exists from '../exists'
-import shelljs from 'shelljs'
-
-const { rm } = shelljs
 
 describe('gitly', () => {
   const destination = join(__dirname, 'output', 'gitly')
@@ -11,11 +9,11 @@ describe('gitly', () => {
     temp: join(__dirname, 'output', 'gitly'),
   }
 
-  beforeEach(() => {
-    rm('-rf', join(__dirname, 'output', 'gitly'))
+  beforeEach(async () => {
+    await rm(join(__dirname, 'output', 'gitly'), { recursive: true, force: true })
   })
-  afterEach(() => {
-    rm('-rf', destination)
+  afterEach(async () => {
+    await rm(destination, { recursive: true, force: true })
   })
 
   it('should clone the repository using axios', async () => {

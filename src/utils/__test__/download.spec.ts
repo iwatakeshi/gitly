@@ -1,27 +1,25 @@
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
-import shelljs from 'shelljs'
+import { rm } from 'node:fs/promises'
 
 import download from '../download'
 import { GitlyDownloadError } from '../error'
-
-const { rm } = shelljs
 
 describe('utils/download (no cache)', () => {
   const options = {
     temp: join(__dirname, 'output', 'download'),
   }
 
-  beforeAll(() => {
-    rm('-rf', join(__dirname, 'output', 'download'))
+  beforeAll(async () => {
+    await rm(join(__dirname, 'output', 'download'), { recursive: true, force: true })
   })
 
-  beforeEach(() => {
-    rm('-rf', join(__dirname, 'output', 'download'))
+  beforeEach(async () => {
+    await rm(join(__dirname, 'output', 'download'), { recursive: true, force: true })
   })
 
-  afterAll(() => {
-    rm('-rf', join(__dirname, 'output', 'download'))
+  afterAll(async () => {
+    await rm(join(__dirname, 'output', 'download'), { recursive: true, force: true })
   })
 
   it('should download "lukeed/gittar"', async () => {
@@ -116,14 +114,14 @@ describe('utils/download (cached)', () => {
   const isCached = (ms: number) => Date.now() - ms <= 15
 
   beforeAll(async () => {
-    rm('-rf', join(__dirname, 'output', 'download', 'cache'))
+    await rm(join(__dirname, 'output', 'download', 'cache'), { recursive: true, force: true })
     // Predownload
     const path = await download('lukeed/gittar', { temp: options.temp })
     expect(existsSync(path)).toBe(true)
   })
 
   afterAll(async () => {
-    rm('-rf', join(__dirname, 'output', 'download', 'cache'))
+    await rm(join(__dirname, 'output', 'download', 'cache'), { recursive: true, force: true })
   })
 
   it('should return a path to the cached zipped file', async () => {

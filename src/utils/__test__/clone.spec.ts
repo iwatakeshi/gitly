@@ -1,9 +1,7 @@
+import { join } from 'node:path'
+import { rm } from 'node:fs/promises'
 import exists from '../exists'
 import clone from '../clone'
-import shelljs from 'shelljs'
-import { join } from 'node:path'
-
-const { rm } = shelljs
 
 describe('utils/clone', () => {
   const options = {
@@ -11,12 +9,12 @@ describe('utils/clone', () => {
     backend: 'git' as 'git' | 'axios',
     throws: true
   }
-  beforeAll(() => {
-    rm('-rf', join(__dirname, 'output', 'clone'))
+  beforeAll(async () => {
+    await rm(join(__dirname, 'output', 'clone'), { recursive: true, force: true })
   })
 
-  afterAll(() => {
-    rm('-rf', join(__dirname, 'output', 'clone'))
+  afterAll(async () => {
+    await rm(join(__dirname, 'output', 'clone'), { recursive: true, force: true })
   })
   it('should clone the repository', async () => {
     const result = await clone('iwatakeshi/gitly', options)

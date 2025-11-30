@@ -1,14 +1,12 @@
 import type GitlyOptions from '../interfaces/options'
 
-import shelljs from 'shelljs'
+import { rm } from 'node:fs/promises'
 import { getArchivePath, getArchiveUrl } from './archive'
 import execute from './execute'
 import exists from './exists'
 import fetch from './fetch'
 import { isOffline } from './offline'
 import parse from './parse'
-
-const { rm } = shelljs
 
 /**
  * Download the tar file from the repository
@@ -34,7 +32,7 @@ export default async function download(
     // If the repository is cached, remove the old cache
     if (await exists(archivePath)) {
       /* istanbul ignore next */
-      rm(archivePath)
+      await rm(archivePath, { force: true })
     }
 
     return fetch(url, archivePath, options)

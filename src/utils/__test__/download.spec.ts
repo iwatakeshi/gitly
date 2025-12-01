@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeAll } from '@jest/globals'
 import { existsSync } from 'node:fs'
-import { join } from 'node:path'
 import { rm } from 'node:fs/promises'
+import { join } from 'node:path'
+import { beforeAll, describe, expect, it } from '@jest/globals'
 
 import download from '../download'
 import { GitlyDownloadError } from '../error'
@@ -46,10 +46,7 @@ describe('utils/download (no cache)', () => {
   })
   it('should download "https://github.com/lukeed/gittar#v0.1.1"', async () => {
     expect.assertions(2)
-    const path = await download(
-      'https://github.com/lukeed/gittar#v0.1.1',
-      options
-    )
+    const path = await download('https://github.com/lukeed/gittar#v0.1.1', options)
     expect(path).toBeTruthy()
     expect(existsSync(path)).toBe(true)
   })
@@ -91,9 +88,11 @@ describe('utils/download (no cache)', () => {
 
   it('should return an empty string when a repo is not found', async () => {
     expect.assertions(1)
-    expect(await download('github:doesnotexist123xyz/gittar#v0.1.1', {
-      resolveCommit: false
-    })).toEqual('')
+    expect(
+      await download('github:doesnotexist123xyz/gittar#v0.1.1', {
+        resolveCommit: false,
+      }),
+    ).toEqual('')
   })
 
   it('should throw an error when a repo is not found (with options', async () => {
@@ -101,13 +100,13 @@ describe('utils/download (no cache)', () => {
     try {
       await download('github:doesnotexist123xyz/gittar#v0.1.1', {
         throw: true,
-        resolveCommit: false
+        resolveCommit: false,
       })
     } catch (error) {
       // Now throws AggregateError containing GitlyDownloadError(s)
       expect(error).toBeInstanceOf(AggregateError)
       const aggError = error as AggregateError
-      expect(aggError.errors.some(e => e instanceof GitlyDownloadError)).toBe(true)
+      expect(aggError.errors.some((e) => e instanceof GitlyDownloadError)).toBe(true)
     }
   })
 })

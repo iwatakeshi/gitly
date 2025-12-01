@@ -1,6 +1,5 @@
-import type GitlyOptions from '../interfaces/options'
-
 import { rm } from 'node:fs/promises'
+import type GitlyOptions from '../interfaces/options'
 import { getArchivePath, getArchiveUrl } from './archive'
 import { injectAuthHeaders } from './auth'
 import execute from './execute'
@@ -23,16 +22,16 @@ import parse from './parse'
  * ```typescript
  * // Download and cache by commit SHA
  * const path = await download('iwatakeshi/gitly')
- * 
+ *
  * // Force fresh download
  * const path = await download('owner/repo', { force: true })
- * 
+ *
  * // Use cache only (offline mode)
  * const path = await download('owner/repo', { cache: true })
- * 
+ *
  * // Disable commit resolution (use branch/tag name)
  * const path = await download('owner/repo', { resolveCommit: false })
- * 
+ *
  * // With proxy
  * const path = await download('owner/repo', {
  *   proxy: { protocol: 'http', host: 'proxy.example.com', port: 8080 }
@@ -41,18 +40,18 @@ import parse from './parse'
  */
 export default async function download(
   repository: string,
-  options: GitlyOptions = {}
+  options: GitlyOptions = {},
 ): Promise<string> {
   const info = parse(repository, options)
   const archivePath = await getArchivePath(info, options)
   const url = getArchiveUrl(info, options)
-  
+
   // Inject authentication headers for private repositories
   const optionsWithAuth: GitlyOptions = {
     ...options,
-    headers: injectAuthHeaders(info, options)
+    headers: injectAuthHeaders(info, options),
   }
-  
+
   const local = async () => exists(archivePath)
   const remote = async () => {
     // If the repository is cached, remove the old cache

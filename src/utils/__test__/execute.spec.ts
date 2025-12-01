@@ -1,13 +1,9 @@
-import { describe, it, expect } from '@jest/globals'
+import { describe, expect, it } from '@jest/globals'
 import execute from '../execute'
 
 describe('utils/execute', () => {
   it('should return result from first successful task', async () => {
-    const tasks = [
-      async () => false,
-      async () => 'success',
-      async () => 'should not reach',
-    ]
+    const tasks = [async () => false, async () => 'success', async () => 'should not reach']
     const result = await execute(tasks)
     expect(result).toBe('success')
   })
@@ -18,11 +14,7 @@ describe('utils/execute', () => {
   })
 
   it('should return false when all tasks return false', async () => {
-    const tasks = [
-      async () => false,
-      async () => false,
-      async () => false,
-    ]
+    const tasks = [async () => false, async () => false, async () => false]
     const result = await execute(tasks)
     expect(result).toBe(false)
   })
@@ -31,15 +23,21 @@ describe('utils/execute', () => {
     const error1 = new Error('Task 1 failed')
     const error2 = new Error('Task 2 failed')
     const error3 = new Error('Task 3 failed')
-    
+
     const tasks = [
-      async () => { throw error1 },
-      async () => { throw error2 },
-      async () => { throw error3 },
+      async () => {
+        throw error1
+      },
+      async () => {
+        throw error2
+      },
+      async () => {
+        throw error3
+      },
     ]
 
     await expect(execute(tasks)).rejects.toThrow(AggregateError)
-    
+
     try {
       await execute(tasks)
     } catch (error) {
@@ -55,9 +53,15 @@ describe('utils/execute', () => {
 
   it('should convert non-Error throws to Error objects', async () => {
     const tasks = [
-      async () => { throw 'string error' },
-      async () => { throw 404 },
-      async () => { throw { code: 'CUSTOM' } },
+      async () => {
+        throw 'string error'
+      },
+      async () => {
+        throw 404
+      },
+      async () => {
+        throw { code: 'CUSTOM' }
+      },
     ]
 
     try {
@@ -75,12 +79,16 @@ describe('utils/execute', () => {
 
   it('should skip failed tasks and continue to next', async () => {
     const tasks = [
-      async () => { throw new Error('First failed') },
+      async () => {
+        throw new Error('First failed')
+      },
       async () => false,
-      async () => { throw new Error('Third failed') },
+      async () => {
+        throw new Error('Third failed')
+      },
       async () => 'finally succeeded',
     ]
-    
+
     const result = await execute(tasks)
     expect(result).toBe('finally succeeded')
   })
@@ -88,12 +96,16 @@ describe('utils/execute', () => {
   it('should handle mix of errors and false returns', async () => {
     const error1 = new Error('Failed task')
     const error2 = new Error('Another failure')
-    
+
     const tasks = [
       async () => false,
-      async () => { throw error1 },
+      async () => {
+        throw error1
+      },
       async () => false,
-      async () => { throw error2 },
+      async () => {
+        throw error2
+      },
     ]
 
     try {

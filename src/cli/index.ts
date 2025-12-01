@@ -1,18 +1,16 @@
 #!/usr/bin/env node
 
+import { readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { parseArgs } from 'node:util'
 import { GitlyCLI } from './cli'
 import { ConsoleLogger } from './logger'
-import { readFileSync } from 'node:fs'
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
 
 // Read version from package.json
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
-const packageJson = JSON.parse(
-  readFileSync(join(__dirname, '../../package.json'), 'utf-8')
-)
+const packageJson = JSON.parse(readFileSync(join(__dirname, '../../package.json'), 'utf-8'))
 const version = packageJson.version
 
 const help = `
@@ -91,7 +89,7 @@ async function main(): Promise<void> {
     }
 
     const logger = new ConsoleLogger(
-      values.verbose ? 'verbose' : values.quiet ? 'silent' : 'normal'
+      values.verbose ? 'verbose' : values.quiet ? 'silent' : 'normal',
     )
 
     const cli = new GitlyCLI(logger)

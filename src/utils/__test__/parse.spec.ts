@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@jest/globals'
+import { describe, expect, it } from '@jest/globals'
 import type URLInfo from '../../interfaces/url'
 import parse from '../parse'
 
@@ -132,7 +132,7 @@ describe('utils/parse', () => {
     expect(
       parse('owner/repo#tag', {
         host: 'blah.dev',
-      })
+      }),
     ).toStrictEqual({
       protocol: 'https',
       host: 'blah.dev',

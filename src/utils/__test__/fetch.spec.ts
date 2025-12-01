@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals'
-import { rm, mkdir } from 'node:fs/promises'
+import { mkdir, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { Readable } from 'node:stream'
-import fetch from '../fetch'
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals'
+import axios from 'axios'
 import { GitlyDownloadError } from '../error'
 import exists from '../exists'
-import axios from 'axios'
+import fetch from '../fetch'
 
 // Mock axios
 jest.mock('axios')
@@ -47,9 +47,12 @@ describe('utils/fetch', () => {
       const result = await fetch(url, dest)
 
       expect(result).toBe(dest)
-      expect(mockedAxios.get).toHaveBeenCalledWith(url, expect.objectContaining({
-        responseType: 'stream',
-      }))
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        url,
+        expect.objectContaining({
+          responseType: 'stream',
+        }),
+      )
       expect(await exists(dest)).toBe(true)
     })
 
@@ -97,13 +100,16 @@ describe('utils/fetch', () => {
 
       await fetch(url, dest)
 
-      expect(mockedAxios.get).toHaveBeenCalledWith(url, expect.objectContaining({
-        proxy: {
-          protocol: 'http',
-          host: 'proxy.example.com',
-          port: 8080,
-        },
-      }))
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        url,
+        expect.objectContaining({
+          proxy: {
+            protocol: 'http',
+            host: 'proxy.example.com',
+            port: 8080,
+          },
+        }),
+      )
     })
 
     it('should handle proxy URL without port (returns false)', async () => {
@@ -121,9 +127,12 @@ describe('utils/fetch', () => {
       await fetch(url, dest)
 
       // Should pass false as proxy since no port
-      expect(mockedAxios.get).toHaveBeenCalledWith(url, expect.objectContaining({
-        proxy: false,
-      }))
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        url,
+        expect.objectContaining({
+          proxy: false,
+        }),
+      )
     })
 
     it('should handle invalid proxy URL (returns false)', async () => {
@@ -141,9 +150,12 @@ describe('utils/fetch', () => {
       await fetch(url, dest)
 
       // Should pass false as proxy due to invalid URL
-      expect(mockedAxios.get).toHaveBeenCalledWith(url, expect.objectContaining({
-        proxy: false,
-      }))
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        url,
+        expect.objectContaining({
+          proxy: false,
+        }),
+      )
     })
 
     it('should use http_proxy as fallback', async () => {
@@ -161,13 +173,16 @@ describe('utils/fetch', () => {
 
       await fetch(url, dest)
 
-      expect(mockedAxios.get).toHaveBeenCalledWith(url, expect.objectContaining({
-        proxy: {
-          protocol: 'http',
-          host: 'proxy.example.com',
-          port: 3128,
-        },
-      }))
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        url,
+        expect.objectContaining({
+          proxy: {
+            protocol: 'http',
+            host: 'proxy.example.com',
+            port: 3128,
+          },
+        }),
+      )
     })
 
     it('should return false when no proxy environment variables are set', async () => {
@@ -185,9 +200,12 @@ describe('utils/fetch', () => {
 
       await fetch(url, dest)
 
-      expect(mockedAxios.get).toHaveBeenCalledWith(url, expect.objectContaining({
-        proxy: false,
-      }))
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        url,
+        expect.objectContaining({
+          proxy: false,
+        }),
+      )
     })
   })
 
@@ -250,9 +268,9 @@ describe('utils/fetch', () => {
       const validProxy = {
         protocol: 'http',
         host: 'proxy.example.com',
-        port: 8080
+        port: 8080,
       }
-      
+
       expect(typeof validProxy.host).toBe('string')
       expect(typeof validProxy.port).toBe('number')
     })
@@ -263,7 +281,7 @@ describe('utils/fetch', () => {
         { url: 'http://proxy.example.com:8080', hasPort: true },
         { url: 'https://proxy.example.com', hasPort: false },
       ]
-      
+
       testCases.forEach(({ url, hasPort }) => {
         const parsed = new URL(url)
         expect(Boolean(parsed.port)).toBe(hasPort)

@@ -1,15 +1,15 @@
-import { describe, it, expect, beforeEach } from '@jest/globals'
+import { beforeEach, describe, expect, it } from '@jest/globals'
+import axios from 'axios'
+import type URLInfo from '../../interfaces/url'
 import {
+  BitbucketCommitResolver,
+  CodebergCommitResolver,
+  CommitResolverRegistry,
   GitHubCommitResolver,
   GitLabCommitResolver,
-  BitbucketCommitResolver,
-  SourcehutCommitResolver,
-  CodebergCommitResolver,
   NullCommitResolver,
-  CommitResolverRegistry,
+  SourcehutCommitResolver,
 } from '../commit-resolver'
-import type URLInfo from '../../interfaces/url'
-import axios from 'axios'
 
 // Mock axios for unit tests
 jest.mock('axios')
@@ -26,7 +26,11 @@ describe('utils/commit-resolver', () => {
     process.env = envBackup
   })
 
-  const createMockInfo = (host: string, path: string = '/user/repo', type: string = 'main'): URLInfo => ({
+  const createMockInfo = (
+    host: string,
+    path: string = '/user/repo',
+    type: string = 'main',
+  ): URLInfo => ({
     protocol: 'https',
     host,
     hostname: host,
@@ -57,11 +61,15 @@ describe('utils/commit-resolver', () => {
 
     it('should throw error for nonexistent repository', async () => {
       const resolver = new GitHubCommitResolver()
-      const info = createMockInfo('github.com', '/nonexistent/repo-that-does-not-exist-12345', 'main')
+      const info = createMockInfo(
+        'github.com',
+        '/nonexistent/repo-that-does-not-exist-12345',
+        'main',
+      )
 
-      await expect(
-        resolver.resolveCommit(info, { resolveCommit: true })
-      ).rejects.toThrow('Failed to resolve commit')
+      await expect(resolver.resolveCommit(info, { resolveCommit: true })).rejects.toThrow(
+        'Failed to resolve commit',
+      )
     }, 15000)
 
     it('should use HEAD as default ref', async () => {
@@ -100,7 +108,7 @@ describe('utils/commit-resolver', () => {
 
     it('should handle HTTPS_PROXY environment variable', async () => {
       process.env.HTTPS_PROXY = 'http://proxy.example.com:8080'
-      
+
       const resolver = new GitHubCommitResolver()
       const info = createMockInfo('github.com', '/lukeed/gittar', 'main')
 
@@ -116,7 +124,7 @@ describe('utils/commit-resolver', () => {
       delete process.env.HTTPS_PROXY
       delete process.env.https_proxy
       process.env.HTTP_PROXY = 'http://proxy.example.com:8080'
-      
+
       const resolver = new GitHubCommitResolver()
       const info = createMockInfo('github.com', '/lukeed/gittar', 'main')
 
@@ -129,7 +137,7 @@ describe('utils/commit-resolver', () => {
 
     it('should handle invalid proxy URL in environment', async () => {
       process.env.HTTPS_PROXY = 'not-a-valid-url'
-      
+
       const resolver = new GitHubCommitResolver()
       const info = createMockInfo('github.com', '/lukeed/gittar', 'main')
 
@@ -142,7 +150,7 @@ describe('utils/commit-resolver', () => {
 
     it('should handle proxy URL without port', async () => {
       process.env.HTTPS_PROXY = 'http://proxy.example.com'
-      
+
       const resolver = new GitHubCommitResolver()
       const info = createMockInfo('github.com', '/lukeed/gittar', 'main')
 
@@ -249,9 +257,9 @@ describe('utils/commit-resolver', () => {
       const resolver = new GitLabCommitResolver()
       const info = createMockInfo('gitlab.com', '/nonexistent/repo-12345', 'main')
 
-      await expect(
-        resolver.resolveCommit(info, { resolveCommit: true })
-      ).rejects.toThrow('Failed to resolve commit')
+      await expect(resolver.resolveCommit(info, { resolveCommit: true })).rejects.toThrow(
+        'Failed to resolve commit',
+      )
     }, 15000)
 
     it('should resolve Bitbucket commit with hash field', async () => {
@@ -274,27 +282,27 @@ describe('utils/commit-resolver', () => {
       const resolver = new BitbucketCommitResolver()
       const info = createMockInfo('bitbucket.org', '/nonexistent/repo-12345', 'main')
 
-      await expect(
-        resolver.resolveCommit(info, { resolveCommit: true })
-      ).rejects.toThrow('Failed to resolve commit')
+      await expect(resolver.resolveCommit(info, { resolveCommit: true })).rejects.toThrow(
+        'Failed to resolve commit',
+      )
     }, 15000)
 
     it('should handle Sourcehut API errors', async () => {
       const resolver = new SourcehutCommitResolver()
       const info = createMockInfo('git.sr.ht', '/~nonexistent/repo-12345', 'main')
 
-      await expect(
-        resolver.resolveCommit(info, { resolveCommit: true })
-      ).rejects.toThrow('Failed to resolve commit')
+      await expect(resolver.resolveCommit(info, { resolveCommit: true })).rejects.toThrow(
+        'Failed to resolve commit',
+      )
     }, 15000)
 
     it('should handle Codeberg API errors', async () => {
       const resolver = new CodebergCommitResolver()
       const info = createMockInfo('codeberg.org', '/nonexistent/repo-12345', 'main')
 
-      await expect(
-        resolver.resolveCommit(info, { resolveCommit: true })
-      ).rejects.toThrow('Failed to resolve commit')
+      await expect(resolver.resolveCommit(info, { resolveCommit: true })).rejects.toThrow(
+        'Failed to resolve commit',
+      )
     }, 15000)
   })
 
@@ -311,8 +319,8 @@ describe('utils/commit-resolver', () => {
         data: {
           hash: 'abc123',
           links: { html: { href: 'https://bitbucket.org/user/repo/commits/abc123' } },
-          date: '2023-01-01T00:00:00Z'
-        }
+          date: '2023-01-01T00:00:00Z',
+        },
       })
 
       const result = await resolver.resolveCommit(info, { resolveCommit: true })
@@ -325,7 +333,7 @@ describe('utils/commit-resolver', () => {
       const info = createMockInfo('git.sr.ht', '/~user/repo', 'main')
 
       mockedAxios.get.mockResolvedValueOnce({
-        data: 'abc123def456\n'
+        data: 'abc123def456\n',
       })
 
       const result = await resolver.resolveCommit(info, { resolveCommit: true })
@@ -343,10 +351,10 @@ describe('utils/commit-resolver', () => {
           html_url: 'https://codeberg.org/user/repo/commit/abc123',
           commit: {
             committer: {
-              date: '2023-01-01T00:00:00Z'
-            }
-          }
-        }
+              date: '2023-01-01T00:00:00Z',
+            },
+          },
+        },
       })
 
       const result = await resolver.resolveCommit(info, { resolveCommit: true })

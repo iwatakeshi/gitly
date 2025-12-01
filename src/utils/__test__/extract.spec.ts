@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
 import { existsSync } from 'node:fs'
-import { join } from 'node:path'
 import { rm, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
+import { afterEach, beforeEach, describe, expect, it } from '@jest/globals'
 
 import download from '../download'
 import extract from '../extract'
@@ -51,10 +51,7 @@ describe('utils/extract', () => {
   })
 
   it('should extract "https://github.com/lukeed/gittar#v0.1.1"', async () => {
-    const source = await download(
-      'https://github.com/lukeed/gittar#v0.1.1',
-      options
-    )
+    const source = await download('https://github.com/lukeed/gittar#v0.1.1', options)
     const path = await extract(source, destination, options)
     expect(existsSync(source)).toBe(true)
     expect(source).toBeTruthy()
@@ -107,18 +104,15 @@ describe('utils/extract', () => {
   it('should log error and return empty string on extraction failure', async () => {
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
     const invalidTarball = join(__dirname, 'output', 'invalid.tar.gz')
-    
+
     // Create an invalid tarball file
     await writeFile(invalidTarball, 'this is not a valid tar.gz file')
-    
+
     const result = await extract(invalidTarball, destination, options)
-    
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Failed to extract archive:',
-      expect.any(Error)
-    )
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to extract archive:', expect.any(Error))
     expect(result).toBe('')
-    
+
     consoleErrorSpy.mockRestore()
     await rm(invalidTarball, { force: true })
   })

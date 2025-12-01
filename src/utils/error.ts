@@ -12,7 +12,7 @@ export default abstract class GitlyAbstractError extends Error {
   rawMessage: string
   constructor(
     readonly message: string,
-    readonly code: number = -1
+    readonly code: number = -1,
   ) {
     super(message)
     this.rawMessage = message

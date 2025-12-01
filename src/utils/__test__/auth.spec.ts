@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
-import { getAuthToken, injectAuthHeaders } from '../auth'
+import { afterEach, beforeEach, describe, expect, it } from '@jest/globals'
 import type URLInfo from '../../interfaces/url'
+import { getAuthToken, injectAuthHeaders } from '../auth'
 
 describe('utils/auth', () => {
   let envBackup: NodeJS.ProcessEnv
@@ -24,7 +24,7 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const result = getAuthToken(info, { token: 'test-token' })
@@ -42,7 +42,7 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const result = getAuthToken(info)
@@ -60,7 +60,7 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const result = getAuthToken(info)
@@ -78,7 +78,7 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const result = getAuthToken(info)
@@ -96,7 +96,7 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const result = getAuthToken(info)
@@ -114,7 +114,7 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const result = getAuthToken(info)
@@ -132,7 +132,7 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const result = getAuthToken(info)
@@ -151,7 +151,7 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const result = injectAuthHeaders(info)
@@ -168,12 +168,12 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const result = injectAuthHeaders(info, { token: 'ghp_test' })
       expect(result).toEqual({
-        Authorization: 'Bearer ghp_test'
+        Authorization: 'Bearer ghp_test',
       })
     })
 
@@ -187,13 +187,13 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const result = injectAuthHeaders(info, { token: 'glpat-test' })
       expect(result).toEqual({
         'PRIVATE-TOKEN': 'glpat-test',
-        Authorization: 'Bearer glpat-test'
+        Authorization: 'Bearer glpat-test',
       })
     })
 
@@ -207,14 +207,14 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const token = 'username:password'
       const encoded = Buffer.from(token).toString('base64')
       const result = injectAuthHeaders(info, { token })
       expect(result).toEqual({
-        Authorization: `Basic ${encoded}`
+        Authorization: `Basic ${encoded}`,
       })
     })
 
@@ -228,12 +228,12 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const result = injectAuthHeaders(info, { token: 'bb-token' })
       expect(result).toEqual({
-        Authorization: 'Bearer bb-token'
+        Authorization: 'Bearer bb-token',
       })
     })
 
@@ -247,16 +247,16 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const result = injectAuthHeaders(info, {
         token: 'test',
-        headers: { 'Custom-Header': 'value' }
+        headers: { 'Custom-Header': 'value' },
       })
       expect(result).toEqual({
         'Custom-Header': 'value',
-        Authorization: 'Bearer test'
+        Authorization: 'Bearer test',
       })
     })
 
@@ -270,12 +270,12 @@ describe('utils/auth', () => {
         path: '/user/repo',
         repository: 'repo',
         owner: 'user',
-        type: 'main'
+        type: 'main',
       }
 
       const result = injectAuthHeaders(info, { token: 'custom-token' })
       expect(result).toEqual({
-        Authorization: 'Bearer custom-token'
+        Authorization: 'Bearer custom-token',
       })
     })
   })

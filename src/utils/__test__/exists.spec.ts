@@ -1,5 +1,5 @@
-import { describe, it, expect } from '@jest/globals'
 import { join } from 'node:path'
+import { describe, expect, it } from '@jest/globals'
 
 import exists from '../exists'
 

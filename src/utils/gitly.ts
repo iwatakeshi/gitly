@@ -1,8 +1,8 @@
 import type GitlyOptions from '../interfaces/options'
+import { ActionsProcessor } from './actions'
 import clone from './clone'
 import download from './download'
 import extract from './extract'
-import { ActionsProcessor } from './actions'
 
 /**
  * Downloads and extracts the repository with optional actions processing
@@ -15,7 +15,7 @@ import { ActionsProcessor } from './actions'
 export default async function gitly(
   repository: string,
   destination: string,
-  options: GitlyOptions
+  options: GitlyOptions,
 ): Promise<[string, string]> {
   let source = ''
   switch (options?.backend) {
@@ -28,9 +28,9 @@ export default async function gitly(
   }
 
   const dest = await extract(source, destination, options)
-  
+
   // Process actions (gitly.json / degit.json) if present
   await ActionsProcessor.processDirectory(dest, options)
-  
+
   return [source, dest]
 }

@@ -1,7 +1,7 @@
-import axios from 'axios'
 import type { AxiosProxyConfig } from 'axios'
-import type URLInfo from '../interfaces/url'
+import axios from 'axios'
 import type GitlyOptions from '../interfaces/options'
+import type URLInfo from '../interfaces/url'
 import { injectAuthHeaders } from './auth'
 
 /**
@@ -30,11 +30,7 @@ export interface ICommitResolver {
 export abstract class BaseCommitResolver implements ICommitResolver {
   abstract resolveCommit(info: URLInfo, options?: GitlyOptions): Promise<CommitInfo>
 
-  protected async makeRequest(
-    url: string,
-    info: URLInfo,
-    options?: GitlyOptions
-  ): Promise<any> {
+  protected async makeRequest(url: string, info: URLInfo, options?: GitlyOptions): Promise<any> {
     const response = await axios.get(url, {
       headers: injectAuthHeaders(info, options),
       proxy: this.getProxy(options?.proxy),
@@ -45,17 +41,17 @@ export abstract class BaseCommitResolver implements ICommitResolver {
 
   private getProxy(proxy?: AxiosProxyConfig): AxiosProxyConfig | false {
     if (proxy) return proxy
-    
+
     const httpsProxy = process.env.HTTPS_PROXY || process.env.https_proxy
     const httpProxy = process.env.HTTP_PROXY || process.env.http_proxy
     const proxyUrl = httpsProxy || httpProxy
-    
+
     if (!proxyUrl) return false
 
     try {
       const url = new URL(proxyUrl)
       if (!url.port) return false
-      
+
       return {
         protocol: url.protocol.replace(':', ''),
         host: url.hostname,
@@ -76,7 +72,7 @@ export class GitHubCommitResolver extends BaseCommitResolver {
     const [_, owner, repo] = info.path.split('/')
     const ref = info.type || 'HEAD'
     const apiUrl = `https://api.github.com/repos/${owner}/${repo}/commits/${ref}`
-    
+
     try {
       const data = await this.makeRequest(apiUrl, info, options)
       return {
@@ -101,7 +97,7 @@ export class GitLabCommitResolver extends BaseCommitResolver {
     const ref = info.type || 'HEAD'
     const projectId = encodeURIComponent(`${owner}/${repo}`)
     const apiUrl = `https://gitlab.com/api/v4/projects/${projectId}/repository/commits/${ref}`
-    
+
     try {
       const data = await this.makeRequest(apiUrl, info, options)
       return {
@@ -124,7 +120,7 @@ export class BitbucketCommitResolver extends BaseCommitResolver {
     const [_, owner, repo] = info.path.split('/')
     const ref = info.type || 'HEAD'
     const apiUrl = `https://api.bitbucket.org/2.0/repositories/${owner}/${repo}/commit/${ref}`
-    
+
     try {
       const data = await this.makeRequest(apiUrl, info, options)
       return {
@@ -147,7 +143,7 @@ export class SourcehutCommitResolver extends BaseCommitResolver {
     const [_, owner, repo] = info.path.split('/')
     const ref = info.type || 'HEAD'
     const apiUrl = `https://git.sr.ht/${owner}/${repo}/refs/${ref}`
-    
+
     try {
       const data = await this.makeRequest(apiUrl, info, options)
       // Sourcehut returns simple text or JSON depending on the endpoint
@@ -171,7 +167,7 @@ export class CodebergCommitResolver extends BaseCommitResolver {
     const [_, owner, repo] = info.path.split('/')
     const ref = info.type || 'HEAD'
     const apiUrl = `https://codeberg.org/api/v1/repos/${owner}/${repo}/commits/${ref}`
-    
+
     try {
       const data = await this.makeRequest(apiUrl, info, options)
       return {
@@ -214,32 +210,29 @@ export class CommitResolverRegistry {
 
   static getResolver(hostname: string): ICommitResolver {
     // Check for exact match first
-    const exactMatch = this.resolvers.get(hostname)
+    const exactMatch = CommitResolverRegistry.resolvers.get(hostname)
     if (exactMatch) {
       return exactMatch
     }
-    
+
     // Fallback: check if hostname contains any known providers
-    for (const [key, resolver] of this.resolvers.entries()) {
+    for (const [key, resolver] of CommitResolverRegistry.resolvers.entries()) {
       const keyPrefix = key.split('.')[0]
       if (keyPrefix && hostname.includes(keyPrefix)) {
         return resolver
       }
     }
-    
+
     return new NullCommitResolver()
   }
 
-  static async resolveCommit(
-    info: URLInfo,
-    options?: GitlyOptions
-  ): Promise<CommitInfo> {
+  static async resolveCommit(info: URLInfo, options?: GitlyOptions): Promise<CommitInfo> {
     // Skip commit resolution if explicitly disabled
     if (options?.cache && !options?.resolveCommit) {
       return new NullCommitResolver().resolveCommit(info)
     }
 
-    const resolver = this.getResolver(info.hostname)
+    const resolver = CommitResolverRegistry.getResolver(info.hostname)
     try {
       return await resolver.resolveCommit(info, options)
     } catch (error) {

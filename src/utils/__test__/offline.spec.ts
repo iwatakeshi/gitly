@@ -1,6 +1,6 @@
-import { describe, it, expect, jest } from '@jest/globals'
-import { isOffline } from '../offline'
 import { promises as dns } from 'node:dns'
+import { describe, expect, it, jest } from '@jest/globals'
+import { isOffline } from '../offline'
 
 // Mock the DNS module
 jest.mock('node:dns', () => ({

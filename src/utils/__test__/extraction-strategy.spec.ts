@@ -1,9 +1,9 @@
-import { describe, it, expect } from '@jest/globals'
+import { describe, expect, it } from '@jest/globals'
 import {
-  SubdirectoryExtractionStrategy,
-  FullExtractionStrategy,
-  ExtractionStrategyFactory,
   createExtractionFilter,
+  ExtractionStrategyFactory,
+  FullExtractionStrategy,
+  SubdirectoryExtractionStrategy,
 } from '../extraction-strategy'
 
 describe('extraction-strategy', () => {
@@ -23,7 +23,7 @@ describe('extraction-strategy', () => {
   describe('SubdirectoryExtractionStrategy', () => {
     it('should extract only matching subdirectory', () => {
       const strategy = new SubdirectoryExtractionStrategy('packages/lib')
-      
+
       expect(strategy.shouldExtract('packages/lib')).toBe(true)
       expect(strategy.shouldExtract('packages/lib/src/index.ts')).toBe(true)
       expect(strategy.shouldExtract('packages/lib/README.md')).toBe(true)
@@ -33,7 +33,7 @@ describe('extraction-strategy', () => {
 
     it('should transform paths by removing subdirectory prefix', () => {
       const strategy = new SubdirectoryExtractionStrategy('packages/lib')
-      
+
       expect(strategy.transformPath('packages/lib/src/index.ts')).toBe('src/index.ts')
       expect(strategy.transformPath('packages/lib/README.md')).toBe('README.md')
       expect(strategy.transformPath('packages/lib')).toBe('')
@@ -43,14 +43,14 @@ describe('extraction-strategy', () => {
       // On Unix-like systems, backslash is just a regular character
       // The strategy normalizes paths, so this test verifies normalization works
       const strategy = new SubdirectoryExtractionStrategy('packages/lib')
-      
+
       expect(strategy.shouldExtract('packages/lib/src/index.ts')).toBe(true)
       expect(strategy.transformPath('packages/lib/src/index.ts')).toBe('src/index.ts')
     })
 
     it('should normalize leading/trailing slashes', () => {
       const strategy = new SubdirectoryExtractionStrategy('/packages/lib/')
-      
+
       expect(strategy.shouldExtract('packages/lib/src/index.ts')).toBe(true)
       expect(strategy.transformPath('packages/lib/src/index.ts')).toBe('src/index.ts')
     })
@@ -72,15 +72,15 @@ describe('extraction-strategy', () => {
     it('should combine strategy and custom filter', () => {
       const strategy = new SubdirectoryExtractionStrategy('packages/lib')
       const customFilter = (path: string) => !path.includes('node_modules')
-      
+
       const filter = createExtractionFilter(strategy, customFilter)
-      
+
       // Should pass both strategy and custom filter
       expect(filter('packages/lib/src/index.ts', {} as any)).toBe(true)
-      
+
       // Should fail strategy check
       expect(filter('packages/other/src/index.ts', {} as any)).toBe(false)
-      
+
       // Should fail custom filter
       expect(filter('packages/lib/node_modules/dep/index.js', {} as any)).toBe(false)
     })
@@ -88,7 +88,7 @@ describe('extraction-strategy', () => {
     it('should work without custom filter', () => {
       const strategy = new SubdirectoryExtractionStrategy('src')
       const filter = createExtractionFilter(strategy)
-      
+
       expect(filter('src/index.ts', {} as any)).toBe(true)
       expect(filter('test/index.ts', {} as any)).toBe(false)
     })

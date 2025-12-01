@@ -1,6 +1,6 @@
-import { readFile, unlink, rm } from 'node:fs/promises'
-import { join, resolve } from 'node:path'
 import { exists } from 'node:fs'
+import { readFile, rm, unlink } from 'node:fs/promises'
+import { join, resolve } from 'node:path'
 import { promisify } from 'node:util'
 import type GitlyOptions from '../interfaces/options'
 import gitly from './gitly'
@@ -62,19 +62,13 @@ export interface IActionExecutor {
  * Follows Single Responsibility Principle
  */
 export class CloneActionExecutor implements IActionExecutor {
-  async execute(
-    action: Action,
-    workingDir: string,
-    options: GitlyOptions
-  ): Promise<void> {
+  async execute(action: Action, workingDir: string, options: GitlyOptions): Promise<void> {
     if (action.action !== 'clone') {
       throw new Error(`Invalid action type: ${action.action}`)
     }
 
     const cloneAction = action as CloneAction
-    const destination = cloneAction.dest
-      ? resolve(workingDir, cloneAction.dest)
-      : workingDir
+    const destination = cloneAction.dest ? resolve(workingDir, cloneAction.dest) : workingDir
 
     // Recursively clone and execute actions in the new repository
     await gitly(cloneAction.src, destination, options)
@@ -87,11 +81,7 @@ export class CloneActionExecutor implements IActionExecutor {
  * Follows Single Responsibility Principle
  */
 export class RemoveActionExecutor implements IActionExecutor {
-  async execute(
-    action: Action,
-    workingDir: string,
-    _options: GitlyOptions
-  ): Promise<void> {
+  async execute(action: Action, workingDir: string, _options: GitlyOptions): Promise<void> {
     if (action.action !== 'remove') {
       throw new Error(`Invalid action type: ${action.action}`)
     }
@@ -105,17 +95,12 @@ export class RemoveActionExecutor implements IActionExecutor {
         // Attempt to remove file or directory
         await rm(filePath, { recursive: true, force: true })
       } catch (error) {
-        errors.push(
-          error instanceof Error ? error : new Error(String(error))
-        )
+        errors.push(error instanceof Error ? error : new Error(String(error)))
       }
     }
 
     if (errors.length > 0) {
-      throw new AggregateError(
-        errors,
-        `Failed to remove ${errors.length} file(s)`
-      )
+      throw new AggregateError(errors, `Failed to remove ${errors.length} file(s)`)
     }
   }
 }
@@ -131,7 +116,7 @@ export class ActionExecutorFactory {
   ])
 
   static getExecutor(actionType: ActionType): IActionExecutor {
-    const executor = this.executors.get(actionType)
+    const executor = ActionExecutorFactory.executors.get(actionType)
     if (!executor) {
       throw new Error(`Unknown action type: ${actionType}`)
     }
@@ -149,36 +134,31 @@ export class ActionsProcessor {
   /**
    * Process actions in a directory if config file exists
    */
-  static async processDirectory(
-    directory: string,
-    options: GitlyOptions
-  ): Promise<void> {
-    const config = await this.loadConfig(directory)
+  static async processDirectory(directory: string, options: GitlyOptions): Promise<void> {
+    const config = await ActionsProcessor.loadConfig(directory)
     if (!config || !config.actions || config.actions.length === 0) {
       return
     }
 
-    await this.executeActions(config.actions, directory, options)
+    await ActionsProcessor.executeActions(config.actions, directory, options)
   }
 
   /**
    * Load configuration from gitly.json or degit.json
    */
-  private static async loadConfig(
-    directory: string
-  ): Promise<ActionsConfig | null> {
-    for (const filename of this.CONFIG_FILENAMES) {
+  private static async loadConfig(directory: string): Promise<ActionsConfig | null> {
+    for (const filename of ActionsProcessor.CONFIG_FILENAMES) {
       const configPath = join(directory, filename)
       try {
         if (await existsAsync(configPath)) {
           const content = await readFile(configPath, 'utf-8')
           const config = JSON.parse(content) as ActionsConfig
-          
+
           // Remove config file after reading (degit behavior)
           await unlink(configPath).catch(() => {
             // Ignore errors if file is already deleted
           })
-          
+
           return config
         }
       } catch (error) {
@@ -195,7 +175,7 @@ export class ActionsProcessor {
   private static async executeActions(
     actions: Action[],
     workingDir: string,
-    options: GitlyOptions
+    options: GitlyOptions,
   ): Promise<void> {
     const errors: Error[] = []
 
@@ -204,17 +184,12 @@ export class ActionsProcessor {
         const executor = ActionExecutorFactory.getExecutor(action.action)
         await executor.execute(action, workingDir, options)
       } catch (error) {
-        errors.push(
-          error instanceof Error ? error : new Error(String(error))
-        )
+        errors.push(error instanceof Error ? error : new Error(String(error)))
       }
     }
 
     if (errors.length > 0) {
-      throw new AggregateError(
-        errors,
-        `Failed to execute ${errors.length} action(s)`
-      )
+      throw new AggregateError(errors, `Failed to execute ${errors.length} action(s)`)
     }
   }
 }

@@ -1,11 +1,10 @@
-import axios, { AxiosProxyConfig } from 'axios'
 import * as stream from 'node:stream'
+import { URL } from 'node:url'
 import { promisify } from 'node:util'
-
+import axios, { type AxiosProxyConfig } from 'axios'
+import type GitlyOptions from '../interfaces/options'
 import { GitlyDownloadError } from './error'
 import write from './write'
-import type GitlyOptions from '../interfaces/options'
-import { URL } from 'node:url'
 
 const pipeline = promisify(stream.pipeline)
 
@@ -19,7 +18,7 @@ const pipeline = promisify(stream.pipeline)
  * @example
  * ```typescript
  * await fetch('https://github.com/user/repo/archive/main.tar.gz', '/tmp/repo.tar.gz')
- * 
+ *
  * // With proxy
  * await fetch(url, file, {
  *   proxy: { protocol: 'http', host: 'proxy.example.com', port: 8080 }
@@ -29,7 +28,7 @@ const pipeline = promisify(stream.pipeline)
 export default async function fetch(
   url: string,
   file: string,
-  options: GitlyOptions = {}
+  options: GitlyOptions = {},
 ): Promise<string> {
   const response = await axios.get(url, {
     headers: options.headers,
@@ -64,19 +63,19 @@ function getProxy(proxy: GitlyOptions['proxy']): AxiosProxyConfig | false {
     try {
       const url = new URL(proxyUrl)
       const { protocol, hostname, port } = url
-      
+
       // Port is required by AxiosProxyConfig, so only return proxy if port is present
       if (!port) {
         return false
       }
-      
+
       return {
         protocol: protocol.replace(':', ''),
         host: hostname,
         port: Number.parseInt(port),
       }
     } catch {
-      return false;
+      return false
     }
   }
 

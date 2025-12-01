@@ -1,7 +1,7 @@
-import type URLInfo from './url'
-import type { AxiosHeaders, AxiosProxyConfig, RawAxiosRequestHeaders } from 'axios'
 import type { Stats } from 'node:fs'
+import type { AxiosHeaders, AxiosProxyConfig, RawAxiosRequestHeaders } from 'axios'
 import type { ReadEntry } from 'tar'
+import type URLInfo from './url'
 
 export default interface GitlyOptions {
   /**

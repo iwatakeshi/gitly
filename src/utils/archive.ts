@@ -4,13 +4,10 @@ import * as tar from 'tar'
 
 import type GitlyOptions from '../interfaces/options'
 import type URLInfo from '../interfaces/url'
-import { GitProviderRegistry } from './git-providers'
 import { CommitResolverRegistry } from './commit-resolver'
+import { GitProviderRegistry } from './git-providers'
 
-export function getArchiveUrl(
-  info: URLInfo,
-  options: GitlyOptions = {}
-): string {
+export function getArchiveUrl(info: URLInfo, options: GitlyOptions = {}): string {
   return GitProviderRegistry.getArchiveUrl(info, options)
 }
 
@@ -18,10 +15,7 @@ export function getArchiveUrl(
  * Get archive path with optional commit hash resolution
  * When resolveCommit is enabled, uses commit SHA instead of branch/tag name
  */
-export async function getArchivePath(
-  info: URLInfo,
-  options: GitlyOptions = {}
-): Promise<string> {
+export async function getArchivePath(info: URLInfo, options: GitlyOptions = {}): Promise<string> {
   const { path, hostname: site } = info
   let cacheKey = info.type
 
@@ -40,30 +34,17 @@ export async function getArchivePath(
     }
   }
 
-  return join(
-    options.temp || join(os.homedir(), '.gitly'),
-    site,
-    path,
-    `${cacheKey}.tar.gz`
-  )
+  return join(options.temp || join(os.homedir(), '.gitly'), site, path, `${cacheKey}.tar.gz`)
 }
 
 /**
  * Legacy synchronous version for backwards compatibility
  * @deprecated Use async getArchivePath instead
  */
-export function getArchivePathSync(
-  info: URLInfo,
-  options: GitlyOptions = {}
-): string {
+export function getArchivePathSync(info: URLInfo, options: GitlyOptions = {}): string {
   const { path, type, hostname: site } = info
 
-  return join(
-    options.temp || join(os.homedir(), '.gitly'),
-    site,
-    path,
-    `${type}.tar.gz`
-  )
+  return join(options.temp || join(os.homedir(), '.gitly'), site, path, `${type}.tar.gz`)
 }
 
 export const extract = tar.extract

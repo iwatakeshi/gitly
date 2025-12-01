@@ -1,14 +1,14 @@
-import { describe, it, expect } from '@jest/globals'
+import { describe, expect, it } from '@jest/globals'
+import type URLInfo from '../../interfaces/url'
 import {
+  BitbucketProvider,
+  CodebergProvider,
+  GiteaProvider,
   GitHubProvider,
   GitLabProvider,
-  BitbucketProvider,
-  SourcehutProvider,
-  CodebergProvider,
   GitProviderRegistry,
-  GiteaProvider,
+  SourcehutProvider,
 } from '../git-providers'
-import type URLInfo from '../../interfaces/url'
 
 describe('git-providers', () => {
   const createURLInfo = (hostname: string, path: string, type: string): URLInfo => ({
@@ -27,7 +27,7 @@ describe('git-providers', () => {
     it('should generate correct archive URL', () => {
       const provider = new GitHubProvider()
       const info = createURLInfo('github', '/user/repo', 'main')
-      
+
       expect(provider.getArchiveUrl(info)).toBe('https://github.com/user/repo/archive/main.tar.gz')
     })
 
@@ -42,8 +42,10 @@ describe('git-providers', () => {
     it('should generate correct archive URL', () => {
       const provider = new GitLabProvider()
       const info = createURLInfo('gitlab', '/user/repo', 'main')
-      
-      expect(provider.getArchiveUrl(info)).toBe('https://gitlab.com/user/repo/-/archive/main/repo-main.tar.gz')
+
+      expect(provider.getArchiveUrl(info)).toBe(
+        'https://gitlab.com/user/repo/-/archive/main/repo-main.tar.gz',
+      )
     })
   })
 
@@ -51,7 +53,7 @@ describe('git-providers', () => {
     it('should generate correct archive URL', () => {
       const provider = new BitbucketProvider()
       const info = createURLInfo('bitbucket', '/user/repo', 'main')
-      
+
       expect(provider.getArchiveUrl(info)).toBe('https://bitbucket.org/user/repo/get/main.tar.gz')
     })
   })
@@ -60,7 +62,7 @@ describe('git-providers', () => {
     it('should generate correct archive URL', () => {
       const provider = new SourcehutProvider()
       const info = createURLInfo('sourcehut', '/~user/repo', 'main')
-      
+
       expect(provider.getArchiveUrl(info)).toBe('https://git.sr.ht/~user/repo/archive/main.tar.gz')
     })
 
@@ -76,8 +78,10 @@ describe('git-providers', () => {
     it('should generate correct archive URL', () => {
       const provider = new CodebergProvider()
       const info = createURLInfo('codeberg', '/user/repo', 'main')
-      
-      expect(provider.getArchiveUrl(info)).toBe('https://codeberg.org/user/repo/archive/main.tar.gz')
+
+      expect(provider.getArchiveUrl(info)).toBe(
+        'https://codeberg.org/user/repo/archive/main.tar.gz',
+      )
     })
   })
 
@@ -99,10 +103,10 @@ describe('git-providers', () => {
       const info = createURLInfo('github', '/user/repo', 'main')
       const options = {
         url: {
-          filter: () => 'https://custom.url/archive.tar.gz'
-        }
+          filter: () => 'https://custom.url/archive.tar.gz',
+        },
       }
-      
+
       const url = GitProviderRegistry.getArchiveUrl(info, options)
       expect(url).toBe('https://custom.url/archive.tar.gz')
     })
@@ -116,7 +120,7 @@ describe('git-providers', () => {
     it('should register custom provider', () => {
       const customProvider = new GiteaProvider('https://gitea.example.com')
       GitProviderRegistry.register(customProvider)
-      
+
       const providers = GitProviderRegistry.getAllProviders()
       expect(providers).toContain(customProvider)
       expect(providers.length).toBeGreaterThan(5)
@@ -126,8 +130,8 @@ describe('git-providers', () => {
       const providers = GitProviderRegistry.getAllProviders()
       expect(Array.isArray(providers)).toBe(true)
       expect(providers.length).toBeGreaterThanOrEqual(5)
-      expect(providers.some(p => p instanceof GitHubProvider)).toBe(true)
-      expect(providers.some(p => p instanceof GitLabProvider)).toBe(true)
+      expect(providers.some((p) => p instanceof GitHubProvider)).toBe(true)
+      expect(providers.some((p) => p instanceof GitLabProvider)).toBe(true)
     })
   })
 
@@ -135,7 +139,7 @@ describe('git-providers', () => {
     it('should generate correct archive URL with custom base URL', () => {
       const provider = new GiteaProvider('https://gitea.example.com')
       const info = createURLInfo('gitea.example', '/owner/repo', 'main')
-      
+
       const url = provider.getArchiveUrl(info)
       expect(url).toBe('https://gitea.example.com/owner/repo/archive/main.tar.gz')
     })
@@ -143,7 +147,7 @@ describe('git-providers', () => {
     it('should use default base URL when not provided', () => {
       const provider = new GiteaProvider()
       const info = createURLInfo('gitea', '/owner/repo', 'develop')
-      
+
       const url = provider.getArchiveUrl(info)
       expect(url).toBe('https://gitea.com/owner/repo/archive/develop.tar.gz')
     })

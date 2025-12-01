@@ -1,6 +1,6 @@
+import type { AxiosHeaders, RawAxiosRequestHeaders } from 'axios'
 import type GitlyOptions from '../interfaces/options'
 import type URLInfo from '../interfaces/url'
-import type { RawAxiosRequestHeaders, AxiosHeaders } from 'axios'
 
 /**
  * Get authentication token from options or environment variables
@@ -14,15 +14,15 @@ export function getAuthToken(info: URLInfo, options: GitlyOptions = {}): string 
 
   // Check provider-specific environment variables
   const host = info.host.toLowerCase()
-  
+
   if (host.includes('github') || host.includes('gitea') || host.includes('codeberg')) {
     return process.env.GITHUB_TOKEN || process.env.GIT_TOKEN
   }
-  
+
   if (host.includes('gitlab')) {
     return process.env.GITLAB_TOKEN || process.env.GIT_TOKEN
   }
-  
+
   if (host.includes('bitbucket')) {
     return process.env.BITBUCKET_TOKEN || process.env.GIT_TOKEN
   }
@@ -37,16 +37,16 @@ export function getAuthToken(info: URLInfo, options: GitlyOptions = {}): string 
  */
 export function injectAuthHeaders(
   info: URLInfo,
-  options: GitlyOptions = {}
+  options: GitlyOptions = {},
 ): RawAxiosRequestHeaders | AxiosHeaders | undefined {
   const token = getAuthToken(info, options)
-  
+
   if (!token) {
     return options.headers
   }
 
   const host = info.host.toLowerCase()
-  const headers: RawAxiosRequestHeaders = options.headers 
+  const headers: RawAxiosRequestHeaders = options.headers
     ? { ...(options.headers as RawAxiosRequestHeaders) }
     : {}
 

@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
-import { join } from 'node:path'
 import { rm } from 'node:fs/promises'
-import gitly from '../gitly'
+import { join } from 'node:path'
+import { afterEach, beforeEach, describe, expect, it } from '@jest/globals'
 import exists from '../exists'
+import gitly from '../gitly'
 
 describe('gitly', () => {
   const destination = join(__dirname, 'output', 'gitly')

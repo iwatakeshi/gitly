@@ -1,13 +1,13 @@
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
+import { mkdir, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { rm, mkdir, writeFile } from 'node:fs/promises'
+import { afterEach, beforeEach, describe, expect, it } from '@jest/globals'
 import {
-  ActionsProcessor,
-  CloneActionExecutor,
-  RemoveActionExecutor,
   ActionExecutorFactory,
+  ActionsProcessor,
   type CloneAction,
+  CloneActionExecutor,
   type RemoveAction,
+  RemoveActionExecutor,
 } from '../actions'
 import exists from '../exists'
 
@@ -45,9 +45,9 @@ describe('utils/actions', () => {
       const executor = new CloneActionExecutor()
       const action = { action: 'remove', files: [] } as any
 
-      await expect(
-        executor.execute(action, testDir, {})
-      ).rejects.toThrow('Invalid action type: remove')
+      await expect(executor.execute(action, testDir, {})).rejects.toThrow(
+        'Invalid action type: remove',
+      )
     })
 
     it('should clone to working directory when dest is not provided', async () => {
@@ -70,7 +70,7 @@ describe('utils/actions', () => {
   describe('RemoveActionExecutor', () => {
     it('should remove files', async () => {
       const executor = new RemoveActionExecutor()
-      
+
       // Create test files
       const file1 = join(testDir, 'file1.txt')
       const file2 = join(testDir, 'file2.txt')
@@ -93,7 +93,7 @@ describe('utils/actions', () => {
 
     it('should remove directories recursively', async () => {
       const executor = new RemoveActionExecutor()
-      
+
       const subdir = join(testDir, 'subdir')
       await mkdir(subdir, { recursive: true })
       await writeFile(join(subdir, 'file.txt'), 'content')
@@ -114,14 +114,14 @@ describe('utils/actions', () => {
       const executor = new RemoveActionExecutor()
       const action = { action: 'clone', src: 'test' } as any
 
-      await expect(
-        executor.execute(action, testDir, {})
-      ).rejects.toThrow('Invalid action type: clone')
+      await expect(executor.execute(action, testDir, {})).rejects.toThrow(
+        'Invalid action type: clone',
+      )
     })
 
     it('should collect errors when removing multiple files fails', async () => {
       const executor = new RemoveActionExecutor()
-      
+
       const action: RemoveAction = {
         action: 'remove',
         files: ['nonexistent1.txt', 'nonexistent2.txt'],
@@ -196,9 +196,9 @@ describe('utils/actions', () => {
 
     it('should do nothing when no config file exists', async () => {
       await writeFile(join(testDir, 'file.txt'), 'content')
-      
+
       await ActionsProcessor.processDirectory(testDir, {})
-      
+
       expect(await exists(join(testDir, 'file.txt'))).toBe(true)
     })
 
@@ -274,7 +274,7 @@ describe('utils/actions', () => {
           temp: join(testDir, 'cache'),
           resolveCommit: false,
           throw: true,
-        })
+        }),
       ).rejects.toThrow('Failed to execute 1 action(s)')
     })
   })
@@ -288,16 +288,13 @@ describe('utils/actions', () => {
       // Create the action with non-existent paths
       const action: RemoveAction = {
         action: 'remove',
-        files: [
-          join(testDir, 'nonexistent1.txt'),
-          join(testDir, 'nonexistent2.txt')
-        ]
+        files: [join(testDir, 'nonexistent1.txt'), join(testDir, 'nonexistent2.txt')],
       }
 
       // With force: true in the rm call, this won't throw even for missing files
       // But we can test that the error handling code path exists
       await expect(executor.execute(action, testDir, {})).resolves.toBeUndefined()
-      
+
       await rm(testDir, { recursive: true, force: true })
     })
   })

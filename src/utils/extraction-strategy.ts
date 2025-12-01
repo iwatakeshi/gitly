@@ -1,6 +1,6 @@
-import { Stats } from 'node:fs'
-import { ReadEntry } from 'tar'
+import type { Stats } from 'node:fs'
 import { normalize, sep } from 'node:path'
+import type { ReadEntry } from 'tar'
 
 /**
  * Subdirectory extraction strategy
@@ -33,18 +33,14 @@ export class SubdirectoryExtractionStrategy implements IExtractionStrategy {
 
   constructor(subdirectory: string) {
     // Normalize path separators and remove leading/trailing slashes
-    this.normalizedSubdir = normalize(subdirectory)
-      .split(sep)
-      .filter(Boolean)
-      .join('/')
+    this.normalizedSubdir = normalize(subdirectory).split(sep).filter(Boolean).join('/')
   }
 
   shouldExtract(entryPath: string): boolean {
     const normalized = this.normalizePath(entryPath)
     // Match exact subdirectory or any path within it
     return (
-      normalized === this.normalizedSubdir ||
-      normalized.startsWith(`${this.normalizedSubdir}/`)
+      normalized === this.normalizedSubdir || normalized.startsWith(`${this.normalizedSubdir}/`)
     )
   }
 
@@ -80,7 +76,7 @@ export class ExtractionStrategyFactory {
  */
 export function createExtractionFilter(
   strategy: IExtractionStrategy,
-  customFilter?: (path: string, stat: Stats | ReadEntry) => boolean
+  customFilter?: (path: string, stat: Stats | ReadEntry) => boolean,
 ): (path: string, stat: Stats | ReadEntry) => boolean {
   return (path: string, stat: Stats | ReadEntry) => {
     // Apply subdirectory strategy first

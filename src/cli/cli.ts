@@ -1,6 +1,6 @@
+import { EventEmitter } from 'node:events'
 import type GitlyOptions from '../interfaces/options'
 import gitly from '../utils/gitly'
-import { EventEmitter } from 'node:events'
 import type { ILogger } from './logger'
 
 /**
@@ -87,7 +87,7 @@ export class GitlyCLI extends EventEmitter {
     const [archivePath, destination] = await gitly(
       options.source,
       options.destination,
-      gitlyOptions
+      gitlyOptions,
     )
     this.emit('download:complete', archivePath)
     this.emit('extract:complete', destination)

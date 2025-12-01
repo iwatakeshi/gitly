@@ -1,6 +1,6 @@
-import spawn from 'cross-spawn'
 import { rm } from 'node:fs/promises'
 import path from 'node:path'
+import spawn from 'cross-spawn'
 import * as tar from 'tar'
 import type GitlyOptions from '../interfaces/options'
 import { getArchivePathSync } from './archive'
@@ -26,7 +26,7 @@ import parse from './parse'
  * ```typescript
  * // Clone latest main branch
  * const path = await clone('iwatakeshi/gitly')
- * 
+ *
  * // Clone with specific depth
  * const path = await clone('owner/repo', {
  *   git: { depth: 5 },
@@ -36,7 +36,7 @@ import parse from './parse'
  */
 export default async function clone(
   repository: string,
-  options: GitlyOptions = {}
+  options: GitlyOptions = {},
 ): Promise<string> {
   const info = parse(repository, options)
   // Git backend doesn't benefit from commit resolution, use sync version
@@ -67,13 +67,7 @@ export default async function clone(
       await rm(archivePath)
     }
 
-    const child = spawn('git', [
-      'clone',
-      '--depth',
-      depth.toString(),
-      info.href,
-      directory,
-    ])
+    const child = spawn('git', ['clone', '--depth', depth.toString(), info.href, directory])
 
     await new Promise((resolve, reject) => {
       child.on('error', (reason) => reject(new GitlyCloneError(reason.message)))
@@ -92,13 +86,13 @@ export default async function clone(
                   cwd: path.resolve(archivePath, '..'),
                   portable: true,
                 },
-                [info.type]
-              )
+                [info.type],
+              ),
             )
             .then(() =>
               rm(path.resolve(directory), {
                 recursive: true,
-              })
+              }),
             )
             .then(resolve)
             .catch((error) => reject(new GitlyCloneError(error.message)))

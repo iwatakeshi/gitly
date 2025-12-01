@@ -1,15 +1,15 @@
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals'
-import { join } from 'node:path'
 import { rm } from 'node:fs/promises'
-import exists from '../exists'
+import { join } from 'node:path'
+import { afterAll, beforeAll, describe, expect, it } from '@jest/globals'
 import clone from '../clone'
 import { GitlyCloneError } from '../error'
+import exists from '../exists'
 
 describe('utils/clone', () => {
   const options = {
     temp: join(__dirname, 'output', 'clone'),
     backend: 'git' as 'git' | 'axios',
-    throws: true
+    throws: true,
   }
   beforeAll(async () => {
     await rm(join(__dirname, 'output', 'clone'), { recursive: true, force: true })
@@ -26,45 +26,37 @@ describe('utils/clone', () => {
 
   describe('security: injection prevention', () => {
     it('should reject repository with --upload-pack in URL', async () => {
-      await expect(
-        clone('user/repo--upload-pack=/evil', options)
-      ).rejects.toThrow(GitlyCloneError)
+      await expect(clone('user/repo--upload-pack=/evil', options)).rejects.toThrow(GitlyCloneError)
     })
 
     it('should reject directory with --upload-pack in path', async () => {
       const maliciousOptions = {
         ...options,
-        temp: join(__dirname, 'output', '--upload-pack', 'clone')
+        temp: join(__dirname, 'output', '--upload-pack', 'clone'),
       }
-      await expect(
-        clone('user/repo', maliciousOptions)
-      ).rejects.toThrow(GitlyCloneError)
+      await expect(clone('user/repo', maliciousOptions)).rejects.toThrow(GitlyCloneError)
     })
 
     it('should reject repository URL containing --upload-pack', async () => {
       await expect(
-        clone('https://github.com/user/repo?--upload-pack=/evil', options)
+        clone('https://github.com/user/repo?--upload-pack=/evil', options),
       ).rejects.toThrow(GitlyCloneError)
     })
 
     it('should reject non-number depth option', async () => {
       const invalidOptions = {
         ...options,
-        git: { depth: '1' as unknown as number }
+        git: { depth: '1' as unknown as number },
       }
-      await expect(
-        clone('user/repo', invalidOptions)
-      ).rejects.toThrow(GitlyCloneError)
+      await expect(clone('user/repo', invalidOptions)).rejects.toThrow(GitlyCloneError)
     })
 
     it('should reject NaN depth option', async () => {
       const invalidOptions = {
         ...options,
-        git: { depth: NaN }
+        git: { depth: NaN },
       }
-      await expect(
-        clone('user/repo', invalidOptions)
-      ).rejects.toThrow(GitlyCloneError)
+      await expect(clone('user/repo', invalidOptions)).rejects.toThrow(GitlyCloneError)
     })
   })
 
@@ -72,12 +64,12 @@ describe('utils/clone', () => {
     it('should handle execution errors when throw is true', async () => {
       const opts = {
         ...options,
-        throw: true
+        throw: true,
       }
-      
+
       // Use an invalid URL that will cause git to fail
       await expect(
-        clone('https://invalid-git-url-that-does-not-exist.com/user/repo', opts)
+        clone('https://invalid-git-url-that-does-not-exist.com/user/repo', opts),
       ).rejects.toThrow()
     }, 30000)
 
@@ -85,9 +77,9 @@ describe('utils/clone', () => {
       const opts = {
         ...options,
         throw: false,
-        throws: false
+        throws: false,
       }
-      
+
       // Use an invalid URL that will cause git to fail
       const result = await clone('https://invalid-git-url-that-does-not-exist.com/user/repo', opts)
       expect(result).toBe('')
@@ -98,9 +90,9 @@ describe('utils/clone', () => {
         ...options,
         force: true,
         throw: false,
-        throws: false
+        throws: false,
       }
-      
+
       const result = await clone('https://invalid-git-url-that-does-not-exist.com/user/repo', opts)
       expect(result).toBe('')
     }, 30000)
@@ -110,9 +102,9 @@ describe('utils/clone', () => {
       // The clone function should then return the archivePath
       const opts = {
         ...options,
-        force: false
+        force: false,
       }
-      
+
       const result = await clone('lukeed/gittar', opts)
       expect(result).toBeTruthy()
       expect(typeof result).toBe('string')

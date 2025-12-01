@@ -205,15 +205,29 @@ export class NullCommitResolver implements ICommitResolver {
  */
 export class CommitResolverRegistry {
   private static resolvers = new Map<string, ICommitResolver>([
-    ['github', new GitHubCommitResolver()],
-    ['gitlab', new GitLabCommitResolver()],
-    ['bitbucket', new BitbucketCommitResolver()],
-    ['sourcehut', new SourcehutCommitResolver()],
-    ['codeberg', new CodebergCommitResolver()],
+    ['github.com', new GitHubCommitResolver()],
+    ['gitlab.com', new GitLabCommitResolver()],
+    ['bitbucket.org', new BitbucketCommitResolver()],
+    ['git.sr.ht', new SourcehutCommitResolver()],
+    ['codeberg.org', new CodebergCommitResolver()],
   ])
 
   static getResolver(hostname: string): ICommitResolver {
-    return this.resolvers.get(hostname) || new NullCommitResolver()
+    // Check for exact match first
+    const exactMatch = this.resolvers.get(hostname)
+    if (exactMatch) {
+      return exactMatch
+    }
+    
+    // Fallback: check if hostname contains any known providers
+    for (const [key, resolver] of this.resolvers.entries()) {
+      const keyPrefix = key.split('.')[0]
+      if (keyPrefix && hostname.includes(keyPrefix)) {
+        return resolver
+      }
+    }
+    
+    return new NullCommitResolver()
   }
 
   static async resolveCommit(

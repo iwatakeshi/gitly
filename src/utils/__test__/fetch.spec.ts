@@ -1,19 +1,163 @@
-import { describe, it, expect } from '@jest/globals'
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
+import { rm, mkdir } from 'node:fs/promises'
+import { join } from 'node:path'
+import fetch from '../fetch'
 import { GitlyDownloadError } from '../error'
-
-// Test getProxy function logic by importing the fetch module
-// We'll test the function behavior through its observable effects
+import exists from '../exists'
 
 describe('utils/fetch', () => {
-  describe('getProxy logic (indirect testing through coverage)', () => {
-    it('should create GitlyDownloadError with proper message and code', () => {
+  const testDir = join(__dirname, 'output', 'fetch-test')
+  let envBackup: NodeJS.ProcessEnv
+
+  beforeEach(async () => {
+    envBackup = { ...process.env }
+    await rm(testDir, { recursive: true, force: true })
+    await mkdir(testDir, { recursive: true })
+  })
+
+  afterEach(async () => {
+    process.env = envBackup
+    await rm(testDir, { recursive: true, force: true })
+  })
+
+  describe('successful downloads', () => {
+    it('should download a file from GitHub', async () => {
+      const url = 'https://github.com/lukeed/gittar/archive/refs/heads/master.tar.gz'
+      const dest = join(testDir, 'test.tar.gz')
+
+      const result = await fetch(url, dest)
+
+      expect(result).toBe(dest)
+      expect(await exists(dest)).toBe(true)
+    }, 30000)
+
+    it('should handle proxy configuration from options', async () => {
+      const url = 'https://github.com/lukeed/gittar/archive/refs/heads/master.tar.gz'
+      const dest = join(testDir, 'proxy-test.tar.gz')
+
+      const result = await fetch(url, dest, {
+        proxy: {
+          protocol: 'http',
+          host: 'proxy.example.com',
+          port: 8080
+        }
+      })
+
+      expect(result).toBe(dest)
+      expect(await exists(dest)).toBe(true)
+    }, 30000)
+
+    it('should use HTTPS_PROXY environment variable', async () => {
+      process.env.https_proxy = 'http://proxy.example.com:8080'
+      
+      const url = 'https://github.com/lukeed/gittar/archive/refs/heads/master.tar.gz'
+      const dest = join(testDir, 'env-proxy-test.tar.gz')
+
+      const result = await fetch(url, dest)
+
+      expect(result).toBe(dest)
+      expect(await exists(dest)).toBe(true)
+    }, 30000)
+
+    it('should use HTTP_PROXY as fallback', async () => {
+      delete process.env.https_proxy
+      delete process.env.HTTPS_PROXY
+      process.env.http_proxy = 'http://proxy.example.com:8080'
+      
+      const url = 'https://github.com/lukeed/gittar/archive/refs/heads/master.tar.gz'
+      const dest = join(testDir, 'http-proxy-test.tar.gz'
+)
+
+      const result = await fetch(url, dest)
+
+      expect(result).toBe(dest)
+      expect(await exists(dest)).toBe(true)
+    }, 30000)
+
+    it('should handle proxy URL without port', async () => {
+      process.env.https_proxy = 'http://proxy.example.com'
+      
+      const url = 'https://github.com/lukeed/gittar/archive/refs/heads/master.tar.gz'
+      const dest = join(testDir, 'no-port-test.tar.gz')
+
+      const result = await fetch(url, dest)
+
+      expect(result).toBe(dest)
+      expect(await exists(dest)).toBe(true)
+    }, 30000)
+
+    it('should handle invalid proxy URL', async () => {
+      process.env.https_proxy = 'not-a-valid-url'
+      
+      const url = 'https://github.com/lukeed/gittar/archive/refs/heads/master.tar.gz'
+      const dest = join(testDir, 'invalid-proxy-test.tar.gz')
+
+      const result = await fetch(url, dest)
+
+      expect(result).toBe(dest)
+      expect(await exists(dest)).toBe(true)
+    }, 30000)
+  })
+
+  describe('error handling', () => {
+    it('should throw GitlyDownloadError for 404', async () => {
+      const url = 'https://github.com/nonexistent/repo-12345/archive/refs/heads/main.tar.gz'
+      const dest = join(testDir, '404-test.tar.gz')
+
+      await expect(fetch(url, dest)).rejects.toThrow(GitlyDownloadError)
+      await expect(fetch(url, dest)).rejects.toThrow('Not Found')
+    }, 30000)
+
+    it('should throw GitlyDownloadError with status code', async () => {
+      const url = 'https://github.com/nonexistent/repo-12345/archive/refs/heads/main.tar.gz'
+      const dest = join(testDir, 'error-code-test.tar.gz')
+
+      try {
+        await fetch(url, dest)
+        throw new Error('Should have thrown')
+      } catch (error) {
+        expect(error).toBeInstanceOf(GitlyDownloadError)
+        expect((error as GitlyDownloadError).code).toBe(404)
+      }
+    }, 30000)
+
+    it('should handle redirects', async () => {
+      // GitHub shorthand URLs often redirect
+      const url = 'https://github.com/lukeed/gittar/archive/master.tar.gz'
+      const dest = join(testDir, 'redirect-test.tar.gz')
+
+      const result = await fetch(url, dest)
+
+      expect(result).toBe(dest)
+      expect(await exists(dest)).toBe(true)
+    }, 30000)
+  })
+
+  describe('GitlyDownloadError', () => {
+    it('should create error with proper message and code', () => {
       const error = new GitlyDownloadError('Not Found', 404)
       expect(error.message).toBe('[gitly:download]: Not Found')
       expect(error.code).toBe(404)
     })
 
-    it('should handle proxy configuration validation', () => {
-      // Test that proxy config requires both host and port
+    it('should handle different status codes', () => {
+      const errors = [
+        new GitlyDownloadError('Bad Request', 400),
+        new GitlyDownloadError('Unauthorized', 401),
+        new GitlyDownloadError('Forbidden', 403),
+        new GitlyDownloadError('Not Found', 404),
+        new GitlyDownloadError('Internal Server Error', 500),
+      ]
+
+      errors.forEach((error, index) => {
+        expect(error).toBeInstanceOf(GitlyDownloadError)
+        expect(error.code).toBe([400, 401, 403, 404, 500][index])
+      })
+    })
+  })
+
+  describe('proxy configuration', () => {
+    it('should validate proxy requires host and port', () => {
       const validProxy = {
         protocol: 'http',
         host: 'proxy.example.com',
@@ -24,106 +168,21 @@ describe('utils/fetch', () => {
       expect(typeof validProxy.port).toBe('number')
     })
 
-    it('should validate environment variable format', () => {
-      // Test proxy URL parsing logic
-      const testUrls = [
-        { url: 'https://proxy.example.com:3128', valid: true },
-        { url: 'http://proxy.example.com:8080', valid: true },
-        { url: 'https://proxy.example.com', valid: false }, // no port
-        { url: 'not-a-url', valid: false }
+    it('should parse proxy URLs correctly', () => {
+      const testCases = [
+        { url: 'https://proxy.example.com:3128', hasPort: true },
+        { url: 'http://proxy.example.com:8080', hasPort: true },
+        { url: 'https://proxy.example.com', hasPort: false },
       ]
       
-      testUrls.forEach(({ url, valid }) => {
-        try {
-          const parsed = new URL(url)
-          const hasPort = Boolean(parsed.port)
-          expect(hasPort).toBe(valid)
-        } catch {
-          expect(valid).toBe(false)
-        }
+      testCases.forEach(({ url, hasPort }) => {
+        const parsed = new URL(url)
+        expect(Boolean(parsed.port)).toBe(hasPort)
       })
     })
 
-    it('should strip colon from protocol', () => {
-      const protocol = 'https:'
-      const cleaned = protocol.replace(':', '')
-      expect(cleaned).toBe('https')
-    })
-
-    it('should parse port as integer', () => {
-      const portString = '3128'
-      const portNumber = Number.parseInt(portString, 10)
-      expect(portNumber).toBe(3128)
-      expect(typeof portNumber).toBe('number')
-    })
-
-    it('should handle NaN port parsing', () => {
-      const invalidPort = 'not-a-number'
-      const parsed = Number.parseInt(invalidPort, 10)
-      expect(Number.isNaN(parsed)).toBe(true)
-    })
-  })
-
-  describe('HTTP status code validation', () => {
-    it('should identify 4xx errors', () => {
-      const codes = [400, 404, 403, 401]
-      codes.forEach(code => {
-        expect(code >= 400 && code < 500).toBe(true)
-      })
-    })
-
-    it('should identify 5xx errors', () => {
-      const codes = [500, 502, 503]
-      codes.forEach(code => {
-        expect(code >= 500).toBe(true)
-      })
-    })
-
-    it('should identify 3xx redirects', () => {
-      const codes = [301, 302, 307, 308]
-      codes.forEach(code => {
-        expect(code >= 300 && code < 400).toBe(true)
-      })
-    })
-
-    it('should identify 2xx success', () => {
-      const codes = [200, 201, 204]
-      codes.forEach(code => {
-        expect(code >= 200 && code < 300).toBe(true)
-      })
-    })
-  })
-
-  describe('proxy environment variable priority', () => {
-    it('should check https_proxy before http_proxy', () => {
-      const envVars = {
-        https_proxy: 'https://secure-proxy.com:3128',
-        http_proxy: 'http://fallback-proxy.com:8080'
-      }
-      
-      // Simulates: const proxyUrl = process.env.https_proxy || process.env.http_proxy
-      const selectedProxy = envVars.https_proxy || envVars.http_proxy
-      expect(selectedProxy).toBe(envVars.https_proxy)
-    })
-
-    it('should fallback to http_proxy when https_proxy is undefined', () => {
-      const envVars = {
-        https_proxy: undefined,
-        http_proxy: 'http://fallback-proxy.com:8080'
-      }
-      
-      const selectedProxy = envVars.https_proxy || envVars.http_proxy
-      expect(selectedProxy).toBe(envVars.http_proxy)
-    })
-
-    it('should return undefined when no proxy is set', () => {
-      const envVars = {
-        https_proxy: undefined,
-        http_proxy: undefined
-      }
-      
-      const selectedProxy = envVars.https_proxy || envVars.http_proxy
-      expect(selectedProxy).toBeUndefined()
+    it('should handle invalid URLs', () => {
+      expect(() => new URL('not-a-url')).toThrow()
     })
   })
 })

@@ -6,6 +6,7 @@ import exists from '../exists'
 describe('utils/exists', () => {
   const options = {
     temp: join(__dirname, 'fixtures'),
+    resolveCommit: false,
   }
   it('should return true when a path exists', async () => {
     const result = await exists(join(__dirname, 'fixtures', 'test.txt'))

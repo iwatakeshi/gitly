@@ -107,5 +107,29 @@ describe('utils/archive', () => {
       consoleSpy.mockRestore()
       process.env.NODE_ENV = originalEnv
     }, 30000)
+
+    it('should warn in production environment when commit resolution fails', async () => {
+      const originalEnv = process.env.NODE_ENV
+      process.env.NODE_ENV = 'production'
+      const consoleSpy = jest.spyOn(console, 'warn')
+      
+      await getArchivePath(
+        parse('nonexistent-user-12345/nonexistent-repo-67890'),
+        { resolveCommit: true }
+      )
+      
+      // Should have warnings in production
+      expect(consoleSpy).toHaveBeenCalled()
+      // Check that at least one warning contains relevant text
+      const calls = consoleSpy.mock.calls
+      const hasRelevantWarning = calls.some(call => 
+        call.some(arg => String(arg).includes('Failed to resolve commit') || 
+                        String(arg).includes('Commit resolution failed'))
+      )
+      expect(hasRelevantWarning).toBe(true)
+      
+      consoleSpy.mockRestore()
+      process.env.NODE_ENV = originalEnv
+    }, 30000)
   })
 })

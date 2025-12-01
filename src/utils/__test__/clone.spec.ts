@@ -104,5 +104,22 @@ describe('utils/clone', () => {
       const result = await clone('https://invalid-git-url-that-does-not-exist.com/user/repo', opts)
       expect(result).toBe('')
     }, 30000)
+
+    it('should return archive path when execute returns boolean true', async () => {
+      // When git clone succeeds, execute() returns true (boolean)
+      // The clone function should then return the archivePath
+      const opts = {
+        ...options,
+        force: false
+      }
+      
+      const result = await clone('lukeed/gittar', opts)
+      expect(result).toBeTruthy()
+      expect(typeof result).toBe('string')
+      // Should return the tar.gz archive path
+      expect(result).toContain('.tar.gz')
+      expect(result).toContain('lukeed')
+      expect(result).toContain('gittar')
+    }, 30000)
   })
 })

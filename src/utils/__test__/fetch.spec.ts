@@ -169,6 +169,26 @@ describe('utils/fetch', () => {
         },
       }))
     })
+
+    it('should return false when no proxy environment variables are set', async () => {
+      delete process.env.https_proxy
+      delete process.env.http_proxy
+      const url = 'https://github.com/lukeed/gittar/archive/master.tar.gz'
+      const dest = join(testDir, 'no-env-proxy-test.tar.gz')
+
+      mockedAxios.get.mockResolvedValueOnce({
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        data: createMockStream(),
+      } as any)
+
+      await fetch(url, dest)
+
+      expect(mockedAxios.get).toHaveBeenCalledWith(url, expect.objectContaining({
+        proxy: false,
+      }))
+    })
   })
 
   describe('error handling', () => {

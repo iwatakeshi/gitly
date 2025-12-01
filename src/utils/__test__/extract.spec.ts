@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
-import { rm } from 'node:fs/promises'
+import { rm, writeFile } from 'node:fs/promises'
 
 import download from '../download'
 import extract from '../extract'
@@ -102,5 +102,24 @@ describe('utils/extract', () => {
     const path = await extract(join(__dirname, 'dummy'), destination, options)
     expect(existsSync(path)).toBe(false)
     expect(path).toBeFalsy()
+  })
+
+  it('should log error and return empty string on extraction failure', async () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
+    const invalidTarball = join(__dirname, 'output', 'invalid.tar.gz')
+    
+    // Create an invalid tarball file
+    await writeFile(invalidTarball, 'this is not a valid tar.gz file')
+    
+    const result = await extract(invalidTarball, destination, options)
+    
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      'Failed to extract archive:',
+      expect.any(Error)
+    )
+    expect(result).toBe('')
+    
+    consoleErrorSpy.mockRestore()
+    await rm(invalidTarball, { force: true })
   })
 })

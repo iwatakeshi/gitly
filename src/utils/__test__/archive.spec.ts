@@ -1,7 +1,6 @@
 import { describe, it, expect } from '@jest/globals'
 import parse from '../parse'
-import { getArchiveUrl } from '../archive'
-import { getArchivePath } from '../archive'
+import { getArchiveUrl, getArchivePathSync } from '../archive'
 const isWin32 = process.platform === 'win32'
 
 describe('utils/archive', () => {
@@ -41,7 +40,7 @@ describe('utils/archive', () => {
 
   describe('getArchivePath()', () => {
     it('should return a path to the zipped file', () => {
-      expect(getArchivePath(parse('iwatakeshi/test'))).toEqual(
+      expect(getArchivePathSync(parse('iwatakeshi/test'))).toEqual(
         isWin32
           ? expect.stringMatching(
               /\.gitly\\github\\iwatakeshi\\test\\master\.tar\.gz/

@@ -16,11 +16,13 @@ The spiritual successor of [gittar](https://github.com/lukeed/gittar) and modern
 - 📦 **Subdirectory Support** - Extract only specific directories from monorepos
 - 🔄 **Actions System** - Composable post-clone operations (degit.json compatible)
 - 🌐 **Multi-Provider** - GitHub, GitLab, Bitbucket, Sourcehut, Codeberg support
+- 🔐 **Token Auth** - Private repository support with personal access tokens
+- 🔑 **Commit-Hash Caching** - Accurate caching using commit SHAs instead of branch names
 - 💾 **Smart Caching** - Offline-first with intelligent cache management
 - 🔒 **Security** - Input validation, injection prevention, DOS protection
 - 📡 **Event-Driven** - Progress tracking with event emitters
 - 🏗️ **Enterprise Architecture** - Strategy, Factory, and Dependency Injection patterns
-- ✅ **Well-Tested** - 99 tests with 82%+ coverage
+- ✅ **Well-Tested** - 99 tests with 74%+ coverage
 - 🎯 **TypeScript Native** - Full type safety and modern ES2021 features
 
 ## 📦 Installation
@@ -54,7 +56,10 @@ gitly user/repo --force
 # Use cache only (offline mode)
 gitly user/repo --cache
 
-# Use git backend (for private repos)
+# Private repository with token
+gitly user/private-repo --token ghp_xxxxxxxxxxxx
+
+# Use git backend (for private repos with SSH)
 gitly user/repo --mode=git --depth=5
 
 # Verbose output
@@ -75,8 +80,18 @@ OPTIONS:
   --mode <mode>      Backend mode: 'tar' (default) or 'git'
   --depth <n>        Git clone depth (default: 1, only for --mode=git)
   --subdirectory <path>  Extract only a subdirectory
+  --token <token>    Auth token for private repos (or set GITHUB_TOKEN/GITLAB_TOKEN)
   --help, -h         Show help
   --version          Show version
+
+ENVIRONMENT VARIABLES:
+  GITHUB_TOKEN       GitHub/Gitea/Codeberg personal access token
+  GITLAB_TOKEN       GitLab personal/project access token
+  BITBUCKET_TOKEN    Bitbucket app password
+  GIT_TOKEN          Generic auth token (fallback)
+  GITLY_CACHE        Cache directory (default: ~/.gitly)
+  HTTPS_PROXY        HTTPS proxy URL
+  HTTP_PROXY         HTTP proxy URL
 ```
 
 ## 💻 Programmatic API
@@ -184,6 +199,19 @@ await cli.clone({
 ### Private Repositories
 
 ```typescript
+// Using token authentication (recommended)
+await gitly('user/private-repo', '/dest', {
+  token: 'ghp_xxxxxxxxxxxx'  // GitHub personal access token
+})
+
+// Or via environment variables
+process.env.GITHUB_TOKEN = 'ghp_xxxxxxxxxxxx'
+await gitly('user/private-repo', '/dest')
+
+// GitLab private repository
+process.env.GITLAB_TOKEN = 'glpat-xxxxxxxxxxxx'
+await gitly('gitlab:user/private-repo', '/dest')
+
 // Using git backend (requires local git with SSH access)
 await gitly('user/private-repo', '/dest', {
   backend: 'git',
@@ -328,11 +356,13 @@ interface GitlyOptions {
 | Actions System | ✅ | ✅ | ❌ |
 | Event Emitters | ✅ | ✅ | ❌ |
 | Multi-Provider | ✅ (5) | ✅ (4) | ✅ (3) |
-| Private Repos | ✅ | ✅ | ❌ |
+| Token Auth | ✅ | ❌ | ❌ |
+| Commit-Hash Caching | ✅ | ❌ | ❌ |
+| Private Repos | ✅ | ✅ (git only) | ❌ |
 | Offline Mode | ✅ | ✅ | ❌ |
 | Modern Architecture | ✅ | ❌ | ❌ |
 | Active Maintenance | ✅ | ❌ | ❌ |
-| Test Coverage | 82% | Unknown | ~70% |
+| Test Coverage | 74% | Unknown | ~70% |
 
 ## 🤝 Contributing
 

@@ -43,6 +43,20 @@ export default interface GitlyOptions {
    */
   subdirectory?: string
   /**
+   * Use commit SHA for caching instead of branch/tag name (default: true)
+   * When enabled, caches are keyed by specific commit hash for accuracy
+   * When disabled, uses branch/tag name (legacy behavior)
+   */
+  resolveCommit?: boolean
+  /**
+   * Authentication token for private repositories
+   * Falls back to GITHUB_TOKEN, GITLAB_TOKEN, BITBUCKET_TOKEN, or GIT_TOKEN env vars
+   * For GitHub/Gitea/Codeberg: 'ghp_...' or 'glpat-...' or any personal access token
+   * For GitLab: 'glpat-...' or any personal/project access token
+   * For Bitbucket: App password
+   */
+  token?: string
+  /**
    * Set the request headers (default: undefined)
    */
   headers?: RawAxiosRequestHeaders | AxiosHeaders

@@ -10,6 +10,7 @@ describe('utils/extract', () => {
   const destination = join(__dirname, 'output', 'extract')
   const options = {
     temp: join(__dirname, 'output', 'extract', '.gitcopy'),
+    resolveCommit: false, // Disable for predictable test performance
   }
 
   beforeEach(async () => {

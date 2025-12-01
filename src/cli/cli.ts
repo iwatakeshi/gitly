@@ -14,6 +14,7 @@ export interface CLICloneOptions {
   mode?: 'axios' | 'git'
   depth?: number
   subdirectory?: string
+  token?: string
   temp?: string
 }
 
@@ -77,6 +78,8 @@ export class GitlyCLI extends EventEmitter {
       backend: options.mode,
       temp: options.temp ?? process.env.GITLY_CACHE,
       git: options.depth ? { depth: options.depth } : undefined,
+      subdirectory: options.subdirectory,
+      token: options.token,
       throw: true,
     }
 

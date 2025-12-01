@@ -2,6 +2,7 @@ import type GitlyOptions from '../interfaces/options'
 
 import { rm } from 'node:fs/promises'
 import { getArchivePath, getArchiveUrl } from './archive'
+import { injectAuthHeaders } from './auth'
 import execute from './execute'
 import exists from './exists'
 import fetch from './fetch'
@@ -16,10 +17,11 @@ import parse from './parse'
  * @throws {AggregateError} When all download strategies fail (when throw=true)
  * @note Tries local cache first, then remote download
  * @note Uses force=true to skip cache for main/master branches
+ * @note Uses commit SHA for caching by default (set resolveCommit: false to disable)
  * @note Returns empty string instead of throwing when options.throw is false
  * @example
  * ```typescript
- * // Download and cache
+ * // Download and cache by commit SHA
  * const path = await download('iwatakeshi/gitly')
  * 
  * // Force fresh download
@@ -27,6 +29,9 @@ import parse from './parse'
  * 
  * // Use cache only (offline mode)
  * const path = await download('owner/repo', { cache: true })
+ * 
+ * // Disable commit resolution (use branch/tag name)
+ * const path = await download('owner/repo', { resolveCommit: false })
  * 
  * // With proxy
  * const path = await download('owner/repo', {
@@ -39,8 +44,15 @@ export default async function download(
   options: GitlyOptions = {}
 ): Promise<string> {
   const info = parse(repository, options)
-  const archivePath = getArchivePath(info, options)
+  const archivePath = await getArchivePath(info, options)
   const url = getArchiveUrl(info, options)
+  
+  // Inject authentication headers for private repositories
+  const optionsWithAuth: GitlyOptions = {
+    ...options,
+    headers: injectAuthHeaders(info, options)
+  }
+  
   const local = async () => exists(archivePath)
   const remote = async () => {
     // If the repository is cached, remove the old cache
@@ -49,7 +61,7 @@ export default async function download(
       await rm(archivePath, { force: true })
     }
 
-    return fetch(url, archivePath, options)
+    return fetch(url, archivePath, optionsWithAuth)
   }
   let order = [local, remote]
   if ((await isOffline()) || options.cache) {

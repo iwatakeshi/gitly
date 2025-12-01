@@ -3,7 +3,7 @@ import { rm } from 'node:fs/promises'
 import path from 'node:path'
 import * as tar from 'tar'
 import type GitlyOptions from '../interfaces/options'
-import { getArchivePath } from './archive'
+import { getArchivePathSync } from './archive'
 import { GitlyCloneError } from './error'
 import execute from './execute'
 import exists from './exists'
@@ -19,6 +19,7 @@ import parse from './parse'
  * @note Requires local git installation
  * @note Validates inputs to prevent command injection
  * @note Caches repository by default in ~/.gitly
+ * @note Git backend uses branch/tag name for caching (commit resolution not applicable)
  * @security Validates --upload-pack parameter to prevent second-order command injection
  * @security Validates depth option to ensure it's a valid number
  * @example
@@ -38,7 +39,8 @@ export default async function clone(
   options: GitlyOptions = {}
 ): Promise<string> {
   const info = parse(repository, options)
-  const archivePath = getArchivePath(info, options)
+  // Git backend doesn't benefit from commit resolution, use sync version
+  const archivePath = getArchivePathSync(info, options)
   const directory = archivePath.replace(/\.tar\.gz$/, '')
   const depth = options?.git?.depth ?? 1
 

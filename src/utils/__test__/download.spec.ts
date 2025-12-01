@@ -9,6 +9,7 @@ import { GitlyDownloadError } from '../error'
 describe('utils/download (no cache)', () => {
   const options = {
     temp: join(__dirname, 'output', 'download'),
+    resolveCommit: false, // Disable commit resolution for faster, predictable tests
   }
 
   beforeAll(async () => {
@@ -90,9 +91,9 @@ describe('utils/download (no cache)', () => {
 
   it('should return an empty string when a repo is not found', async () => {
     expect.assertions(1)
-    expect(await download('github:doesnotexist123xyz/gittar#v0.1.1')).toEqual(
-      ''
-    )
+    expect(await download('github:doesnotexist123xyz/gittar#v0.1.1', {
+      resolveCommit: false
+    })).toEqual('')
   })
 
   it('should throw an error when a repo is not found (with options', async () => {
@@ -100,6 +101,7 @@ describe('utils/download (no cache)', () => {
     try {
       await download('github:doesnotexist123xyz/gittar#v0.1.1', {
         throw: true,
+        resolveCommit: false
       })
     } catch (error) {
       // Now throws AggregateError containing GitlyDownloadError(s)
@@ -114,13 +116,14 @@ describe('utils/download (cached)', () => {
   const options = {
     temp: join(__dirname, 'output', 'download', 'cache'),
     cache: true,
+    resolveCommit: false, // Disable commit resolution for predictable cache paths
   }
   const isCached = (ms: number) => Date.now() - ms <= 15
 
   beforeAll(async () => {
     await rm(join(__dirname, 'output', 'download', 'cache'), { recursive: true, force: true })
     // Predownload
-    const path = await download('lukeed/gittar', { temp: options.temp })
+    const path = await download('lukeed/gittar', { temp: options.temp, resolveCommit: false })
     expect(existsSync(path)).toBe(true)
   })
 

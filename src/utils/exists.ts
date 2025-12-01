@@ -4,7 +4,7 @@ import { isAbsolute } from 'node:path'
 import type GitlyOptions from '../interfaces/options'
 
 import parse from './parse'
-import { getArchivePath } from './archive'
+import { getArchivePathSync } from './archive'
 
 export default async function exists(
   path: string,
@@ -12,7 +12,7 @@ export default async function exists(
 ): Promise<boolean> {
   let _path = path
   if (!isAbsolute(path)) {
-    _path = getArchivePath(parse(path), options)
+    _path = getArchivePathSync(parse(path), options)
   }
   try {
     await fs.access(_path, constants.F_OK)

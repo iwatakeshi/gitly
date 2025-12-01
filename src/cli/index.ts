@@ -33,6 +33,7 @@ OPTIONS:
   --mode <mode>      Backend mode: 'tar' (default) or 'git'
   --depth <n>        Git clone depth (default: 1, only for --mode=git)
   --subdirectory <path>  Extract only a subdirectory
+  --token <token>    Auth token for private repos (or set GITHUB_TOKEN/GITLAB_TOKEN)
   --help, -h         Show this help
   --version          Show version
 
@@ -45,6 +46,10 @@ EXAMPLES:
 
 ENVIRONMENT:
   HTTPS_PROXY / HTTP_PROXY  Proxy configuration
+  GITHUB_TOKEN              GitHub/Gitea/Codeberg personal access token
+  GITLAB_TOKEN              GitLab personal/project access token
+  BITBUCKET_TOKEN           Bitbucket app password
+  GIT_TOKEN                 Generic auth token (fallback)
   GITLY_CACHE               Cache directory (default: ~/.gitly)
 `
 
@@ -60,6 +65,7 @@ async function main(): Promise<void> {
         mode: { type: 'string', default: 'tar' },
         depth: { type: 'string' },
         subdirectory: { type: 'string' },
+        token: { type: 'string' },
         help: { type: 'boolean', short: 'h' },
         version: { type: 'boolean' },
       },
@@ -98,6 +104,7 @@ async function main(): Promise<void> {
       mode: values.mode === 'git' ? 'git' : 'axios',
       depth: values.depth ? parseInt(values.depth, 10) : undefined,
       subdirectory: values.subdirectory,
+      token: values.token,
     })
 
     logger.success(`✓ Cloned to ${result.destination}`)

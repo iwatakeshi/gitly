@@ -255,5 +255,23 @@ describe('utils/commit-resolver', () => {
         resolver.resolveCommit(info, { resolveCommit: true })
       ).rejects.toThrow('Failed to resolve commit')
     }, 15000)
+
+    it('should handle Sourcehut API errors', async () => {
+      const resolver = new SourcehutCommitResolver()
+      const info = createMockInfo('git.sr.ht', '/~nonexistent/repo-12345', 'main')
+
+      await expect(
+        resolver.resolveCommit(info, { resolveCommit: true })
+      ).rejects.toThrow('Failed to resolve commit')
+    }, 15000)
+
+    it('should handle Codeberg API errors', async () => {
+      const resolver = new CodebergCommitResolver()
+      const info = createMockInfo('codeberg.org', '/nonexistent/repo-12345', 'main')
+
+      await expect(
+        resolver.resolveCommit(info, { resolveCommit: true })
+      ).rejects.toThrow('Failed to resolve commit')
+    }, 15000)
   })
 })

@@ -67,4 +67,42 @@ describe('utils/clone', () => {
       ).rejects.toThrow(GitlyCloneError)
     })
   })
+
+  describe('error handling', () => {
+    it('should handle execution errors when throw is true', async () => {
+      const opts = {
+        ...options,
+        throw: true
+      }
+      
+      // Use an invalid URL that will cause git to fail
+      await expect(
+        clone('https://invalid-git-url-that-does-not-exist.com/user/repo', opts)
+      ).rejects.toThrow()
+    }, 30000)
+
+    it('should return empty string when throw is false and execution fails', async () => {
+      const opts = {
+        ...options,
+        throw: false,
+        throws: false
+      }
+      
+      // Use an invalid URL that will cause git to fail
+      const result = await clone('https://invalid-git-url-that-does-not-exist.com/user/repo', opts)
+      expect(result).toBe('')
+    }, 30000)
+
+    it('should handle force option with failed execution', async () => {
+      const opts = {
+        ...options,
+        force: true,
+        throw: false,
+        throws: false
+      }
+      
+      const result = await clone('https://invalid-git-url-that-does-not-exist.com/user/repo', opts)
+      expect(result).toBe('')
+    }, 30000)
+  })
 })

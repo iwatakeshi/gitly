@@ -296,7 +296,7 @@ describe('utils/actions', () => {
 
       // With force: true in the rm call, this won't throw even for missing files
       // But we can test that the error handling code path exists
-      await expect(executor.execute(action, testDir)).resolves.toBeUndefined()
+      await expect(executor.execute(action, testDir, {})).resolves.toBeUndefined()
       
       await rm(testDir, { recursive: true, force: true })
     })

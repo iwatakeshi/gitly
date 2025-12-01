@@ -8,7 +8,7 @@ import {
   NullCommitResolver,
   CommitResolverRegistry,
 } from '../commit-resolver'
-import type { URLInfo } from '../../interfaces/url'
+import type URLInfo from '../../interfaces/url'
 import axios from 'axios'
 
 // Mock axios for unit tests

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals'
-import { rm, mkdir, writeFile } from 'node:fs/promises'
+import { rm, mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
 import { Readable } from 'node:stream'
 import fetch from '../fetch'
@@ -223,7 +223,9 @@ describe('utils/fetch', () => {
         throw new Error('Should have thrown')
       } catch (error) {
         expect(error).toBeInstanceOf(GitlyDownloadError)
-        expect((error as GitlyDownloadError).code).toBe(404)
+        if (error instanceof GitlyDownloadError) {
+          expect(error.code).toBe(404)
+        }
       }
     })
 

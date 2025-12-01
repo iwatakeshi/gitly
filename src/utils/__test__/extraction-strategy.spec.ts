@@ -1,6 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
-import { join } from 'node:path'
-import { rm, writeFile, mkdir } from 'node:fs/promises'
+import { describe, it, expect } from '@jest/globals'
 import {
   SubdirectoryExtractionStrategy,
   FullExtractionStrategy,
@@ -12,8 +10,8 @@ describe('extraction-strategy', () => {
   describe('FullExtractionStrategy', () => {
     it('should extract all paths', () => {
       const strategy = new FullExtractionStrategy()
-      expect(strategy.shouldExtract('any/path')).toBe(true)
-      expect(strategy.shouldExtract('another/path')).toBe(true)
+      expect(strategy.shouldExtract()).toBe(true)
+      expect(strategy.shouldExtract()).toBe(true)
     })
 
     it('should not transform paths', () => {

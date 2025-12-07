@@ -80,7 +80,7 @@ export class GitHubCommitResolver extends BaseCommitResolver {
         url: data.html_url,
         date: data.commit?.committer?.date,
       }
-    } catch (error) {
+    } catch (_error) {
       // Fallback to using the branch/tag name if API fails
       throw new Error(`Failed to resolve commit for ${owner}/${repo}@${ref}`)
     }
@@ -105,7 +105,7 @@ export class GitLabCommitResolver extends BaseCommitResolver {
         url: data.web_url,
         date: data.committed_date,
       }
-    } catch (error) {
+    } catch (_error) {
       throw new Error(`Failed to resolve commit for ${owner}/${repo}@${ref}`)
     }
   }
@@ -128,7 +128,7 @@ export class BitbucketCommitResolver extends BaseCommitResolver {
         url: data.links?.html?.href,
         date: data.date,
       }
-    } catch (error) {
+    } catch (_error) {
       throw new Error(`Failed to resolve commit for ${owner}/${repo}@${ref}`)
     }
   }
@@ -152,7 +152,7 @@ export class SourcehutCommitResolver extends BaseCommitResolver {
         sha,
         url: `https://git.sr.ht/${owner}/${repo}/commit/${sha}`,
       }
-    } catch (error) {
+    } catch (_error) {
       throw new Error(`Failed to resolve commit for ${owner}/${repo}@${ref}`)
     }
   }
@@ -175,7 +175,7 @@ export class CodebergCommitResolver extends BaseCommitResolver {
         url: data.html_url,
         date: data.commit?.committer?.date,
       }
-    } catch (error) {
+    } catch (_error) {
       throw new Error(`Failed to resolve commit for ${owner}/${repo}@${ref}`)
     }
   }

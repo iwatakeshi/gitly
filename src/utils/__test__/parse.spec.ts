@@ -148,7 +148,7 @@ describe('utils/parse', () => {
 
   describe('security: DOS prevention', () => {
     it('should reject URL with excessive zeros (ReDoS protection)', () => {
-      const maliciousUrl = '0'.repeat(30) + '/repo'
+      const maliciousUrl = `${'0'.repeat(30)}/repo`
       expect(() => parse(maliciousUrl)).toThrow('Invalid argument')
     })
 
@@ -167,12 +167,12 @@ describe('utils/parse', () => {
     })
 
     it('should reject URL with exactly 26 zeros', () => {
-      const url = '0'.repeat(26) + 'owner/repo'
+      const url = `${'0'.repeat(26)}owner/repo`
       expect(() => parse(url)).toThrow('Invalid argument')
     })
 
     it('should allow URL with exactly 25 zeros', () => {
-      const url = '0'.repeat(25) + 'owner/repo'
+      const url = `${'0'.repeat(25)}owner/repo`
       expect(() => parse(url)).not.toThrow()
     })
   })

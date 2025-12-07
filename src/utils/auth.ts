@@ -52,27 +52,27 @@ export function injectAuthHeaders(
 
   // GitHub, Gitea, Codeberg (Gitea-based) use Bearer token
   if (host.includes('github') || host.includes('gitea') || host.includes('codeberg')) {
-    headers['Authorization'] = `Bearer ${token}`
+    headers.Authorization = `Bearer ${token}`
   }
   // GitLab uses PRIVATE-TOKEN header or Bearer token
   else if (host.includes('gitlab')) {
     // Support both header formats (PRIVATE-TOKEN is legacy)
     headers['PRIVATE-TOKEN'] = token
-    headers['Authorization'] = `Bearer ${token}`
+    headers.Authorization = `Bearer ${token}`
   }
   // Bitbucket uses Basic auth with username in token or Bearer
   else if (host.includes('bitbucket')) {
     // If token contains ':', treat as username:app_password
     if (token.includes(':')) {
       const encoded = Buffer.from(token).toString('base64')
-      headers['Authorization'] = `Basic ${encoded}`
+      headers.Authorization = `Basic ${encoded}`
     } else {
-      headers['Authorization'] = `Bearer ${token}`
+      headers.Authorization = `Bearer ${token}`
     }
   }
   // Default to Bearer token for other providers
   else {
-    headers['Authorization'] = `Bearer ${token}`
+    headers.Authorization = `Bearer ${token}`
   }
 
   return headers

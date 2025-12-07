@@ -72,7 +72,7 @@ function getProxy(proxy: GitlyOptions['proxy']): AxiosProxyConfig | false {
       return {
         protocol: protocol.replace(':', ''),
         host: hostname,
-        port: Number.parseInt(port),
+        port: Number.parseInt(port, 10),
       }
     } catch {
       return false

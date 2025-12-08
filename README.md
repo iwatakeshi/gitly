@@ -10,22 +10,22 @@
 
 The spiritual successor of [gittar](https://github.com/lukeed/gittar) and modern alternative to [degit](https://github.com/Rich-Harris/degit) written in TypeScript with enterprise-grade architecture.
 
-## ✨ Features
+## Features
 
-- 🚀 **CLI Tool** - Simple command-line interface for scaffolding projects
-- 📦 **Subdirectory Support** - Extract only specific directories from monorepos
-- 🔄 **Actions System** - Composable post-clone operations (degit.json compatible)
-- 🌐 **Multi-Provider** - GitHub, GitLab, Bitbucket, Sourcehut, Codeberg support
-- 🔐 **Token Auth** - Private repository support with personal access tokens
-- 🔑 **Commit-Hash Caching** - Accurate caching using commit SHAs instead of branch names
-- 💾 **Smart Caching** - Offline-first with intelligent cache management
-- 🔒 **Security** - Input validation, injection prevention, DOS protection
-- 📡 **Event-Driven** - Progress tracking with event emitters
-- 🏗️ **Enterprise Architecture** - Strategy, Factory, and Dependency Injection patterns
-- ✅ **Well-Tested** - 99 tests with 74%+ coverage
-- 🎯 **TypeScript Native** - Full type safety and modern ES2021 features
+- **CLI Tool** - Simple command-line interface for scaffolding projects
+- **Subdirectory Support** - Extract only specific directories from monorepos
+- **Actions System** - Composable post-clone operations (degit.json compatible)
+- **Multi-Provider** - GitHub, GitLab, Bitbucket, Sourcehut, Codeberg support
+- **Token Auth** - Private repository support with personal access tokens
+- **Commit-Hash Caching** - Accurate caching using commit SHAs instead of branch names
+- **Smart Caching** - Offline-first with intelligent cache management
+- **Security** - Input validation, injection prevention, DOS protection
+- **Event-Driven** - Progress tracking with event emitters
+- **Enterprise Architecture** - Strategy, Factory, and Dependency Injection patterns
+- **Well-Tested** - 99 tests with 74%+ coverage
+- **TypeScript Native** - Full type safety and modern ES2021 features
 
-## 📦 Installation
+## Installation
 
 ```bash
 # As a CLI tool
@@ -35,7 +35,7 @@ npm install -g gitly
 npm install gitly
 ```
 
-## 🚀 CLI Usage
+## CLI Usage
 
 ```bash
 # Clone a repository
@@ -94,7 +94,7 @@ ENVIRONMENT VARIABLES:
   HTTP_PROXY         HTTP proxy URL
 ```
 
-## 💻 Programmatic API
+## Programmatic API
 
 ### Basic Usage
 
@@ -249,7 +249,7 @@ await gitly('user/repo', '/dest', {
 })
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 Gitly uses enterprise-level design patterns:
 
@@ -261,7 +261,7 @@ Gitly uses enterprise-level design patterns:
 - **Registry Pattern** - Extensible git provider registry
 - **Event-Driven** - Progress tracking and observability
 
-## 📚 API Reference
+## API Reference
 
 ### `gitly(source, destination, options?)`
 
@@ -298,7 +298,7 @@ Parse repository URL.
 
 **Returns:** `URLInfo` - Parsed URL information
 
-## 🔧 Options
+## Options
 
 ```typescript
 interface GitlyOptions {
@@ -346,33 +346,33 @@ interface GitlyOptions {
 }
 ```
 
-## 🆚 Comparison
+## Comparison
 
 | Feature | gitly | degit | gittar |
 |---------|-------|-------|--------|
-| CLI | ✅ | ✅ | ❌ |
-| TypeScript | ✅ | ❌ | ❌ |
-| Subdirectories | ✅ | ✅ | ❌ |
-| Actions System | ✅ | ✅ | ❌ |
-| Event Emitters | ✅ | ✅ | ❌ |
-| Multi-Provider | ✅ (5) | ✅ (4) | ✅ (3) |
-| Token Auth | ✅ | ❌ | ❌ |
-| Commit-Hash Caching | ✅ | ❌ | ❌ |
-| Private Repos | ✅ | ✅ (git only) | ❌ |
-| Offline Mode | ✅ | ✅ | ❌ |
-| Modern Architecture | ✅ | ❌ | ❌ |
-| Active Maintenance | ✅ | ❌ | ❌ |
+| CLI | Yes | Yes | No |
+| TypeScript | Yes | No | No |
+| Subdirectories | Yes | Yes | No |
+| Actions System | Yes | Yes | No |
+| Event Emitters | Yes | Yes | No |
+| Multi-Provider | Yes (5) | Yes (4) | Yes (3) |
+| Token Auth | Yes | No | No |
+| Commit-Hash Caching | Yes | No | No |
+| Private Repos | Yes | Yes (git only) | No |
+| Offline Mode | Yes | Yes | No |
+| Modern Architecture | Yes | No | No |
+| Active Maintenance | Yes | No | No |
 | Test Coverage | 74% | Unknown | ~70% |
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) first.
 
-## 📄 License
+## License
 
 [MIT](LICENSE.md) © [Takeshi Iwana](https://github.com/iwatakeshi)
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [gittar](https://github.com/lukeed/gittar) by Luke Edwards
 - [degit](https://github.com/Rich-Harris/degit) by Rich Harris

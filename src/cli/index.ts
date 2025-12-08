@@ -105,7 +105,7 @@ async function main(): Promise<void> {
       token: values.token,
     })
 
-    logger.success(`✓ Cloned to ${result.destination}`)
+    logger.success(`Cloned to ${result.destination}`)
     process.exit(0)
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)

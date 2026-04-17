@@ -1,6 +1,6 @@
 {
   "name": "gitly",
-  "version": "3.2.3",
+  "version": "3.2.4",
   "description": "An API to download and/or extract git repositories",
   "type": "module",
   "main": "./dist/main.js",
@@ -24,23 +24,22 @@
     "dist/**/*"
   ],
   "dependencies": {
-    "axios": "^1.13.6",
+    "axios": "^1.15.0",
     "cross-spawn": "^7.0.6",
     "shelljs": "^0.10.0",
-    "tar": "^7.5.9"
+    "tar": "^7.5.13"
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.6",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.3.3",
+    "@types/node": "^25.6.0",
     "@types/shelljs": "^0.10.0",
-    "@types/tar": "^7.0.87",
-    "jest": "^30.2.0",
-    "prettier": "^3.8.1",
-    "ts-jest": "^29.4.6",
+    "jest": "^30.3.0",
+    "prettier": "^3.8.3",
+    "ts-jest": "^29.4.9",
     "tslib": "^2.8.1",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "scripts": {
     "prepare": "npm run build",

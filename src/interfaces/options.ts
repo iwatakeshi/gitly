@@ -1,5 +1,5 @@
 import type URLInfo from './url'
-import type { AxiosHeaders, AxiosProxyConfig, RawAxiosRequestHeaders } from 'axios'
+import type { AxiosProxyConfig, RawAxiosRequestHeaders } from 'axios'
 import type { Stats } from 'node:fs'
 import type { ReadEntry } from 'tar'
 
@@ -40,7 +40,7 @@ export default interface GitlyOptions {
   /**
    * Set the request headers (default: undefined)
    */
-  headers?: RawAxiosRequestHeaders | AxiosHeaders
+  headers?: RawAxiosRequestHeaders
   /**
    * Set the backend (default: undefined)
    *
